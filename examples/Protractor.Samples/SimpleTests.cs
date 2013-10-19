@@ -33,7 +33,7 @@ namespace Protractor.Samples
         public void ShouldGreetUsingBinding()
         {
             IWebDriver ngDriver = new NgWebDriver(driver);
-            ngDriver.Url = "http://www.angularjs.org";
+            ngDriver.Navigate().GoToUrl("http://www.angularjs.org");
             ngDriver.FindElement(NgBy.Input("yourName")).SendKeys("Julie");
             Assert.AreEqual("Hello Julie!", ngDriver.FindElement(NgBy.Binding("{{yourName}}")).Text);
         }
@@ -42,7 +42,7 @@ namespace Protractor.Samples
         public void ShouldListTodos()
         {
             IWebDriver ngDriver = new NgWebDriver(driver);
-            ngDriver.Url = "http://www.angularjs.org";
+            ngDriver.Navigate().GoToUrl("http://www.angularjs.org");
             var elements = ngDriver.FindElements(NgBy.Repeater("todo in todos"));
             Assert.AreEqual("build an angular app", elements[1].Text);
         }

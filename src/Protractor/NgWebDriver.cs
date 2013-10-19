@@ -171,7 +171,7 @@ namespace Protractor
 
         public INavigation Navigate()
         {
-            return this.driver.Navigate();
+            return new NgNavigation(this, this.driver.Navigate());
         }
 
         public void Quit()

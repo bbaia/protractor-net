@@ -41,6 +41,7 @@
   <ItemGroup>
     <Compile Include="JavaScriptBy.cs" />
     <Compile Include="NgBy.cs" />
+    <Compile Include="NgNavigation.cs" />
     <Compile Include="NgWebDriver.cs" />
     <Compile Include="ClientSideScripts.cs" />
     <Compile Include="NgModule.cs" />
