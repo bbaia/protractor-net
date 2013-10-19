@@ -1,0 +1,15 @@
+/packages
+
+bin
+obj
+*.dll
+
+*.pdb
+
+*.suo
+
+*.csproj.user
+
+
+
+
