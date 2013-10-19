@@ -7,6 +7,9 @@ using OpenQA.Selenium;
 
 namespace Protractor
 {
+    /// <summary>
+    /// Provides a mechanism to write tests against an AngularJS application.
+    /// </summary>
     public class NgWebDriver : IWebDriver
     {
         private const string AngularDeferBootstrap = "NG_DEFER_BOOTSTRAP!";
@@ -17,9 +20,9 @@ namespace Protractor
         private NgModule[] mockModules;
 
         /// <summary>
-        /// 
+        /// Creates a new instance of <see cref="NgWebDriver"/> by wrapping a <see cref="IWebDriver"/> instance.
         /// </summary>
-        /// <param name="driver"></param>
+        /// <param name="driver">The configured webdriver instance.</param>
         /// <param name="mockModules">
         /// The modules to load before Angular whenever Url setter or Navigate().GoToUrl() is called.
         /// </param>
@@ -29,9 +32,9 @@ namespace Protractor
         }
 
         /// <summary>
-        /// 
+        /// Creates a new instance of <see cref="NgWebDriver"/> by wrapping a <see cref="IWebDriver"/> instance.
         /// </summary>
-        /// <param name="driver"></param>
+        /// <param name="driver">The configured webdriver instance.</param>
         /// <param name="rootElement">
         /// The CSS selector for an element on which to find Angular. 
         /// <para/>
@@ -53,7 +56,7 @@ namespace Protractor
         }
 
         /// <summary>
-        /// Gets the wrapped IWebDriver instance.
+        /// Gets the wrapped <see cref="IWebDriver"/> instance.
         /// <para/>
         /// Use this to interact with pages that do not contain Angular (such as a log-in screen).
         /// </summary>
@@ -82,11 +85,18 @@ namespace Protractor
 
         #region IWebDriver Members
 
+        /// <summary>
+        /// Gets the current window handle, which is an opaque handle to this 
+        /// window that uniquely identifies it within this driver instance.
+        /// </summary>
         public string CurrentWindowHandle
         {
             get { return this.driver.CurrentWindowHandle; }
         }
 
+        /// <summary>
+        /// Gets the source of the page last loaded by the browser.
+        /// </summary>
         public string PageSource
         {
             get
@@ -96,6 +106,9 @@ namespace Protractor
             }
         }
 
+        /// <summary>
+        /// Gets the title of the current browser window.
+        /// </summary>
         public string Title
         {
             get
@@ -105,6 +118,9 @@ namespace Protractor
             }
         }
 
+        /// <summary>
+        /// Gets or sets the URL the browser is currently displaying.
+        /// </summary>
         public string Url
         {
             get
@@ -154,42 +170,85 @@ namespace Protractor
             }
         }
 
+        /// <summary>
+        /// Gets the window handles of open browser windows.
+        /// </summary>
         public ReadOnlyCollection<string> WindowHandles
         {
             get { return this.driver.WindowHandles; }
         }
 
+        /// <summary>
+        /// Close the current window, quitting the browser if it is the last window currently open.
+        /// </summary>
         public void Close()
         {
             this.driver.Close();
         }
 
+        /// <summary>
+        /// Instructs the driver to change its settings.
+        /// </summary>
+        /// <returns>
+        /// An <see cref="IOptions"/> object allowing the user to change the settings of the driver.
+        /// </returns>
         public IOptions Manage()
         {
             return this.driver.Manage();
         }
 
+        /// <summary>
+        /// Instructs the driver to navigate the browser to another location.
+        /// </summary>
+        /// <returns>
+        /// An <see cref="INavigation"/> object allowing the user to access 
+        /// the browser's history and to navigate to a given URL.
+        /// </returns>
         public INavigation Navigate()
         {
             return new NgNavigation(this, this.driver.Navigate());
         }
 
+        /// <summary>
+        /// Quits this driver, closing every associated window.
+        /// </summary>
         public void Quit()
         {
             this.driver.Quit();
         }
 
+        /// <summary>
+        /// Instructs the driver to send future commands to a different frame or window.
+        /// </summary>
+        /// <returns>
+        /// An <see cref="ITargetLocator"/> object which can be used to select a frame or window.
+        /// </returns>
         public ITargetLocator SwitchTo()
         {
             return this.driver.SwitchTo();
         }
 
+        /// <summary>
+        /// Finds the first <see cref="NgWebElement"/> using the given mechanism. 
+        /// </summary>
+        /// <param name="by">The locating mechanism to use.</param>
+        /// <returns>The first matching <see cref="NgWebElement"/> on the current context.</returns>
+        /// <exception cref="NoSuchElementException">If no element matches the criteria.</exception>
         public NgWebElement FindElement(By by)
         {
             this.WaitForAngular();
             return new NgWebElement(this, this.driver.FindElement(by));
         }
 
+        /// <summary>
+        /// Finds all <see cref="NgWebElement"/>s within the current context 
+        /// using the given mechanism.
+        /// </summary>
+        /// <param name="by">The locating mechanism to use.</param>
+        /// <returns>
+        /// A <see cref="ReadOnlyCollection{T}"/> of all <see cref="NgWebElement"/>s 
+        /// matching the current criteria, or an empty list if nothing matches.
+        /// </returns>
         public ReadOnlyCollection<NgWebElement> FindElements(By by)
         {
             this.WaitForAngular();
@@ -207,6 +266,10 @@ namespace Protractor
             return new ReadOnlyCollection<IWebElement>(this.driver.FindElements(by).Select(e => (IWebElement)new NgWebElement(this, e)).ToList());
         }
 
+        /// <summary>
+        /// Performs application-defined tasks associated with freeing, 
+        /// releasing, or resetting unmanaged resources.
+        /// </summary>
         public void Dispose()
         {
             this.driver.Dispose();

@@ -19,7 +19,7 @@
         public string Script { get; protected set; }
 
         /// <summary>
-        /// 
+        /// Creates a new instance of <see cref="NgModule"/>.
         /// </summary>
         /// <param name="name">The name of the module to load or override.</param>
         /// <param name="script">The JavaScript to load the module.</param>
