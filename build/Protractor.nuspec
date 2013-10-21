@@ -16,8 +16,11 @@
     </dependencies>
   </metadata>
   <files>
-    <file src="..\src\Protractor\bin\Release\Protractor.dll" target="lib\net40" />
-    <file src="..\src\Protractor\bin\Release\Protractor.pdb" target="lib\net40" />
-    <file src="..\src\Protractor\bin\Release\Protractor.xml" target="lib\net40" />
+    <file src="..\src\Protractor\bin\Release\net40\Protractor.dll" target="lib\net40" />
+    <file src="..\src\Protractor\bin\Release\net40\Protractor.pdb" target="lib\net40" />
+    <file src="..\src\Protractor\bin\Release\net40\Protractor.xml" target="lib\net40" />
+    <file src="..\src\Protractor\bin\Release\net35\Protractor.dll" target="lib\net35" />
+    <file src="..\src\Protractor\bin\Release\net35\Protractor.pdb" target="lib\net35" />
+    <file src="..\src\Protractor\bin\Release\net35\Protractor.xml" target="lib\net35" />
   </files>
 </package>

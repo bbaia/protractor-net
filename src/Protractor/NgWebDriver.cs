@@ -160,7 +160,7 @@ namespace Protractor
                     }
                     // Resume Angular bootstrap
                     this.jsExecutor.ExecuteScript(ClientSideScripts.ResumeAngularBootstrap,
-                        String.Join(",", this.mockModules.Select(m => m.Name)));
+                        String.Join(",", this.mockModules.Select(m => m.Name).ToArray()));
                 }
                 else
                 {
