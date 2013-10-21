@@ -226,5 +226,16 @@ namespace Protractor
         }
 
         #endregion
+
+        /// <summary>
+        /// Evaluates the expression as if it were on the scope of the current element.
+        /// </summary>
+        /// <param name="expression">The expression to evaluate.</param>
+        /// <returns>The expression evaluated by Angular.</returns>
+        public object Evaluate(string expression)
+        {
+            this.ngDriver.WaitForAngular();
+            return ((IJavaScriptExecutor)this.ngDriver.WrappedDriver).ExecuteScript(ClientSideScripts.Evaluate, this.element, expression);
+        }
     }
 }

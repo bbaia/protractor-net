@@ -41,10 +41,11 @@ namespace Protractor.Samples
         [Test]
         public void ShouldListTodos()
         {
-            IWebDriver ngDriver = new NgWebDriver(driver);
+            var ngDriver = new NgWebDriver(driver);
             ngDriver.Navigate().GoToUrl("http://www.angularjs.org");
             var elements = ngDriver.FindElements(NgBy.Repeater("todo in todos"));
             Assert.AreEqual("build an angular app", elements[1].Text);
+            Assert.AreEqual(false, elements[1].Evaluate("todo.done"));
         }
     }
 }
