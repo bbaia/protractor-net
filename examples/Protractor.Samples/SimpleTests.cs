@@ -26,7 +26,7 @@ namespace Protractor.Samples
         [TearDown]
         public void TearDown()
         {
-            driver.Dispose();
+            driver.Quit();
         }
 
         [Test]
@@ -35,7 +35,7 @@ namespace Protractor.Samples
             IWebDriver ngDriver = new NgWebDriver(driver);
             ngDriver.Navigate().GoToUrl("http://www.angularjs.org");
             ngDriver.FindElement(NgBy.Input("yourName")).SendKeys("Julie");
-            Assert.AreEqual("Hello Julie!", ngDriver.FindElement(NgBy.Binding("{{yourName}}")).Text);
+            Assert.AreEqual("Hello Julie!", ngDriver.FindElement(NgBy.Binding("yourName")).Text);
         }
 
         [Test]
