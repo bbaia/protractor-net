@@ -43,7 +43,9 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="UsingMockModuleTests.cs" />
     <Compile Include="SimpleTests.cs" />
+    <Compile Include="Support\NgMockE2EModule.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
@@ -60,6 +62,7 @@
     <Content Include="phantomjs-license.txt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <EmbeddedResource Include="Support\angular-mocks.js" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\src\Protractor\Protractor-NET40.csproj">
