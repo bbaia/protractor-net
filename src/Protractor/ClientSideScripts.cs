@@ -53,6 +53,15 @@ check(attempts);";
 angular.resumeBootstrap(arguments[0].length ? arguments[0].split(',') : []);";
 
         /**
+         * Return the current url using $location.absUrl().
+         * 
+         * arguments[0] {string} The selector housing an ng-app
+         */
+        public const string GetLocationAbsUrl = @"
+var el = document.querySelector(arguments[0]);
+return angular.element(el).injector().get('$location').absUrl();";
+
+        /**
          * Evaluate an Angular expression in the context of a given element.
          *
          * arguments[0] {Element} The element in whose scope to evaluate.

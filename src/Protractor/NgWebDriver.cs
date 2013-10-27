@@ -126,7 +126,16 @@ namespace Protractor
             get
             {
                 this.WaitForAngular();
-                return this.driver.Url;
+                IHasCapabilities hcDriver = this.driver as IHasCapabilities;
+                if (hcDriver != null && hcDriver.Capabilities.BrowserName == "internet explorer")
+                {
+                    // 'this.driver.Url' does not work on IE
+                    return this.jsExecutor.ExecuteScript(ClientSideScripts.GetLocationAbsUrl, this.rootElement) as string;
+                }
+                else
+                {
+                    return this.driver.Url;
+                }
             }
             set
             {
