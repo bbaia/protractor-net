@@ -49,6 +49,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
+    <None Include="README.md" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="..\..\packages\PhantomJS.1.9.2\tools\phantomjs\phantomjs.exe">
