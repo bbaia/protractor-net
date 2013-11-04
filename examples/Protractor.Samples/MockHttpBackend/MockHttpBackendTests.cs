@@ -35,7 +35,7 @@ namespace Protractor.Samples.MockHttpBackend
             driver.Quit();
         }
 
-        [Test]
+        [Test(Description = "Should filter the phone list as user types into the search box")]
         public void ShouldFilter()
         {
             // Fake backend with 2 phones

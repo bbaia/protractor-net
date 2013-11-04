@@ -38,7 +38,8 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Drawing" />
-    <Reference Include="WebDriver">
+    <Reference Include="WebDriver, Version=2.37.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\packages\Selenium.WebDriver.2.37.0\lib\net40\WebDriver.dll</HintPath>
     </Reference>
   </ItemGroup>
@@ -46,6 +47,8 @@
     <Compile Include="MockHttpBackend\MockHttpBackendTests.cs" />
     <Compile Include="Basic\BasicTests.cs" />
     <Compile Include="MockHttpBackend\Support\NgMockE2EModule.cs" />
+    <Compile Include="PageObjects\PageObjectsTests.cs" />
+    <Compile Include="PageObjects\Support\TutorialStep5Page.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

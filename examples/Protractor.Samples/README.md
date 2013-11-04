@@ -12,6 +12,12 @@ E2E testing against the [AngularJS tutorial](http://docs.angularjs.org/tutorial)
 
 Use the [ngMockE2E](http://docs.angularjs.org/api/ngMockE2E.$httpBackend) Angular module to mock the HTTP backend. 
 
+## PageObjects
+
+E2E testing against the [AngularJS tutorial](http://docs.angularjs.org/tutorial) Step 5 sample.
+
+Use the [Page Objects](https://code.google.com/p/selenium/wiki/PageObjects) pattern to make your tests more readable.
+
 # Running tests
 
 Tests are written with [NUnit](http://nunit.org/).
