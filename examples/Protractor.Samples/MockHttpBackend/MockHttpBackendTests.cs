@@ -4,16 +4,16 @@ using OpenQA.Selenium;
 using OpenQA.Selenium.PhantomJS;
 using OpenQA.Selenium.Chrome;
 
-using Protractor.Samples.Support;
+using Protractor.Samples.MockHttpBackend.Support;
 
-namespace Protractor.Samples
+namespace Protractor.Samples.MockHttpBackend
 {
     /*
      * E2E testing against the AngularJS tutorial Step 5 sample: 
      * http://docs.angularjs.org/tutorial/step_05
      */
     [TestFixture]
-    public class UsingMockModuleTests
+    public class MockHttpBackendTests
     {
         private IWebDriver driver;
 

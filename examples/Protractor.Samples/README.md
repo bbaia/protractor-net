@@ -1,4 +1,18 @@
-# Running sample tests
+# Samples description
+
+## Basic
+
+E2E testing against [AngularJS's homepage](http://angularjs.org/).
+
+Show basic usage of the library.
+
+## MockHttpBackend
+
+E2E testing against the [AngularJS tutorial](http://docs.angularjs.org/tutorial) Step 5 sample.
+
+Use the [ngMockE2E](http://docs.angularjs.org/api/ngMockE2E.$httpBackend) Angular module to mock the HTTP backend. 
+
+# Running tests
 
 Tests are written with [NUnit](http://nunit.org/).
 

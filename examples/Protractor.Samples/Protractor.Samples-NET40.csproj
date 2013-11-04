@@ -43,9 +43,9 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="UsingMockModuleTests.cs" />
-    <Compile Include="SimpleTests.cs" />
-    <Compile Include="Support\NgMockE2EModule.cs" />
+    <Compile Include="MockHttpBackend\MockHttpBackendTests.cs" />
+    <Compile Include="Basic\BasicTests.cs" />
+    <Compile Include="MockHttpBackend\Support\NgMockE2EModule.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
@@ -63,7 +63,7 @@
     <Content Include="phantomjs-license.txt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <EmbeddedResource Include="Support\angular-mocks.js" />
+    <EmbeddedResource Include="MockHttpBackend\Support\angular-mocks.js" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\src\Protractor\Protractor-NET40.csproj">
@@ -71,6 +71,7 @@
       <Name>Protractor-NET40</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

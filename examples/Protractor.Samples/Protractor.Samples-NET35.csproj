@@ -45,9 +45,9 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="SimpleTests.cs" />
-    <Compile Include="Support\NgMockE2EModule.cs" />
-    <Compile Include="UsingMockModuleTests.cs" />
+    <Compile Include="Basic\BasicTests.cs" />
+    <Compile Include="MockHttpBackend\MockHttpBackendTests.cs" />
+    <Compile Include="MockHttpBackend\Support\NgMockE2EModule.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="..\..\packages\PhantomJS.1.9.2\tools\phantomjs\phantomjs.exe">
@@ -58,10 +58,10 @@
       <Link>chromedriver.exe</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <EmbeddedResource Include="MockHttpBackend\Support\angular-mocks.js" />
     <Content Include="phantomjs-license.txt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <EmbeddedResource Include="Support\angular-mocks.js" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\src\Protractor\Protractor-NET35.csproj">

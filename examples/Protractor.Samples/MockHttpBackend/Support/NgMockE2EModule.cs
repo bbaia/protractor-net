@@ -2,7 +2,7 @@
 using System.IO;
 using System.Reflection;
 
-namespace Protractor.Samples.Support
+namespace Protractor.Samples.MockHttpBackend.Support
 {
     /// <summary>
     /// Module that depends on the 'ngMockE2E' Angular module to define 
@@ -19,7 +19,7 @@ namespace Protractor.Samples.Support
         {
             // Load angular-mocks.js from embedded resources
             var assembly = Assembly.GetExecutingAssembly();
-            var resourceName = "Protractor.Samples.Support.angular-mocks.js";
+            var resourceName = "Protractor.Samples.MockHttpBackend.Support.angular-mocks.js";
             using (Stream stream = assembly.GetManifestResourceStream(resourceName))
             using (StreamReader reader = new StreamReader(stream))
             {
