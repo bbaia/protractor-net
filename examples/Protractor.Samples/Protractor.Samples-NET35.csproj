@@ -56,7 +56,7 @@
       <Link>phantomjs.exe</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="..\..\packages\WebDriver.ChromeDriver.win32.2.4.0.0\content\chromedriver.exe">
+    <Content Include="..\..\packages\WebDriver.ChromeDriver.win32.2.7.0.0\content\chromedriver.exe">
       <Link>chromedriver.exe</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
