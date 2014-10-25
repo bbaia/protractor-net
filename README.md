@@ -21,7 +21,7 @@ public void ShouldGreetUsingBinding()
     {
         ngDriver.Url = "http://www.angularjs.org";
         ngDriver.FindElement(NgBy.Input("yourName")).SendKeys("Julie");
-        Assert.AreEqual("Hello Julie!", ngDriver.FindElement(NgBy.Binding("{{yourName}}")).Text);
+        Assert.AreEqual("Hello Julie!", ngDriver.FindElement(NgBy.Binding("yourName")).Text);
     }
 }
 ```
