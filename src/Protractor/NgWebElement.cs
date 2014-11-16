@@ -9,7 +9,7 @@ namespace Protractor
     /// <summary>
     /// Provides a mechanism to get elements off the page for test.
     /// </summary>
-    public class NgWebElement : IWebElement
+    public class NgWebElement : IWebElement, IWrapsElement
     {
         private NgWebDriver ngDriver;
         private IWebElement element;
