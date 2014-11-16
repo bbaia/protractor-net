@@ -10,7 +10,7 @@ namespace Protractor
     /// <summary>
     /// Provides a mechanism to write tests against an AngularJS application.
     /// </summary>
-    public class NgWebDriver : IWebDriver
+    public class NgWebDriver : IWebDriver, IWrapsDriver
     {
         private const string AngularDeferBootstrap = "NG_DEFER_BOOTSTRAP!";
 
