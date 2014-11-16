@@ -4,13 +4,14 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 
 using OpenQA.Selenium;
+using OpenQA.Selenium.Internal;
 
 namespace Protractor
 {
     /// <summary>
     /// Provides a mechanism to write tests against an AngularJS application.
     /// </summary>
-    public class NgWebDriver : IWebDriver
+    public class NgWebDriver : IWebDriver, IWrapsDriver
     {
         private const string AngularDeferBootstrap = "NG_DEFER_BOOTSTRAP!";
 
@@ -55,6 +56,8 @@ namespace Protractor
             this.mockModules = mockModules;
         }
 
+        #region IWrapsDriver Members
+
         /// <summary>
         /// Gets the wrapped <see cref="IWebDriver"/> instance.
         /// <para/>
@@ -64,6 +67,8 @@ namespace Protractor
         {
             get { return this.driver; }
         }
+
+        #endregion
 
         /// <summary>
         /// Gets the CSS selector for an element on which to find Angular. 

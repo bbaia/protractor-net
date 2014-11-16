@@ -3,13 +3,14 @@ using System.Drawing;
 using System.Collections.ObjectModel;
 
 using OpenQA.Selenium;
+using OpenQA.Selenium.Internal;
 
 namespace Protractor
 {
     /// <summary>
     /// Provides a mechanism to get elements off the page for test.
     /// </summary>
-    public class NgWebElement : IWebElement
+    public class NgWebElement : IWebElement, IWrapsElement
     {
         private NgWebDriver ngDriver;
         private IWebElement element;
@@ -25,6 +26,8 @@ namespace Protractor
             this.element = element;
         }
 
+        #region IWrapsElement Members
+
         /// <summary>
         /// Gets the wrapped <see cref="IWebElement"/> instance.
         /// </summary>
@@ -32,6 +35,8 @@ namespace Protractor
         {
             get { return this.element; }
         }
+
+        #endregion
 
         #region IWebElement Members
 
