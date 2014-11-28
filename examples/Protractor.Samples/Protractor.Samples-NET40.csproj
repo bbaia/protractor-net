@@ -38,9 +38,12 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Drawing" />
-    <Reference Include="WebDriver, Version=2.38.0.0, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="WebDriver, Version=2.44.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\packages\Selenium.WebDriver.2.38.0\lib\net40\WebDriver.dll</HintPath>
+      <HintPath>..\..\packages\Selenium.WebDriver.2.44.0\lib\net40\WebDriver.dll</HintPath>
+    </Reference>
+    <Reference Include="WebDriver.Support">
+      <HintPath>..\..\packages\Selenium.Support.2.44.0\lib\net40\WebDriver.Support.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -49,13 +52,14 @@
     <Compile Include="MockHttpBackend\Support\NgMockE2EModule.cs" />
     <Compile Include="PageObjects\PageObjectsTests.cs" />
     <Compile Include="PageObjects\Support\TutorialStep5Page.cs" />
+    <Compile Include="PageObjects\Support\TutorialStep5PageByPageFactory.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
     <None Include="README.md" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="..\..\packages\PhantomJS.1.9.2\tools\phantomjs\phantomjs.exe">
+    <Content Include="..\..\packages\PhantomJS.1.9.8\tools\phantomjs\phantomjs.exe">
       <Link>phantomjs.exe</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
@@ -73,6 +77,9 @@
       <Project>{de9c82c5-ebb3-4a2b-a75e-ce3e68e2c866}</Project>
       <Name>Protractor-NET40</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{82A7F48D-3B50-4B1E-B82E-3ADA8210C358}" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

@@ -65,5 +65,36 @@ namespace Protractor.Samples.PageObjects
             Assert.AreEqual("MOTOROLA XOOM™", step5Page.GetResultsPhoneName(0));
             Assert.AreEqual("Motorola XOOM™ with Wi-Fi", step5Page.GetResultsPhoneName(1));
         }
+
+        [Test(Description = "Should filter the phone list as user types into the search box")]
+        public void ShouldFilterByPageFactory()
+        {
+            var step5Page = new TutorialStep5PageByPageFactory(driver, "http://angular.github.io/angular-phonecat/step-5/app/");
+
+            Assert.AreEqual(20, step5Page.GetResultsCount());
+
+            step5Page.SearchFor("Motorola");
+            Assert.AreEqual(8, step5Page.GetResultsCount());
+
+            step5Page.SearchFor("Nexus");
+            Assert.AreEqual(1, step5Page.GetResultsCount());
+        }
+
+        [Test(Description = "Should be possible to control phone order via the drop down select box")]
+        public void ShouldSortByPageFactory()
+        {
+            var step5Page = new TutorialStep5PageByPageFactory(driver, "http://angular.github.io/angular-phonecat/step-5/app/");
+
+            step5Page.SearchFor("tablet");
+            Assert.AreEqual(2, step5Page.GetResultsCount());
+
+            step5Page.SortByAge();
+            Assert.AreEqual("Motorola XOOM™ with Wi-Fi", step5Page.GetResultsPhoneName(0));
+            Assert.AreEqual("MOTOROLA XOOM™", step5Page.GetResultsPhoneName(1));
+
+            step5Page.SortByName();
+            Assert.AreEqual("MOTOROLA XOOM™", step5Page.GetResultsPhoneName(0));
+            Assert.AreEqual("Motorola XOOM™ with Wi-Fi", step5Page.GetResultsPhoneName(1));
+        }
     }
 }
