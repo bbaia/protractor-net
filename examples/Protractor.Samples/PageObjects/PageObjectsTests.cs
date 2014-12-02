@@ -2,8 +2,6 @@
 using NUnit.Framework;
 using OpenQA.Selenium;
 using OpenQA.Selenium.PhantomJS;
-using OpenQA.Selenium.Chrome;
-
 using Protractor.Samples.PageObjects.Support;
 
 namespace Protractor.Samples.PageObjects

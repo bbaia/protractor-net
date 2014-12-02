@@ -1,12 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Drawing.Text;
-using System.Runtime.CompilerServices;
 using NUnit.Framework;
 using OpenQA.Selenium;
 using OpenQA.Selenium.PhantomJS;
-using OpenQA.Selenium.Chrome;
 using OpenQA.Selenium.Support.PageObjects;
 
 namespace Protractor.Samples.Basic
