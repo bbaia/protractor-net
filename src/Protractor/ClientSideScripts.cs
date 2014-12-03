@@ -89,10 +89,11 @@ var using = arguments[0] || document;
 var binding = arguments[1];
 var bindings = using.getElementsByClassName('ng-binding');
 var matches = [];
+var matcher = new RegExp(binding);
 for (var i = 0; i < bindings.length; ++i) {
     var bindingName = angular.element(bindings[i]).data().$binding[0].exp ||
         angular.element(bindings[i]).data().$binding;
-    if (bindingName.indexOf(binding) != -1) {
+    if (matcher.test(bindingName)) {
         matches.push(bindings[i]);
     }
 }
