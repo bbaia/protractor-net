@@ -10,7 +10,7 @@ namespace Protractor
     /// <summary>
     /// Provides a mechanism to write tests against an AngularJS application.
     /// </summary>
-    public class NgWebDriver : IWebDriver, IWrapsDriver
+    public class NgWebDriver : IWebDriver, IWrapsDriver, ITakesScreenshot
     {
         private const string AngularDeferBootstrap = "NG_DEFER_BOOTSTRAP!";
 
@@ -284,6 +284,31 @@ namespace Protractor
             this.driver.Dispose();
         }
 
+        #endregion
+
+        #region ITakesScreenshot Members
+        
+        public Screenshot GetScreenshot()
+		{
+		    ITakesScreenshot takesScreenshot = driver as ITakesScreenshot;
+			if (takesScreenshot == null)
+			{
+				for (IWrapsDriver wrapsDriver = driver as IWrapsDriver; wrapsDriver != null; wrapsDriver = (wrapsDriver.WrappedDriver as IWrapsDriver))
+				{
+					takesScreenshot = (wrapsDriver.WrappedDriver as ITakesScreenshot);
+					if (takesScreenshot != null)
+					{
+						break;
+					}
+				}
+			}
+			if (takesScreenshot == null)
+			{
+				throw new ArgumentException("The IWebDriver object must implement or wrap a driver that implements ITakesScreenshot.", "driver");
+			}
+			return takesScreenshot.GetScreenshot();
+		}
+        
         #endregion
 
         internal void WaitForAngular()
