@@ -18,6 +18,38 @@ namespace Protractor
         }
 
         /// <summary>
+        /// Gets a mechanism to find a button by Text
+        /// </summary>
+        /// <param name="buttonText"></param>
+        /// <returns></returns>
+        public static By ButtonText(string buttonText)
+        {
+            return new JavaScriptBy(ClientSideScripts.FindButton, buttonText);
+        }
+
+        /// <summary>
+        /// Gets a mechanism to find a button by partial Text
+        /// </summary>
+        /// <param name="buttonText"></param>
+        /// <returns></returns>
+        public static By ButtonTextPartial(string buttonText)
+        {
+            return new JavaScriptBy(ClientSideScripts.FindButtonByPartialText, buttonText);
+        }
+
+        /// <summary>
+        /// Gets a mechanism to find elements by Tag name, Attribute and string to search for on the Attribute
+        /// </summary>
+        /// <param name="tagName"></param>
+        /// <param name="attribute"></param>
+        /// <param name="searchString"></param>
+        /// <returns></returns>
+        public static By Find(string tagName, string attribute, string searchString)
+        {
+            return new JavaScriptBy(ClientSideScripts.Find, tagName, attribute, searchString);
+        }
+
+        /// <summary>
         /// Gets a mechanism to find input elements by their model name.
         /// </summary>
         /// <param name="model">The model name.</param>
@@ -25,6 +57,16 @@ namespace Protractor
         public static By Input(string model)
         {
             return new JavaScriptBy(ClientSideScripts.FindInputs, model);
+        }
+
+        /// <summary>
+        /// Gets a mechanism to find a Label by Text
+        /// </summary>
+        /// <param name="labelText"></param>
+        /// <returns></returns>
+        public static By LabelText(string labelText)
+        {
+            return new JavaScriptBy(ClientSideScripts.FindByLabelText, labelText);
         }
 
         /// <summary>
