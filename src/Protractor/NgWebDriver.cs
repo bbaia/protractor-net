@@ -5,6 +5,7 @@ using System.Collections.ObjectModel;
 
 using OpenQA.Selenium;
 using OpenQA.Selenium.Internal;
+using System.Diagnostics;
 
 namespace Protractor
 {
@@ -87,6 +88,19 @@ namespace Protractor
         /// This should be used only when necessary, such as when a page continuously polls an API using $timeout.
         /// </summary>
         public bool IgnoreSynchronization { get; set; }
+
+        /// <summary>
+        /// Waits for until all $timeouts and $http calls have been processed allowing you to get timing information about your page
+        /// </summary>
+        /// <returns></returns>
+        public TimeSpan TimeAction()
+        {
+            Stopwatch stopwatch = new Stopwatch();
+            stopwatch.Start();
+            WaitForAngular();
+            stopwatch.Stop();
+            return stopwatch.Elapsed;
+        }
 
         #region IWebDriver Members
 
