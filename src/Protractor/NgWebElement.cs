@@ -3,16 +3,17 @@ using System.Drawing;
 using System.Collections.ObjectModel;
 
 using OpenQA.Selenium;
+using OpenQA.Selenium.Internal;
 
 namespace Protractor
 {
     /// <summary>
     /// Provides a mechanism to get elements off the page for test.
     /// </summary>
-    public class NgWebElement : IWebElement, IWrapsElement
+    public class NgWebElement : IWebElement, IWrapsElement, IJavaScriptExecutor
     {
-        private NgWebDriver ngDriver;
-        private IWebElement element;
+        private readonly NgWebDriver _ngDriver;
+        private readonly IWebElement _element;
 
         /// <summary>
         /// Creates a new instance of <see cref="NgWebElement"/> by wrapping a <see cref="IWebElement"/> instance.
@@ -21,17 +22,21 @@ namespace Protractor
         /// <param name="element">The existing <see cref="IWebElement"/> instance.</param>
         public NgWebElement(NgWebDriver ngDriver, IWebElement element)
         {
-            this.ngDriver = ngDriver;
-            this.element = element;
+            _ngDriver = ngDriver;
+            _element = element;
         }
+
+        #region IWrapsElement
 
         /// <summary>
         /// Gets the wrapped <see cref="IWebElement"/> instance.
         /// </summary>
         public IWebElement WrappedElement
         {
-            get { return this.element; }
+            get { return _element; }
         }
+
+        #endregion
 
         #region IWebElement Members
 
@@ -40,10 +45,10 @@ namespace Protractor
         /// </summary>
         public bool Displayed
         {
-            get 
+            get
             {
-                this.ngDriver.WaitForAngular();
-                return this.element.Displayed;
+                _ngDriver.WaitForAngular();
+                return _element.Displayed;
             }
         }
 
@@ -54,8 +59,8 @@ namespace Protractor
         {
             get
             {
-                this.ngDriver.WaitForAngular();
-                return this.element.Enabled;
+                _ngDriver.WaitForAngular();
+                return _element.Enabled;
             }
         }
 
@@ -67,8 +72,8 @@ namespace Protractor
         {
             get
             {
-                this.ngDriver.WaitForAngular();
-                return this.element.Location;
+                _ngDriver.WaitForAngular();
+                return _element.Location;
             }
         }
 
@@ -79,8 +84,8 @@ namespace Protractor
         {
             get
             {
-                this.ngDriver.WaitForAngular();
-                return this.element.Selected;
+                _ngDriver.WaitForAngular();
+                return _element.Selected;
             }
         }
 
@@ -91,8 +96,8 @@ namespace Protractor
         {
             get
             {
-                this.ngDriver.WaitForAngular();
-                return this.element.Size;
+                _ngDriver.WaitForAngular();
+                return _element.Size;
             }
         }
 
@@ -103,8 +108,8 @@ namespace Protractor
         {
             get
             {
-                this.ngDriver.WaitForAngular();
-                return this.element.TagName;
+                _ngDriver.WaitForAngular();
+                return _element.TagName;
             }
         }
 
@@ -116,8 +121,8 @@ namespace Protractor
         {
             get
             {
-                this.ngDriver.WaitForAngular();
-                return this.element.Text;
+                _ngDriver.WaitForAngular();
+                return _element.Text;
             }
         }
 
@@ -126,8 +131,8 @@ namespace Protractor
         /// </summary>
         public void Clear()
         {
-            this.ngDriver.WaitForAngular();
-            this.element.Clear();
+            _ngDriver.WaitForAngular();
+            _element.Clear();
         }
 
         /// <summary>
@@ -135,8 +140,8 @@ namespace Protractor
         /// </summary>
         public void Click()
         {
-            this.ngDriver.WaitForAngular();
-            this.element.Click();
+            _ngDriver.WaitForAngular();
+            _element.Click();
         }
 
         /// <summary>
@@ -144,8 +149,8 @@ namespace Protractor
         /// </summary>
         public string GetAttribute(string attributeName)
         {
-            this.ngDriver.WaitForAngular();
-            return this.element.GetAttribute(attributeName);
+            _ngDriver.WaitForAngular();
+            return _element.GetAttribute(attributeName);
         }
 
         /// <summary>
@@ -153,8 +158,8 @@ namespace Protractor
         /// </summary>
         public string GetCssValue(string propertyName)
         {
-            this.ngDriver.WaitForAngular();
-            return this.element.GetCssValue(propertyName);
+            _ngDriver.WaitForAngular();
+            return _element.GetCssValue(propertyName);
         }
 
         /// <summary>
@@ -162,8 +167,8 @@ namespace Protractor
         /// </summary>
         public void SendKeys(string text)
         {
-            this.ngDriver.WaitForAngular();
-            this.element.SendKeys(text);
+            _ngDriver.WaitForAngular();
+            _element.SendKeys(text);
         }
 
         /// <summary>
@@ -171,8 +176,8 @@ namespace Protractor
         /// </summary>
         public void Submit()
         {
-            this.ngDriver.WaitForAngular();
-            this.element.Submit();
+            _ngDriver.WaitForAngular();
+            _element.Submit();
         }
 
         /// <summary>
@@ -183,12 +188,8 @@ namespace Protractor
         /// <exception cref="NoSuchElementException">If no element matches the criteria.</exception>
         public NgWebElement FindElement(By by)
         {
-            if (by is JavaScriptBy)
-            {
-                ((JavaScriptBy)by).RootElement = this.element;
-            }
-            this.ngDriver.WaitForAngular();
-            return new NgWebElement(this.ngDriver, this.element.FindElement(by));
+            _ngDriver.WaitForAngular();
+            return new NgWebElement(_ngDriver, _element.FindElement(by));
         }
 
         /// <summary>
@@ -202,27 +203,45 @@ namespace Protractor
         /// </returns>
         public ReadOnlyCollection<NgWebElement> FindElements(By by)
         {
-            if (by is JavaScriptBy)
-            {
-                ((JavaScriptBy)by).RootElement = this.element;
-            }
-            this.ngDriver.WaitForAngular();
-            return new ReadOnlyCollection<NgWebElement>(this.element.FindElements(by).Select(e => new NgWebElement(this.ngDriver, e)).ToList());
+            _ngDriver.WaitForAngular();
+            return new ReadOnlyCollection<NgWebElement>(_element.FindElements(by).Select(e => new NgWebElement(_ngDriver, e)).ToList());
         }
 
         IWebElement ISearchContext.FindElement(By by)
         {
-            return this.FindElement(by);
+            return FindElement(by);
         }
 
         ReadOnlyCollection<IWebElement> ISearchContext.FindElements(By by)
         {
-            if (by is JavaScriptBy)
-            {
-                ((JavaScriptBy)by).RootElement = this.element;
-            }
-            this.ngDriver.WaitForAngular();
-            return new ReadOnlyCollection<IWebElement>(this.element.FindElements(by).Select(e => (IWebElement)new NgWebElement(this.ngDriver, e)).ToList());
+            _ngDriver.WaitForAngular();
+            return new ReadOnlyCollection<IWebElement>(_element.FindElements(by).Select(e => (IWebElement)new NgWebElement(_ngDriver, e)).ToList());
+        }
+
+        #endregion
+
+        #region IJavaScriptExecutor Members
+
+        /// <summary>
+        /// Executes JavaScript in the context of the currently selected frame or window
+        /// </summary>
+        /// <param name="script">The JavaScript code to execute</param>
+        /// <param name="args">The arguments to the script</param>
+        /// <returns>The value returned by the script</returns>
+        public object ExecuteScript(string script, params object[] args)
+        {
+            return _ngDriver.ExecuteScript(script, args);
+        }
+
+        /// <summary>
+        /// Executes JavaScript asynchronously in the context of the currently selected frame or window
+        /// </summary>
+        /// <param name="script">The JavaScript code to execute</param>
+        /// <param name="args">The arguments to the script</param>
+        /// <returns>The value returned by the script</returns>
+        public object ExecuteAsyncScript(string script, params object[] args)
+        {
+            return _ngDriver.ExecuteAsyncScript(script, args);
         }
 
         #endregion
@@ -234,8 +253,8 @@ namespace Protractor
         /// <returns>The expression evaluated by Angular.</returns>
         public object Evaluate(string expression)
         {
-            this.ngDriver.WaitForAngular();
-            return ((IJavaScriptExecutor)this.ngDriver.WrappedDriver).ExecuteScript(ClientSideScripts.Evaluate, this.element, expression);
+            _ngDriver.WaitForAngular();
+            return ((IJavaScriptExecutor)_ngDriver.WrappedDriver).ExecuteScript(ClientSideScripts.Evaluate, _element, expression);
         }
     }
 }

@@ -25,8 +25,8 @@
         /// <param name="script">The JavaScript to load the module.</param>
         public NgModule(string name, string script)
         {
-            this.Name = name;
-            this.Script = script;
+            Name = name;
+            Script = script;
         }
     }
 }
