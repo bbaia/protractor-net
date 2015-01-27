@@ -38,12 +38,15 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Drawing" />
+    <Reference Include="System.Web.Services" />
     <Reference Include="WebDriver, Version=2.38.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\packages\Selenium.WebDriver.2.38.0\lib\net40\WebDriver.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Binding.cs" />
+    <Compile Include="Input.cs" />
     <Compile Include="JavaScriptBy.cs" />
     <Compile Include="NgBy.cs" />
     <Compile Include="NgNavigation.cs" />
@@ -52,6 +55,10 @@
     <Compile Include="NgModule.cs" />
     <Compile Include="NgWebElement.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Repeater.cs" />
+    <Compile Include="Select.cs" />
+    <Compile Include="SelectedOption.cs" />
+    <Compile Include="TextArea.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

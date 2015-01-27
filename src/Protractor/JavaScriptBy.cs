@@ -7,12 +7,20 @@ using OpenQA.Selenium.Internal;
 
 namespace Protractor
 {
-    internal class JavaScriptBy : By
+    /// <summary>
+    /// 
+    /// </summary>
+    public abstract class JavaScriptBy : By
     {
         private readonly string _script;
         private readonly object[] _args;
 
-        public JavaScriptBy(string script, params object[] args)
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="script"></param>
+        /// <param name="args"></param>
+        protected JavaScriptBy(string script, params object[] args)
         {
             _script = script;
             _args = args;

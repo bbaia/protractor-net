@@ -14,7 +14,7 @@ namespace Protractor
         /// <returns>A <see cref="By"/> object the driver can use to find the elements.</returns>
         public static By Binding(string binding)
         {
-            return new JavaScriptBy(ClientSideScripts.FindBindings, binding);
+            return new Binding(binding);
         }
 
         /// <summary>
@@ -24,7 +24,7 @@ namespace Protractor
         /// <returns>A <see cref="By"/> object the driver can use to find the elements.</returns>
         public static By Input(string model)
         {
-            return new JavaScriptBy(ClientSideScripts.FindInputs, model);
+            return new Input(model);
         }
 
         /// <summary>
@@ -34,7 +34,7 @@ namespace Protractor
         /// <returns>A <see cref="By"/> object the driver can use to find the elements.</returns>
         public static By TextArea(string model)
         {
-            return new JavaScriptBy(ClientSideScripts.FindTextArea, model);
+            return new TextArea(model);
         }
 
         /// <summary>
@@ -44,17 +44,17 @@ namespace Protractor
         /// <returns>A <see cref="By"/> object the driver can use to find the elements.</returns>
         public static By Select(string model)
         {
-            return new JavaScriptBy(ClientSideScripts.FindSelects, model);
+            return new Select(model);
         }
 
         /// <summary>
-        /// Gets a mechanism to find select option elements by their model name.
+        /// Gets a mechanism to find selected option elements by their model name.
         /// </summary>
         /// <param name="model">The model name.</param>
         /// <returns>A <see cref="By"/> object the driver can use to find the elements.</returns>
         public static By SelectedOption(string model)
         {
-            return new JavaScriptBy(ClientSideScripts.FindSelectedOptions, model);
+            return new SelectedOption(model);
         }
 
         /// <summary>
@@ -64,7 +64,7 @@ namespace Protractor
         /// <returns>A <see cref="By"/> object the driver can use to find the elements.</returns>
         public static By Repeater(string repeat)
         {
-            return new JavaScriptBy(ClientSideScripts.FindAllRepeaterRows, repeat);
+            return new Repeater(repeat);
         }
     }
 }
