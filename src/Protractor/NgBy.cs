@@ -1,4 +1,5 @@
-﻿using OpenQA.Selenium;
+﻿using System;
+using OpenQA.Selenium;
 
 namespace Protractor
 {
@@ -22,9 +23,20 @@ namespace Protractor
         /// </summary>
         /// <param name="model">The model name.</param>
         /// <returns>A <see cref="By"/> object the driver can use to find the elements.</returns>
+        [Obsolete("Use Model instead.")]
         public static By Input(string model)
         {
-            return new JavaScriptBy(ClientSideScripts.FindInputs, model);
+            return new JavaScriptBy(ClientSideScripts.FindModel, model);
+        }
+
+        /// <summary>
+        /// Gets a mechanism to find elements by their model name.
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns>A <see cref="By"/> object the driver can use to find the elements.</returns>
+        public static By Model(string model)
+        {
+            return new JavaScriptBy(ClientSideScripts.FindModel, model);
         }
 
         /// <summary>
@@ -32,9 +44,10 @@ namespace Protractor
         /// </summary>
         /// <param name="model">The model name.</param>
         /// <returns>A <see cref="By"/> object the driver can use to find the elements.</returns>
+        [Obsolete("Use Model instead.")]
         public static By TextArea(string model)
         {
-            return new JavaScriptBy(ClientSideScripts.FindTextArea, model);
+            return new JavaScriptBy(ClientSideScripts.FindModel, model);
         }
 
         /// <summary>
@@ -42,9 +55,10 @@ namespace Protractor
         /// </summary>
         /// <param name="model">The model name.</param>
         /// <returns>A <see cref="By"/> object the driver can use to find the elements.</returns>
+        [Obsolete("Use Model instead.")]
         public static By Select(string model)
         {
-            return new JavaScriptBy(ClientSideScripts.FindSelects, model);
+            return new JavaScriptBy(ClientSideScripts.FindModel, model);
         }
 
         /// <summary>

@@ -34,7 +34,7 @@ namespace Protractor.Samples.Basic
         {
             IWebDriver ngDriver = new NgWebDriver(driver);
             ngDriver.Navigate().GoToUrl("http://www.angularjs.org");
-            ngDriver.FindElement(NgBy.Input("yourName")).SendKeys("Julie");
+            ngDriver.FindElement(NgBy.Model("yourName")).SendKeys("Julie");
             Assert.AreEqual("Hello Julie!", ngDriver.FindElement(NgBy.Binding("yourName")).Text);
         }
 

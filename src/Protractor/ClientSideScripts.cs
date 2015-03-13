@@ -99,39 +99,19 @@ for (var i = 0; i < bindings.length; ++i) {
 return matches;";
 
         /**
-         * Find input elements by model name.
+         * Find elements by model name.
          *
          * arguments[0] {Element} The scope of the search.
          * arguments[1] {string} The model name.
          *
          * @return {Array.WebElement} The matching input elements.
          */
-        public const string FindInputs = @"
+        public const string FindModel = @"
 var using = arguments[0] || document;
 var model = arguments[1];
 var prefixes = ['ng-', 'ng_', 'data-ng-', 'x-ng-', 'ng\\:'];
 for (var p = 0; p < prefixes.length; ++p) {
-    var selector = 'input[' + prefixes[p] + 'model=""' + model + '""]';
-    var inputs = using.querySelectorAll(selector);
-    if (inputs.length) {
-        return inputs;
-    }
-}";
-
-        /**
-         * Find multiple select elements by model name.
-         *
-         * arguments[0] {Element} The scope of the search.
-         * arguments[1] {string} The model name.
-         *
-         * @return {Array.WebElement} The matching select elements.
-         */
-        public const string FindSelects = @"
-var using = arguments[0] || document;
-var model = arguments[1];
-var prefixes = ['ng-', 'ng_', 'data-ng-', 'x-ng-', 'ng\\:'];
-for (var p = 0; p < prefixes.length; ++p) {
-    var selector = 'select[' + prefixes[p] + 'model=""' + model + '""]';
+    var selector = '[' + prefixes[p] + 'model=""' + model + '""]';
     var inputs = using.querySelectorAll(selector);
     if (inputs.length) {
         return inputs;
@@ -155,26 +135,6 @@ for (var p = 0; p < prefixes.length; ++p) {
     var inputs = using.querySelectorAll(selector);
     if (inputs.length) {
         return inputs;
-    }
-}";
-
-        /**
-         * Find textarea elements by model name.
-         *
-         * arguments[0] {Element} The scope of the search.
-         * arguments[1] {String} The model name.
-         *
-         * @return {Array.WebElement} The matching textarea elements.
-         */
-        public const string FindTextArea = @"
-var using = arguments[0] || document;
-var model = arguments[1];
-var prefixes = ['ng-', 'ng_', 'data-ng-', 'x-ng-', 'ng\\:'];
-for (var p = 0; p < prefixes.length; ++p) {
-    var selector = 'textarea[' + prefixes[p] + 'model=""' + model + '""]';
-    var textareas = using.querySelectorAll(selector);
-    if (textareas.length) {
-        return textareas;
     }
 }";
 

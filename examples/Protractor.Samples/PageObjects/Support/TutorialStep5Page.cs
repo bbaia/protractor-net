@@ -19,7 +19,7 @@ namespace Protractor.Samples.PageObjects.Support
 
         public TutorialStep5Page SearchFor(string query)
         {
-            var q = ngDriver.FindElement(NgBy.Input("query"));
+            var q = ngDriver.FindElement(NgBy.Model("query"));
             q.Clear();
             q.SendKeys(query);
             return this;
@@ -29,7 +29,7 @@ namespace Protractor.Samples.PageObjects.Support
         {
             // Alternative: Use OpenQA.Selenium.Support.UI.SelectElement from Selenium.Support package
             ngDriver
-                .FindElement(NgBy.Select("orderProp"))
+                .FindElement(NgBy.Model("orderProp"))
                 .FindElement(By.XPath("//option[@value='name']"))
                 .Click();
             return this;
@@ -39,7 +39,7 @@ namespace Protractor.Samples.PageObjects.Support
         {
             // Alternative: Use OpenQA.Selenium.Support.UI.SelectElement from Selenium.Support package
             ngDriver
-                .FindElement(NgBy.Select("orderProp"))
+                .FindElement(NgBy.Model("orderProp"))
                 .FindElement(By.XPath("//option[@value='age']"))
                 .Click();
             return this;

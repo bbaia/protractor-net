@@ -64,9 +64,9 @@ $httpBackend.whenGET('phones/phones.json').respond(
             IWebDriver ngDriver = new NgWebDriver(driver, mockModule);
             ngDriver.Navigate().GoToUrl("http://angular.github.io/angular-phonecat/step-5/app/");
             Assert.AreEqual(2, ngDriver.FindElements(NgBy.Repeater("phone in phones")).Count);
-            ngDriver.FindElement(NgBy.Input("query")).SendKeys("bravo");
+            ngDriver.FindElement(NgBy.Model("query")).SendKeys("bravo");
             Assert.AreEqual(1, ngDriver.FindElements(NgBy.Repeater("phone in phones")).Count);
-            ngDriver.FindElement(NgBy.Input("query")).SendKeys("!");
+            ngDriver.FindElement(NgBy.Model("query")).SendKeys("!");
             Assert.AreEqual(0, ngDriver.FindElements(NgBy.Repeater("phone in phones")).Count);
         }
     }
