@@ -119,7 +119,7 @@ for (var p = 0; p < prefixes.length; ++p) {
 }";
 
         /**
-         * Find unordered list elements by model name.
+         * Find elements by model name.
          *
          * arguments[0] {Element} The scope of the search.
          * arguments[1] {string} The model name.
