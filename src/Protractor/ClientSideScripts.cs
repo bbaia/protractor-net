@@ -119,6 +119,26 @@ for (var p = 0; p < prefixes.length; ++p) {
 }";
 
         /**
+         * Find unordered list elements by model name.
+         *
+         * arguments[0] {Element} The scope of the search.
+         * arguments[1] {string} The model name.
+         *
+         * @return {Array.WebElement} The matching input elements.
+         */
+        public const string FindModel = @"
+var using = arguments[0] || document;
+var model = arguments[1];
+var prefixes = ['ng-', 'ng_', 'data-ng-', 'x-ng-', 'ng\\:'];
+for (var p = 0; p < prefixes.length; ++p) {
+    var selector = '[' + prefixes[p] + 'model=""' + model + '""]';
+    var inputs = using.querySelectorAll(selector);
+    if (inputs.length) {
+        return inputs;
+    }
+}";
+
+        /**
          * Find multiple select elements by model name.
          *
          * arguments[0] {Element} The scope of the search.
