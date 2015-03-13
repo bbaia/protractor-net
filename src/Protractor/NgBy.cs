@@ -28,6 +28,16 @@ namespace Protractor
         }
 
         /// <summary>
+        /// Gets the mechanism to find an element by model
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        public static By Model(string model)
+        {
+            return new JavaScriptBy(ClientSideScripts.FindModel, model);
+        }
+
+        /// <summary>
         /// Gets a mechanism to find textarea elements by their model name.
         /// </summary>
         /// <param name="model">The model name.</param>
