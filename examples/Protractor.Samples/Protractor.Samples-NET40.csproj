@@ -46,7 +46,7 @@
     <Compile Include="MockHttpBackend\MockHttpBackendTests.cs" />
     <Compile Include="Basic\BasicTests.cs" />
     <Compile Include="MockHttpBackend\Support\NgMockE2EModule.cs" />
-    <Compile Include="PageObjects\NavigationTest.cs" />
+    <Compile Include="PageObjects\HelloNgWebDriver.cs" />
     <Compile Include="PageObjects\PageObjectsTests.cs" />
     <Compile Include="PageObjects\Support\TutorialStep5Page.cs" />
   </ItemGroup>

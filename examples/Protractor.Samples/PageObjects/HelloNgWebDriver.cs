@@ -6,7 +6,7 @@
     using OpenQA.Selenium.Chrome;
 
     [TestFixture]
-    public class HelloNgWebDriver
+    public class NavigationTest
     {
         private IWebDriver _driver;
         private NgWebDriver _ngWebDriver;
@@ -21,6 +21,7 @@
             _ngWebDriver = new NgWebDriver(_driver, "[ng-app='docsApp']");
             _ngWebDriver.Navigate().GoToUrl(Url);
             _ngWebDriver.Manage().Window.Maximize();
+            //The script timeout is almost essential since most of protractor mechanism are dependent of client side script.
             _ngWebDriver.Manage().Timeouts().SetPageLoadTimeout(TimeSpan.FromSeconds(10));
 
         }
@@ -32,7 +33,7 @@
         }
 
         /// <summary>
-        /// Sample test to demonstrate the use of NgWebDriver.
+        /// Sample test to demonstrate the use NgWebDriver with angular page.
         /// </summary>
         [Test]
         public void HelloNgDriver()
@@ -44,7 +45,7 @@
         }
 
         /// <summary>
-        /// Sample test to demonstrate the use of wrapper NgWebDriver.
+        /// Sample test to demonstrate the use wrapper driver with angular and non-angular hybrid page.
         /// </summary>
         [Test]
         public void HelloNgWrapperDriver()
