@@ -1,8 +1,14 @@
+0.5.0 / 2015-04-04
+==================
+
+* ([3a24008](https://github.com/bbaia/protractor-net/commit/3a24008861b061f0c9b0e34cfa2f0b98ba3cc55b)) Add NgBy.Model for getting elements by model regardless of element tag name
+* ([633a6e5](https://github.com/bbaia/protractor-net/commit/633a6e541a28860bfc1c041771a30821c03fa7a7)) Update to Selenium.WebDriver v2.45
+
 0.4.0 / 2014-12-03
 ==================
 
 * ([4cb2bdc](https://github.com/bbaia/protractor-net/commit/4cb2bdceb4d04175c230cce9b9def6102299673d)) Add the ability to use the Actions class
-* ([99cef60](https://github.com/bbaia/protractor-net/commit/99cef60645b1ef1d12247893eaaee2522bc27654)) Update to Selenium.WebDriver v2.38
+* ([762b553](https://github.com/bbaia/protractor-net/commit/762b553a0bbae65273f16d1362ca1088e21620ac)) Update to Selenium.WebDriver v2.44
 
 0.3.0 / 2013-10-27
 ==================
