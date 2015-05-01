@@ -19,6 +19,36 @@ namespace Protractor
         }
 
         /// <summary>
+        /// Gets a mechanism to find a button by Text
+        /// </summary>
+        /// <param name="buttonText"></param>
+        /// <returns></returns>
+        public static By ButtonText(string buttonText)
+        {
+            return new JavaScriptBy(ClientSideScripts.FindButton, buttonText);
+        }
+
+        /// <summary>
+        /// Gets a mechanism to find a button by partial Text
+        /// </summary>
+        /// <param name="buttonText"></param>
+        /// <returns></returns>
+        public static By ButtonTextPartial(string buttonText)
+        {
+            return new JavaScriptBy(ClientSideScripts.FindButtonByPartialText, buttonText);
+        }
+
+        /// <summary>
+        /// Gets a mechanism to find a Label by Text
+        /// </summary>
+        /// <param name="labelText"></param>
+        /// <returns></returns>
+        public static By LabelText(string labelText)
+        {
+            return new JavaScriptBy(ClientSideScripts.FindByLabelText, labelText);
+        }
+
+        /// <summary>
         /// Gets a mechanism to find input elements by their model name.
         /// </summary>
         /// <param name="model">The model name.</param>
