@@ -3,6 +3,7 @@ using NUnit.Framework;
 using OpenQA.Selenium;
 using OpenQA.Selenium.PhantomJS;
 using OpenQA.Selenium.Chrome;
+using OpenQA.Selenium.IE;
 
 namespace Protractor.Samples.Basic
 {
@@ -19,6 +20,10 @@ namespace Protractor.Samples.Basic
 
             // Using NuGet Package 'WebDriver.ChromeDriver.win32'
             //driver = new ChromeDriver();
+
+            // Using NuGet Package 'WebDriver.IEDriverServer.win32'
+            //var options = new InternetExplorerOptions() { IntroduceInstabilityByIgnoringProtectedModeSettings = true };
+            //driver = new InternetExplorerDriver(options);
 
             driver.Manage().Timeouts().SetScriptTimeout(TimeSpan.FromSeconds(5));
         }
