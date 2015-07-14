@@ -1,3 +1,10 @@
+0.6.0 / 2015-07-14
+==================
+
+* ([015799c](https://github.com/bbaia/protractor-net/commit/015799c84fe45a62839a8e1fe585a23c8f7b0306)) Add support for ng-repeat-start and ng-repeat-end elements
+* ([1a2af2c](https://github.com/bbaia/protractor-net/commit/1a2af2cf15ca83355c32e9c9ca5676c7831889c3)) Update to Selenium.WebDriver v2.46
+* ([8d85e80](https://github.com/bbaia/protractor-net/commit/8d85e80104a1a5efc4ddacff164adf13f2f4e215)) Update WaitForAngular client script (Improve error message and use Angular testability api if available)
+
 0.5.0 / 2015-04-04
 ==================
 
