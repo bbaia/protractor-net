@@ -91,6 +91,45 @@ var expression = arguments[1];
 return angular.element(element).scope().$eval(expression);";
 
         #region Locators
+        /* Find buttons by textual content. 
+        * @param {string} searchText The exact text to match.
+        * @param {Element} using The scope of the search.  Defaults to 'document'.
+        * @return {Array.<Element>} The matching elements.
+        */
+        public const string FindButton =
+            "var using = arguments[0]  || document; var searchText = arguments[1];" +
+            "var elements = using.querySelectorAll('button, input[type=\"button\"], " +
+            "input[type=\"submit\"]');  " +
+            "var matches = [];  " +
+            "for (var i = 0; i < elements.length; ++i) {    " +
+            "var element = elements[i];    " +
+            "var elementText;    " +
+            "if (element.tagName.toLowerCase() == 'button') {      " +
+            "elementText = element.innerText || element.textContent;    } " +
+            "else {      elementText = element.value;    }    " +
+            "if (elementText.trim() === searchText) {      " +
+            "matches.push(element);    }  }  return matches; ";
+
+
+        /* Find buttons by textual content.
+       * @param {string} searchText The exact text to match.
+       * @param {Element} using The scope of the search.  Defaults to 'document'.
+       * @return {Array.<Element>} The matching elements.
+        */
+        public const string FindButtonByPartialText =
+        "var using = arguments[0]  || document; var searchText = arguments[1];" +
+        "var elements = using.querySelectorAll('button, input[type=\"button\"], " +
+        "input[type=\"submit\"]');  " +
+        "var matches = [];  " +
+        "for (var i = 0; i < elements.length; ++i) {    " +
+        "var element = elements[i];    " +
+        "var elementText;    " +
+        "if (element.tagName.toLowerCase() == 'button') {      " +
+        "elementText = element.innerText || element.textContent;    } " +
+        "else {      elementText = element.value;    }    " +
+        "if (elementText.indexOf(searchText)  > -1) {      " +
+        "matches.push(element);    }  }  return matches; ";
+
 
         /**
          * Find a list of elements in the page by their angular binding.
@@ -113,6 +152,28 @@ for (var i = 0; i < bindings.length; ++i) {
     }
 }
 return matches;";
+
+        /**
+ * Find label elements by the text content
+ *
+ * arguments[0] {Element} The scope of the search.
+ * arguments[1] {string} The model name.
+ *
+ * @return {Array.WebElement} The matching select elements.
+ */
+        public const string FindByLabelText =
+          "var using = arguments[0]  || document; " +
+          "var searchText = arguments[1];" +
+          "var elements = using.querySelectorAll('label');" +
+          "var matches = [];  " +
+          "for (var i = 0; i < elements.length; ++i) {    " +
+          "var element = elements[i];    " +
+          "var elementText;    " +
+          "if (element.tagName.toLowerCase() == 'label') {      " +
+          "elementText = element.innerText || element.textContent;    } " +
+          "else {      elementText = element.value;    }    " +
+          "if (elementText.trim() === searchText) {      " +
+          "matches.push(element);    }  }  return matches; ";
 
         /**
          * Find elements by model name.
