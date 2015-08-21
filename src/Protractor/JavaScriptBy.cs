@@ -7,7 +7,7 @@ using OpenQA.Selenium.Internal;
 
 namespace Protractor
 {
-    internal class JavaScriptBy : By
+    public class JavaScriptBy : By
     {
         private string script;
         private object[] args;
