@@ -151,15 +151,29 @@ namespace Protractor
                      hcDriver.Capabilities.BrowserName == "phantomjs"))
                 {
                     // Internet Explorer & PhantomJS
-                    this.jsExecutor.ExecuteScript("window.name += '" + AngularDeferBootstrap + "';");
+                    // Don't run the angularjs defer unless there are modules to inject - problems on PhantomJs
+                    if (mockModules.Any())
+                    {
+                        jsExecutor.ExecuteScript("window.name += '" + AngularDeferBootstrap + "';");
+                    }
+
                     this.driver.Url = value;
                 }
                 else
                 {
                     // Chrome & Firefox
                     this.driver.Url = "about:blank";
-                    this.jsExecutor.ExecuteScript("window.name += '" + AngularDeferBootstrap + "'; window.location.href = '" + value + "';");
+
+                    // Don't run the angularjs defer unless there are modules to inject - problems on PhantomJs - maybe to do with choice of router
+                    if (mockModules.Any())
+                    {
+                        jsExecutor.ExecuteScript("window.name += '" + AngularDeferBootstrap + "';");
+                    }
+
+                    jsExecutor.ExecuteScript("window.location.href = '" + value + "';");
                 }
+
+                if (!mockModules.Any()) return;
 
                 // Make sure the page is an Angular page.
                 object isAngularApp = this.jsExecutor.ExecuteAsyncScript(ClientSideScripts.TestForAngular, 10);
