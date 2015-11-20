@@ -230,6 +230,60 @@ for (var i = 0; i < elements.length; ++i) {
 }
 return matches;";
 
+        /**
+         * Find buttons by textual content.
+         *
+         * arguments[0] {Element} The scope of the search.
+         * arguments[1] {string} The partial text to match.
+         *
+         * @return {Array.Element} The matching elements.
+         */
+
+        public const string findByPartialButtonText_untested = @"
+var using = arguments[0] || document;
+var searchText = arguments[1];
+
+var elements = using.querySelectorAll('button, input[type=""button""], input[type=""submit""]');
+var matches = [];
+for (var i = 0; i < elements.length; ++i) {
+    var element = elements[i];
+    var elementText;
+    if (element.tagName.toLowerCase() == 'button') {
+        elementText = element.textContent || element.innerText || '';
+    } else {
+        elementText = element.value;
+    }
+    if (elementText.indexOf(searchText) > -1) {
+        matches.push(element);
+    }
+}
+return matches;";
+
+        /**
+         * Find buttons by textual content.
+         *
+         * arguments[0] {Element} The scope of the search.
+         * arguments[1] {string} The exact text to match.
+         * arguments[2] {string} The css selector to match.
+         *
+         * @return {Array.Element} The matching elements.
+         */
+
+        public const string findByCssContainingText_untested = @"
+var using = arguments[0] || document;
+var searchText = arguments[1];
+var cssSelector = arguments[2];
+var elements = using.querySelectorAll(cssSelector);
+var matches = [];
+for (var i = 0; i < elements.length; ++i) {
+    var element = elements[i];
+    var elementText = element.textContent || element.innerText || '';
+    if (elementText.indexOf(searchText) > -1) {
+        matches.push(element);
+    }
+}
+return matches;
+";
 
         /**
          * Find elements by options.
