@@ -115,6 +115,55 @@ for (var i = 0; i < bindings.length; ++i) {
 return matches;";
 
         /**
+         * Find a list of elements in the page by their angular binding.
+         *
+         * arguments[0] {string} The binding, e.g. {{cat.name}}.
+         * arguments[1] {boolean} Whether the binding needs to be matched exactly.
+         * arguments[2] {Element} The scope of the search.
+         * arguments[3] {string} The selector to use for the root app element.
+         *
+         * @return {Array.WebElement} The elements containing the binding.
+         */
+
+        public const string FindBindings_untested = @"
+
+var binding = arguments[0];
+var exact =  arguments[1] || false;
+var using = arguments[2] || document;
+var rootSelector  = arguments[3] || 'body';
+var root = document.querySelector(rootSelector);
+
+if (angular.getTestability) {
+    return angular.getTestability(root).
+    findBindings(using, binding, exactMatch);
+}
+var bindings = using.getElementsByClassName('ng-binding');
+var matches = [];
+for (var i = 0; i < bindings.length; ++i) {
+    var dataBinding = angular.element(bindings[i]).data('$binding');
+    if (dataBinding) {
+        var bindingName = dataBinding.exp || dataBinding[0].exp || dataBinding;
+        if (exactMatch) {
+            var matcher = new RegExp('({|\\s|^|\\|)' +
+                /* See http://stackoverflow.com/q/3561711 */
+                binding.replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, '\\$&') +
+                '(}|\\s|$|\\|)');
+            if (matcher.test(bindingName)) {
+                matches.push(bindings[i]);
+            }
+        } else {
+            if (bindingName.indexOf(binding) != -1) {
+                matches.push(bindings[i]);
+            }
+        }
+    }
+}
+return matches; /* Return the whole array for webdriver.findElements. */
+";
+
+
+
+        /**
          * Find elements by model name.
          *
          * arguments[0] {Element} The scope of the search.
@@ -153,6 +202,58 @@ for (var p = 0; p < prefixes.length; ++p) {
         return inputs;
     }
 }";
+        /**
+         * Find buttons by textual content.
+         *
+         * arguments[0] {Element} The scope of the search.
+         * arguments[1] {string} The exact text to match.
+         *
+         * @return {Array.Element} The matching elements.
+         */
+
+        public const string findByButtonText_untested = @"
+var using = arguments[0] || document;
+var searchText = arguments[1];
+var elements = using.querySelectorAll('button, input[type=""button""], input[type=""submit""]');
+var matches = [];
+for (var i = 0; i < elements.length; ++i) {
+    var element = elements[i];
+    var elementText;
+    if (element.tagName.toLowerCase() == 'button') {
+        elementText = element.textContent || element.innerText || '';
+    } else {
+        elementText = element.value;
+    }
+    if (elementText.trim() === searchText) {
+        matches.push(element);
+    }
+}
+return matches;";
+
+
+        /**
+         * Find elements by options.
+         *
+         * arguments[0] {Element} The scope of the search.
+         * arguments[1] {string} The descriptor for the option
+         * (i.e. fruit for fruit in fruits).* arguments[1] {string} The text of the repeater, e.g. 'cat in cats'.
+         *
+         * @return {Array.WebElement} The matching elements.
+         */
+
+        public const string findByOptions_untested = @"
+var using = arguments[0] || document;
+var optionsDescriptor = arguments[1];
+
+var prefixes = ['ng-', 'ng_', 'data-ng-', 'x-ng-', 'ng\\:'];
+for (var p = 0; p < prefixes.length; ++p) {
+var selector = '[' + prefixes[p] + 'options=""' + optionsDescriptor + '""] option';
+var elements = using.querySelectorAll(selector);
+if (elements.length) {
+return elements;
+}
+}";
+
 
         /**
          * Find all rows of an ng-repeat.
