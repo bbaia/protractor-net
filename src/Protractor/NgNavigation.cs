@@ -79,6 +79,15 @@ namespace Protractor
             this.navigation.Refresh();
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        public void SetLocation(string selector, string url)
+        {
+            IJavaScriptExecutor jsExecutor = this.ngDriver.WrappedDriver as IJavaScriptExecutor;
+            jsExecutor.ExecuteScript(ClientSideScripts.SetLocation, new Object[]{selector, url});
+        }
+
         #endregion
     }
 }

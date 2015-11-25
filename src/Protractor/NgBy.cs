@@ -62,6 +62,14 @@ namespace Protractor
         }
 
         /// <summary>
+        /// 
+        /// </summary>
+        public static By Options(string option)
+        {
+            return new JavaScriptBy(ClientSideScripts.FindByOptions, option);
+        }
+
+        /// <summary>
         /// Gets a mechanism to find select option elements by their model name.
         /// </summary>
         /// <param name="model">The model name.</param>
@@ -79,6 +87,22 @@ namespace Protractor
         public static By Repeater(string repeat)
         {
             return new JavaScriptBy(ClientSideScripts.FindAllRepeaterRows, repeat);
+        }
+        
+        /// <summary>
+        /// 
+        /// </summary>
+        public static By ButtonText(string repeat)
+        {
+            return new JavaScriptBy(ClientSideScripts.FindByButtonText, repeat);
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public static By PartialButtonText(string repeat)
+        {
+            return new JavaScriptBy(ClientSideScripts.FindByPartialButtonText, repeat);
         }
     }
 }
