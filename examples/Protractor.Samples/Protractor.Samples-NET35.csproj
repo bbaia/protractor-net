@@ -45,6 +45,9 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Way2Automation\Way2AutomationTests.cs" />
+  </ItemGroup>
+  <ItemGroup>
     <Compile Include="Basic\BasicTests.cs" />
     <Compile Include="MockHttpBackend\MockHttpBackendTests.cs" />
     <Compile Include="MockHttpBackend\Support\NgMockE2EModule.cs" />
