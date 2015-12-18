@@ -25,6 +25,12 @@ namespace Protractor.Test
         private IWebDriver driver;
         private NgWebDriver ngDriver;
         private WebDriverWait wait;
+        private IAlert alert;
+        private string alert_text;
+        private Regex theReg;
+        private MatchCollection theMatches;
+        private Match theMatch;
+        private Capture theCapture;
         private int wait_seconds = 3;
         private int highlight_timeout = 100;
         private Actions actions;
@@ -142,7 +148,7 @@ namespace Protractor.Test
             highlight(ng_post_code_element);
             StringAssert.IsMatch("Post Code", ng_post_code_element.GetAttribute("placeholder"));
             ng_post_code_element.SendKeys("11011");
-            
+
             // NOTE: there are two 'Add Customer' buttons on this form
             NgWebElement ng_add_dustomer_button_element = ngDriver.FindElements(NgBy.PartialButtonText("Add Customer"))[1];
             actions.MoveToElement(ng_add_dustomer_button_element.WrappedElement).Build().Perform();
@@ -152,15 +158,15 @@ namespace Protractor.Test
             // confirm
             try
             {
-            ngDriver.WrappedDriver.SwitchTo().Alert().Accept();
-            // switch to "Customers" screen
-            ngDriver.FindElement(NgBy.PartialButtonText("Customers")).Click();
+                ngDriver.WrappedDriver.SwitchTo().Alert().Accept();
+                // switch to "Customers" screen
+                ngDriver.FindElement(NgBy.PartialButtonText("Customers")).Click();
 
-            // customers
-            ReadOnlyCollection<NgWebElement> ng_customers = ngDriver.FindElements(NgBy.Repeater("cust in Customers"));
-            // discover newly added customer            
-            NgWebElement newly_added_customer = ng_customers.First(cust => Regex.IsMatch(cust.Text, "John Doe.*"));
-            Assert.IsNotNull(newly_added_customer);
+                // customers
+                ReadOnlyCollection<NgWebElement> ng_customers = ngDriver.FindElements(NgBy.Repeater("cust in Customers"));
+                // discover newly added customer            
+                NgWebElement newly_added_customer = ng_customers.First(cust => Regex.IsMatch(cust.Text, "John Doe.*"));
+                Assert.IsNotNull(newly_added_customer);
             }
             catch (NoAlertPresentException ex)
             {
@@ -233,12 +239,15 @@ namespace Protractor.Test
             currencies_select_element.SelectByText("Dollar");
             var submit_button_element = ngDriver.WrappedDriver.FindElement(By.XPath("/html/body//form/button[@type='submit']"));
             StringAssert.IsMatch("Process", submit_button_element.Text);
+            Thread.Sleep(1000);
             submit_button_element.Click();
+
             try
             {
-                IAlert alert = driver.SwitchTo().Alert();
-                string alert_text = alert.Text;
+                alert = driver.SwitchTo().Alert();
+                alert_text = alert.Text;
                 StringAssert.StartsWith("Account created successfully with account Number", alert_text);
+
                 alert.Accept();
 
             }
@@ -252,14 +261,45 @@ namespace Protractor.Test
                 // Alert not handled by PhantomJS
                 verificationErrors.Append(ex.StackTrace);
             }
-            // TODO: confirm account added for customer
-            // repeater: account in cust.accountNo 
+
+            // Confirm account added for customer
+            Assert.IsEmpty(verificationErrors.ToString());
+
+            // switch to "Customers" screen
+            ngDriver.FindElement(NgBy.PartialButtonText("Customers")).Click();
+
+            // customers
+            ng_customers = ngDriver.FindElements(NgBy.Repeater("cust in Customers"));
+            // discover customer            
+            NgWebElement ng_customer_element = ng_customers.First(cust => Regex.IsMatch(cust.Text, "Harry Potter.*"));
+            Assert.IsNotNull(ng_customer_element);
+            string account_id = "";
+            theReg = new Regex(@"(?<account_id>\d+)$");
+            theMatches = theReg.Matches(alert_text);
+            foreach (Match theMatch in theMatches)
+            {
+                if (theMatch.Length != 0)
+                {
+
+                    foreach (Capture theCapture in theMatch.Groups["account_id"].Captures)
+                    {
+                        account_id = theCapture.ToString();
+                    }
+                }
+            }
+            Assert.IsNotNullOrEmpty(account_id);
+            // accounts of specific customer
+            ReadOnlyCollection<NgWebElement> ng_customer_accounts = ng_customer_element.FindElements(NgBy.Repeater("account in cust.accountNo"));
+
+            NgWebElement account_matching = ng_customer_accounts.First(acc => String.Equals(acc.Text, account_id));
+            Assert.IsNotNull(account_matching);
+            highlight(account_matching.WrappedElement);
+            Thread.Sleep(1000);
         }
 
         [Test]
         public void ShouldSortCustomersAccounts()
         {
-
             ngDriver.FindElement(NgBy.ButtonText("Bank Manager Login")).Click();
             ngDriver.FindElement(NgBy.PartialButtonText("Customers")).Click();
             // core Selenium
