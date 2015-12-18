@@ -291,7 +291,11 @@ namespace Protractor
 
         #endregion
 
-        internal void WaitForAngular()
+        /// <summary>
+        /// Waits for angular to finish any ongoing $http, $timeouts, digest cycles etc.
+        /// This is used before any action on this driver, except if IgnoreSynchonization flag is set to true.
+        /// </summary>
+        public void WaitForAngular()
         {
             if (!this.IgnoreSynchronization)
             {
