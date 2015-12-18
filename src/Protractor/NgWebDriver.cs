@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Linq;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 
 using OpenQA.Selenium;
@@ -15,10 +14,10 @@ namespace Protractor
     {
         private const string AngularDeferBootstrap = "NG_DEFER_BOOTSTRAP!";
 
-        private IWebDriver driver;
-        private IJavaScriptExecutor jsExecutor;
-        private string rootElement;
-        private NgModule[] mockModules;
+        private readonly IWebDriver driver;
+        private readonly IJavaScriptExecutor jsExecutor;
+        private readonly string rootElement;
+        private readonly NgModule[] mockModules;
 
         /// <summary>
         /// Creates a new instance of <see cref="NgWebDriver"/> by wrapping a <see cref="IWebDriver"/> instance.
@@ -178,6 +177,7 @@ namespace Protractor
                 }
                 else
                 {
+                    //TODO MGA : this may not be a good approach, protractor could still be used interchangeably with pages with or without angular, should not break !
                     throw new InvalidOperationException(
                         String.Format("Angular could not be found on the page '{0}'", value));
                 }
@@ -291,7 +291,11 @@ namespace Protractor
 
         #endregion
 
-        internal void WaitForAngular()
+        /// <summary>
+        /// Waits for angular to finish any ongoing $http, $timeouts, digest cycles etc.
+        /// This is used before any action on this driver, except if IgnoreSynchonization flag is set to true.
+        /// </summary>
+        public void WaitForAngular()
         {
             if (!this.IgnoreSynchronization)
             {

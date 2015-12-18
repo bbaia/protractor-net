@@ -12,8 +12,8 @@ namespace Protractor
     /// </summary>
     public class NgWebElement : IWebElement, IWrapsElement
     {
-        private NgWebDriver ngDriver;
-        private IWebElement element;
+        private readonly NgWebDriver ngDriver;
+        private readonly IWebElement element;
 
         /// <summary>
         /// Creates a new instance of <see cref="NgWebElement"/> by wrapping a <see cref="IWebElement"/> instance.
