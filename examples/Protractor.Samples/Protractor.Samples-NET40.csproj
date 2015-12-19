@@ -48,10 +48,11 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Way2Automation\Way2AutomationTests.cs" />
-  </ItemGroup>
+</ItemGroup>
   <ItemGroup>
-    <Compile Include="Basic\CalculatorTests.cs" />
-    <Compile Include="Basic\NgNavTests.cs" />
+    <Compile Include="Calculator\CalculatorTests.cs" />
+</ItemGroup>
+<ItemGroup>
     <Compile Include="MockHttpBackend\MockHttpBackendTests.cs" />
     <Compile Include="Basic\BasicTests.cs" />
     <Compile Include="MockHttpBackend\Support\NgMockE2EModule.cs" />
