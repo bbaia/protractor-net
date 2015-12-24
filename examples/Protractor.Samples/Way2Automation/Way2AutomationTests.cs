@@ -14,8 +14,8 @@ using System.Collections.ObjectModel;
 using System.IO;
 using System.Threading;
 using System.Linq;
-using System.Drawing;
-using System.Windows.Forms;
+// using System.Drawing;
+// using System.Windows.Forms;
 
 namespace Protractor.Test
 {
@@ -46,7 +46,7 @@ namespace Protractor.Test
             //driver = new ChromeDriver();
             //var options = new InternetExplorerOptions() { IntroduceInstabilityByIgnoringProtectedModeSettings = true };
             //driver = new InternetExplorerDriver(options);
-            driver.Manage().Window.Size = new System.Drawing.Size(600, 400);
+            // driver.Manage().Window.Size = new System.Drawing.Size(600, 400);
             driver.Manage().Timeouts().SetScriptTimeout(TimeSpan.FromSeconds(60));
             ngDriver = new NgWebDriver(driver);
             wait = new WebDriverWait(driver, TimeSpan.FromSeconds(wait_seconds));
