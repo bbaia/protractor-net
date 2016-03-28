@@ -21,16 +21,17 @@ namespace Protractor.Samples.PageObjects
         [SetUp]
         public void SetUp()
         {
-            // Using NuGet Package 'PhantomJS'
+            // Using PhantomJS
             driver = new PhantomJSDriver();
 
-            // Using NuGet Package 'WebDriver.ChromeDriver.win32'
+            // Using Chrome
             //driver = new ChromeDriver();
 
-            // Using NuGet Package 'WebDriver.IEDriverServer.win32'
+            // Using Internet Explorer
             //var options = new InternetExplorerOptions() { IntroduceInstabilityByIgnoringProtectedModeSettings = true };
             //driver = new InternetExplorerDriver(options);
 
+            // Required for TestForAngular and WaitForAngular scripts
             driver.Manage().Timeouts().SetScriptTimeout(TimeSpan.FromSeconds(5));
         }
 

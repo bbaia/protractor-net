@@ -17,7 +17,7 @@ Supports Microsoft .NET Framework 3.5 and higher.
 [Test]
 public void ShouldGreetUsingBinding()
 {
-    using (IWebDriver ngDriver = new NgWebDriver(new ChromeDriver()))
+    using (var ngDriver = new NgWebDriver(new ChromeDriver()))
     {
         ngDriver.Url = "http://www.angularjs.org";
         ngDriver.FindElement(NgBy.Model("yourName")).SendKeys("Julie");

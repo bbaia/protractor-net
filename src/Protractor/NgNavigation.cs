@@ -49,26 +49,70 @@ namespace Protractor
             this.navigation.Forward();
         }
 
+        void OpenQA.Selenium.INavigation.GoToUrl(Uri url)
+        {
+            GoToUrl(url, true);
+        }
+
         /// <summary>
         /// Load a new web page in the current browser window.
         /// </summary>
         /// <param name="url">The URL to load.</param>
         public void GoToUrl(Uri url)
         {
-            if (url == null)
-            {
-                throw new ArgumentNullException("url", "URL cannot be null.");
-            }
-            this.ngDriver.Url = url.ToString();
+            GoToUrl(url, true);
         }
 
         /// <summary>
-        ///  Load a new web page in the current browser window.
+        /// Load a new web page in the current browser window.
+        /// </summary>
+        /// <param name="url">The URL to load.</param>
+        /// <param name="ensureAngularApp">Ensure the page is an Angular page by throwing an exception.</param>
+        public void GoToUrl(Uri url, bool ensureAngularApp)
+        {
+            if (ensureAngularApp)
+            {
+                if (url == null)
+                {
+                    throw new ArgumentNullException("url", "URL cannot be null.");
+                }
+                this.ngDriver.Url = url.ToString();
+            }
+            else
+            {
+                this.navigation.GoToUrl(url);
+            }
+        }
+
+        void OpenQA.Selenium.INavigation.GoToUrl(string url)
+        {
+            GoToUrl(url, true);
+        }
+
+        /// <summary>
+        /// Load a new web page in the current browser window.
         /// </summary>
         /// <param name="url">The URL to load. It is best to use a fully qualified URL</param>
         public void GoToUrl(string url)
         {
-            this.ngDriver.Url = url;
+            GoToUrl(url, true);
+        }
+
+        /// <summary>
+        /// Load a new web page in the current browser window.
+        /// </summary>
+        /// <param name="url">The URL to load. It is best to use a fully qualified URL</param>
+        /// <param name="ensureAngularApp">Ensure the page is an Angular page by throwing an exception.</param>
+        public void GoToUrl(string url, bool ensureAngularApp)
+        {
+            if (ensureAngularApp)
+            {
+                this.ngDriver.Url = url;
+            }
+            else
+            {
+                this.navigation.GoToUrl(url);
+            }
         }
 
         /// <summary>

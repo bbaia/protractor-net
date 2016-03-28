@@ -161,25 +161,28 @@ namespace Protractor
                     this.jsExecutor.ExecuteScript("window.name += '" + AngularDeferBootstrap + "'; window.location.href = '" + value + "';");
                 }
 
-                // Make sure the page is an Angular page.
-                object isAngularApp = this.jsExecutor.ExecuteAsyncScript(ClientSideScripts.TestForAngular, 10);
-                if (isAngularApp is bool && (bool)isAngularApp)
+                try
                 {
-                    // At this point, Angular will pause for us, until angular.resumeBootstrap is called.
-
-                    // Register extra modules
-                    foreach (NgModule ngModule in this.mockModules)
+                    // Make sure the page is an Angular page.
+                    object isAngularApp = this.jsExecutor.ExecuteAsyncScript(ClientSideScripts.TestForAngular);
+                    if (isAngularApp is bool && (bool)isAngularApp)
                     {
-                        this.jsExecutor.ExecuteScript(ngModule.Script);
+                        // At this point, Angular will pause for us, until angular.resumeBootstrap is called.
+
+                        // Register extra modules
+                        foreach (NgModule ngModule in this.mockModules)
+                        {
+                            this.jsExecutor.ExecuteScript(ngModule.Script);
+                        }
+                        // Resume Angular bootstrap
+                        this.jsExecutor.ExecuteScript(ClientSideScripts.ResumeAngularBootstrap,
+                            String.Join(",", this.mockModules.Select(m => m.Name).ToArray()));
                     }
-                    // Resume Angular bootstrap
-                    this.jsExecutor.ExecuteScript(ClientSideScripts.ResumeAngularBootstrap,
-                        String.Join(",", this.mockModules.Select(m => m.Name).ToArray()));
                 }
-                else
+                catch (WebDriverTimeoutException wdte)
                 {
                     throw new InvalidOperationException(
-                        String.Format("Angular could not be found on the page '{0}'", value));
+                        String.Format("Angular could not be found on the page '{0}'", value), wdte);
                 }
             }
         }
@@ -211,14 +214,19 @@ namespace Protractor
             return this.driver.Manage();
         }
 
+        INavigation OpenQA.Selenium.IWebDriver.Navigate()
+        {
+            return this.Navigate();
+        }
+
         /// <summary>
         /// Instructs the driver to navigate the browser to another location.
         /// </summary>
         /// <returns>
-        /// An <see cref="INavigation"/> object allowing the user to access 
+        /// An <see cref="NgNavigation"/> object allowing the user to access 
         /// the browser's history and to navigate to a given URL.
         /// </returns>
-        public INavigation Navigate()
+        public NgNavigation Navigate()
         {
             return new NgNavigation(this, this.driver.Navigate());
         }
@@ -292,9 +300,14 @@ namespace Protractor
         #endregion
 
         /// <summary>
-        /// Waits for angular to finish any ongoing $http, $timeouts, digest cycles etc.
+        /// Waits for Angular to finish any ongoing $http, $timeouts, digest cycles etc.
         /// This is used before any action on this driver, except if IgnoreSynchonization flag is set to true.
         /// </summary>
+        /// <remarks>
+        /// Use NgWebDriver.Manage().Timeouts().SetScriptTimeout() to specify the amount of time the driver should wait for Angular.
+        /// </remarks>
+        /// <exception cref="InvalidOperationException">If Angular could not be found.</exception>
+        /// <exception cref="WebDriverTimeoutException">If the driver times out while waiting for Angular.</exception>
         public void WaitForAngular()
         {
             if (!this.IgnoreSynchronization)

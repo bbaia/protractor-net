@@ -21,16 +21,17 @@ namespace Protractor.Samples.MockHttpBackend
         [SetUp]
         public void SetUp()
         {
-            // Using NuGet Package 'PhantomJS'
+            // Using PhantomJS
             driver = new PhantomJSDriver();
 
-            // Using NuGet Package 'WebDriver.ChromeDriver.win32'
+            // Using Chrome
             //driver = new ChromeDriver();
 
-            // Using NuGet Package 'WebDriver.IEDriverServer.win32'
+            // Using Internet Explorer
             //var options = new InternetExplorerOptions() { IntroduceInstabilityByIgnoringProtectedModeSettings = true };
             //driver = new InternetExplorerDriver(options);
 
+            // Required for TestForAngular and WaitForAngular scripts
             driver.Manage().Timeouts().SetScriptTimeout(TimeSpan.FromSeconds(5));
         }
 
@@ -66,7 +67,7 @@ $httpBackend.whenGET('phones/phones.json').respond(
 ]
 );
 ");
-            IWebDriver ngDriver = new NgWebDriver(driver, mockModule);
+            var ngDriver = new NgWebDriver(driver, mockModule);
             ngDriver.Navigate().GoToUrl("http://angular.github.io/angular-phonecat/step-5/app/");
             Assert.AreEqual(2, ngDriver.FindElements(NgBy.Repeater("phone in phones")).Count);
             ngDriver.FindElement(NgBy.Model("query")).SendKeys("bravo");

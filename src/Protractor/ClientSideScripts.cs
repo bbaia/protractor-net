@@ -20,45 +20,37 @@ namespace Protractor
          * arguments[1] {function} callback
          */
         public const string WaitForAngular = @"
-var el = document.querySelector(arguments[0]);
+var rootSelector = arguments[0];
+var el = document.querySelector(rootSelector);
 var callback = arguments[1];
-try {
-    if (!window.angular) {
-        throw new Error('angular could not be found on the window');
+if (!window.angular) {
+    throw new Error('angular could not be found on the window');
+}
+if (angular.getTestability) {
+    angular.getTestability(el).whenStable(callback);
+} else {
+    if (!angular.element(el).injector()) {
+        throw new Error('root element (' + rootSelector + ') has no injector.' +
+            ' this may mean it is not inside ng-app.');
     }
-    if (angular.getTestability) {
-        angular.getTestability(el).whenStable(callback);
-    } else {
-        if (!angular.element(el).injector()) {
-          throw new Error('root element (' + rootSelector + ') has no injector.' +
-              ' this may mean it is not inside ng-app.');
-        }
-    angular.element(el).injector().get('$browser').
-        notifyWhenNoOutstandingRequests(callback);
-    }
-} catch (err) {
-    callback(err.message);
+angular.element(el).injector().get('$browser').
+    notifyWhenNoOutstandingRequests(callback);
 }";
 
         /**
          * Tests whether the angular global variable is present on a page. 
          * Retries in case the page is just loading slowly.
-         *
-         * arguments[0] {string} none.
          */
         public const string TestForAngular = @"
-var attempts = arguments[0];
-var callback = arguments[arguments.length - 1];
-var check = function(n) {
+var callback = arguments[0];
+var check = function() {
     if (window.angular && window.angular.resumeBootstrap) {
         callback(true);
-    } else if (n < 1) {
-        callback(false);
     } else {
-        window.setTimeout(function() {check(n - 1)}, 1000);
+        window.setTimeout(function() {check()}, 1000);
     }
 };
-check(attempts);";
+check();";
 
         /**
          * Continue to bootstrap Angular. 
