@@ -38,6 +38,7 @@ namespace Protractor
         /// </summary>
         public void Back()
         {
+            this.ngDriver.WaitForAngular();
             this.navigation.Back();
         }
 
@@ -46,6 +47,7 @@ namespace Protractor
         /// </summary>
         public void Forward()
         {
+            this.ngDriver.WaitForAngular();
             this.navigation.Forward();
         }
 
@@ -120,6 +122,7 @@ namespace Protractor
         /// </summary>
         public void Refresh()
         {
+            this.ngDriver.WaitForAngular();
             this.navigation.Refresh();
         }
 
