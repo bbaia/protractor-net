@@ -1,3 +1,13 @@
+0.7.0 / 2016-03-29
+==================
+
+* ([77e5191](https://github.com/bbaia/protractor-net/commit/77e519137117a41838c8000959afa4339f6ec4a2)) Use NgWebDriver.WaitForAngular in NgNavigation methods (Fast, Forward and Refresh)
+* ([dd6d015](https://github.com/bbaia/protractor-net/commit/dd6d015b1bee0cfebee5201e845772ee4d280ff8)) Add support for non-Angular pages
+* ([188beec](https://github.com/bbaia/protractor-net/commit/188beec9fce3d0a5f21748fda7899fd253f28d74)) Made NgWebDriver.WaitForAngular public
+* ([487fd34](https://github.com/bbaia/protractor-net/commit/487fd34165bf57036215a6aedda039124a3da00c)) Add ability to use NgBy methods as custom filter with FindsByAttribute (Page Objects pattern support)
+* ([2a89f43](https://github.com/bbaia/protractor-net/commit/2a89f43242e9c28e2645e194e09e5f437931dff8)) Remove obsolete NgBy methods (Input, TextArea, Select)
+* ([ef2a3aa](https://github.com/bbaia/protractor-net/commit/ef2a3aa71fa115a882557848e388c8aa5169ae8c)) Update to Selenium.WebDriver v2.53
+
 0.6.0 / 2015-07-14
 ==================
 

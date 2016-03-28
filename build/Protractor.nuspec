@@ -2,7 +2,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
   <metadata>
     <id>Protractor</id>
-    <version>0.6.0</version>
+    <version>0.7.0</version>
     <projectUrl>https://github.com/bbaia/protractor-net</projectUrl>
     <licenseUrl>https://github.com/bbaia/protractor-net/blob/master/LICENSE</licenseUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
@@ -12,7 +12,7 @@
     <language>en-US</language>
     <tags>Angular AngularJS Protractor Selenium WebDriver E2E Test</tags>
     <dependencies>
-      <dependency id="Selenium.WebDriver" version="2.46.0" />
+      <dependency id="Selenium.WebDriver" version="2.53.0" />
     </dependencies>
   </metadata>
   <files>
