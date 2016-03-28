@@ -19,44 +19,11 @@ namespace Protractor
         }
 
         /// <summary>
-        /// Gets a mechanism to find input elements by their model name.
-        /// </summary>
-        /// <param name="model">The model name.</param>
-        /// <returns>A <see cref="By"/> object the driver can use to find the elements.</returns>
-        [Obsolete("Use Model instead.")]
-        public static By Input(string model)
-        {
-            return new JavaScriptBy(ClientSideScripts.FindModel, model);
-        }
-
-        /// <summary>
         /// Gets a mechanism to find elements by their model name.
         /// </summary>
-        /// <param name="model"></param>
+        /// <param name="model">The model name.</param>
         /// <returns>A <see cref="By"/> object the driver can use to find the elements.</returns>
         public static By Model(string model)
-        {
-            return new JavaScriptBy(ClientSideScripts.FindModel, model);
-        }
-
-        /// <summary>
-        /// Gets a mechanism to find textarea elements by their model name.
-        /// </summary>
-        /// <param name="model">The model name.</param>
-        /// <returns>A <see cref="By"/> object the driver can use to find the elements.</returns>
-        [Obsolete("Use Model instead.")]
-        public static By TextArea(string model)
-        {
-            return new JavaScriptBy(ClientSideScripts.FindModel, model);
-        }
-
-        /// <summary>
-        /// Gets a mechanism to find select elements by their model name.
-        /// </summary>
-        /// <param name="model">The model name.</param>
-        /// <returns>A <see cref="By"/> object the driver can use to find the elements.</returns>
-        [Obsolete("Use Model instead.")]
-        public static By Select(string model)
         {
             return new JavaScriptBy(ClientSideScripts.FindModel, model);
         }
