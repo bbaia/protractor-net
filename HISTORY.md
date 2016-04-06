@@ -1,3 +1,9 @@
+0.7.1 / 2016-04-07
+==================
+
+* ([9034ae9](https://github.com/bbaia/protractor-net/commit/9034ae993321e64d241e0fe08ceb92538a13f829)) Add the NgWebDriver.Location property and NgNavigation.GoToLocation method to perform in-page navigation
+* ([373437c](https://github.com/bbaia/protractor-net/commit/373437c3e350a0dcdb4cc215f2c3747c7fdeb19e)) Reset URL on IE and PhantomJS before navigation
+
 0.7.0 / 2016-03-29
 ==================
 
