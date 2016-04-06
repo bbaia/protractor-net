@@ -70,6 +70,36 @@ var el = document.querySelector(arguments[0]);
 return angular.element(el).injector().get('$location').absUrl();";
 
         /**
+         * Return the current location using $location.url().
+         *
+         * arguments[0] {string} The selector housing an ng-app
+         */
+        public const string GetLocation = @"
+var el = document.querySelector(arguments[0]);
+return angular.element(el).injector().get('$location').url();";
+
+        /**
+         * Browse to another page using in-page navigation.
+         *
+         * arguments[0] {string} The selector housing an ng-app
+         * arguments[1] {string} In page URL using the same syntax as $location.url()
+         */
+        public const string SetLocation = @"
+var el = document.querySelector(arguments[0]);
+var url = arguments[1];
+if (angular.getTestability) {
+    angular.getTestability(el).setLocation(url);
+}
+var $injector = angular.element(el).injector();
+var $location = $injector.get('$location');
+var $rootScope = $injector.get('$rootScope');
+
+if (url !== $location.url()) {
+    $location.url(url);
+    $rootScope.$digest();
+}";
+
+        /**
          * Evaluate an Angular expression in the context of a given element.
          *
          * arguments[0] {Element} The element in whose scope to evaluate.

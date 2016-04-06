@@ -302,6 +302,23 @@ namespace Protractor
         #endregion
 
         /// <summary>
+        /// Gets or sets the location for in-page navigation using the same syntax as '$location.url()'.
+        /// </summary>
+        public string Location
+        {
+            get
+            {
+                this.WaitForAngular();
+                return this.jsExecutor.ExecuteScript(ClientSideScripts.GetLocation, this.rootElement) as string;
+            }
+            set
+            {
+                this.WaitForAngular();
+                this.jsExecutor.ExecuteScript(ClientSideScripts.SetLocation, this.rootElement, value);
+            }
+        }
+
+        /// <summary>
         /// Waits for Angular to finish any ongoing $http, $timeouts, digest cycles etc.
         /// This is used before any action on this driver, except if IgnoreSynchonization flag is set to true.
         /// </summary>

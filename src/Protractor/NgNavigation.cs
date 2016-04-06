@@ -127,5 +127,14 @@ namespace Protractor
         }
 
         #endregion
+
+        /// <summary>
+        /// Browse to another page using in-page navigation.
+        /// </summary>
+        /// <param name="path">The path to load using the same syntax as '$location.url()'.</param>
+        public void GoToLocation(string path)
+        {
+            this.ngDriver.Location = path;
+        }
     }
 }
