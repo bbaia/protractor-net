@@ -1,0 +1,36 @@
+<!doctype html>
+<html ng-app="myApp">
+<head>
+<!-- origin:
+http://www.codeproject.com/Articles/1065838/AngularJS-Tutorial
+http://www.codeproject.com/Articles/1065811/ANGULARJS-Services-Tutorial
+ -->
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.9/angular.js">
+</script>
+<style>
+  body {font: 11px arial, sans-serif; }
+  .odd { color: blue; }
+  .even { color: red; }
+</style>
+<script type='text/javascript'>
+angular.module('myApp', [])
+    .controller('myCtrlr', function($http, $log, $q, $scope) {
+        $http.get('http://www.w3schools.com/angular/customers.php').
+        success(function(data) {
+            $scope.people = data.records;
+        });
+    });
+</script>
+</head>
+<body>
+<div ng-controller="myCtrlr">
+  <h1>Welcome to my book store</h1>
+    <div style="width: 100%; overflow: scroll;">
+      <div ng-repeat="person in people" ng-class="{even: !$even, odd: !$odd}">
+        <span>{{person.Name}}</span>
+        <span> {{person.Country}}</span>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

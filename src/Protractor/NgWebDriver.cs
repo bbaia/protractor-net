@@ -14,7 +14,6 @@ namespace Protractor
     public class NgWebDriver : IWebDriver, IWrapsDriver
     {
         private const string AngularDeferBootstrap = "NG_DEFER_BOOTSTRAP!";
-
         private IWebDriver driver;
         private IJavaScriptExecutor jsExecutor;
         private string rootElement;
@@ -162,7 +161,9 @@ namespace Protractor
                 }
 
                 // Make sure the page is an Angular page.
-                object isAngularApp = this.jsExecutor.ExecuteAsyncScript(ClientSideScripts.TestForAngular, 10);
+                object isAngularApp = this.jsExecutor.ExecuteAsyncScript(ClientSideScripts.TestForAngular, 60);
+                
+                
                 if (isAngularApp is bool && (bool)isAngularApp)
                 {
                     // At this point, Angular will pause for us, until angular.resumeBootstrap is called.
@@ -181,7 +182,9 @@ namespace Protractor
                     throw new InvalidOperationException(
                         String.Format("Angular could not be found on the page '{0}'", value));
                 }
+                
             }
+                 
         }
 
         /// <summary>
@@ -296,6 +299,14 @@ namespace Protractor
             if (!this.IgnoreSynchronization)
             {
                 this.jsExecutor.ExecuteAsyncScript(ClientSideScripts.WaitForAngular, this.rootElement);
+            }
+        }
+
+        internal void WaitForAllAngular2()
+        {
+            if (!this.IgnoreSynchronization)
+            {
+                this.jsExecutor.ExecuteAsyncScript(ClientSideScripts.WaitForAllAngular2);
             }
         }
     }

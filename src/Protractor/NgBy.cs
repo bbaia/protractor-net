@@ -4,7 +4,7 @@ using OpenQA.Selenium;
 namespace Protractor
 {
     /// <summary>
-    /// Mechanism used to locate elements within Angular applications by binding, model, etc.
+    /// Mechanism used to locate elements within Angular applications by binding, model, repeater, options etc.
     /// </summary>
     public static class NgBy
     {
@@ -12,10 +12,11 @@ namespace Protractor
         /// Gets a mechanism to find elements by their Angular binding.
         /// </summary>
         /// <param name="binding">The binding, e.g. '{{cat.name}}'.</param>
+        /// /// <param name="exactMatch">exact match</param>
         /// <returns>A <see cref="By"/> object the driver can use to find the elements.</returns>
-        public static By Binding(string binding)
+        public static By Binding(string binding, bool exactMatch = true)
         {
-            return new JavaScriptBy(ClientSideScripts.FindBindings, binding);
+            return new JavaScriptBy(ClientSideScripts.FindBindings, binding, null, exactMatch);
         }
 
         /// <summary>
@@ -28,6 +29,7 @@ namespace Protractor
         {
             return new JavaScriptBy(ClientSideScripts.FindModel, model);
         }
+
 
         /// <summary>
         /// Gets a mechanism to find elements by their model name.
@@ -61,22 +63,16 @@ namespace Protractor
             return new JavaScriptBy(ClientSideScripts.FindModel, model);
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        public static By Options(string option)
-        {
-            return new JavaScriptBy(ClientSideScripts.FindByOptions, option);
-        }
 
         /// <summary>
-        /// Gets a mechanism to find select option elements by their model name.
+        /// Gets a mechanism to find  the elements in a column of an ng-repeat.
         /// </summary>
-        /// <param name="model">The model name.</param>
+        /// <param name="repeat">The text of the repeater, e.g. 'cat in cats'.</param>
+        /// <param name="binding">The text of the repeater, e.g. '{{cat.name}}'.</param>
         /// <returns>A <see cref="By"/> object the driver can use to find the elements.</returns>
-        public static By SelectedOption(string model)
+        public static By RepeaterColumn(string repeat, string binding)
         {
-            return new JavaScriptBy(ClientSideScripts.FindSelectedOptions, model);
+            return new JavaScriptBy(ClientSideScripts.FindRepeaterColumn, repeat, binding);
         }
 
         /// <summary>
@@ -88,21 +84,56 @@ namespace Protractor
         {
             return new JavaScriptBy(ClientSideScripts.FindAllRepeaterRows, repeat);
         }
-        
+
         /// <summary>
-        /// 
-        /// </summary>
-        public static By ButtonText(string repeat)
+        /// Gets a mechanism to find buttons by textual content.
+        /// </summary>    	
+        /// <param name="buttonText">TThe exact text to match.</param>
+        /// <returns>A <see cref="By"/> object the driver can use to find the elements.</returns>
+        public static By ButtonText(string buttonText)
         {
-            return new JavaScriptBy(ClientSideScripts.FindByButtonText, repeat);
+            return new JavaScriptBy(ClientSideScripts.FindByButtonText, buttonText);
         }
 
         /// <summary>
-        /// 
-        /// </summary>
-        public static By PartialButtonText(string repeat)
+        /// Gets a mechanism to find buttons by textual content.
+        /// </summary>    	
+        /// <param name="buttonText">The partial text to match.</param>
+        /// <returns>A <see cref="By"/> object the driver can use to find the elements.</returns>
+        public static By PartialButtonText(string buttonText)
         {
-            return new JavaScriptBy(ClientSideScripts.FindByPartialButtonText, repeat);
+            return new JavaScriptBy(ClientSideScripts.FindByPartialButtonText, buttonText);
+        }
+
+        /// <summary>
+        /// Gets a mechanism to find select option elements by their model name.
+        /// </summary>    	
+        /// <param name="option">The descriptor for the option e.g. fruit for fruit in fruits.</param>
+        /// <returns>A <see cref="By"/> object the driver can use to find the elements.</returns>
+        public static By Options(string option)
+        {
+            return new JavaScriptBy(ClientSideScripts.FindByOptions, option);
+        }
+
+        /// <summary>
+        /// Gets a mechanism to find selected option elements in the select element
+        /// implemented via repeater without a model, by the repeater attribute.
+        /// </summary>
+        /// <param name="repeater">The repeater attribute.</param>
+        /// <returns>A <see cref="By"/> object the driver can use to find the elements.</returns>
+        public static By SelectedRepeaterOption(string repeater)
+        {
+            return new JavaScriptBy(ClientSideScripts.FindSelectedRepeaterOption, repeater);
+        }
+
+        /// <summary>
+        /// Gets a mechanism to find select option elements by their model name.
+        /// </summary>
+        /// <param name="model">The model name.</param>
+        /// <returns>A <see cref="By"/> object the driver can use to find the elements.</returns>
+        public static By SelectedOption(string model)
+        {
+            return new JavaScriptBy(ClientSideScripts.FindSelectedOption, model);
         }
     }
 }

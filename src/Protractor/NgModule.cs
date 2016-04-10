@@ -3,7 +3,7 @@
     /// <summary>
     /// Represents an Angular module to load before Angular is loaded.
     /// <para/>
-    /// The modules will be registered after existing modules, 
+    /// The modules will be registered after existing modules,
     /// so any module registered will override preexisting modules with the same name.
     /// </summary>
     public class NgModule

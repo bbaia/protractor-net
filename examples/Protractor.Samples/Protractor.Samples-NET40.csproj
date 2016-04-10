@@ -38,6 +38,7 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
     <Reference Include="WebDriver, Version=2.46.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\packages\Selenium.WebDriver.2.46.0\lib\net40\WebDriver.dll</HintPath>
@@ -48,11 +49,95 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Way2Automation\Way2AutomationTests.cs" />
-</ItemGroup>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="LocalFileTests\LocalFileTests.cs" />
+  </ItemGroup>
   <ItemGroup>
     <Compile Include="Calculator\CalculatorTests.cs" />
-</ItemGroup>
-<ItemGroup>
+  </ItemGroup>
+
+
+  <ItemGroup>
+    <None Include="Files\ng_directive_binding.htm">
+      <Link>ng_directive_binding.htm</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Files\ng_upload1.htm">
+      <Link>ng_upload1.htm</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Files\ng_watch_ng_if.htm">
+      <Link>ng_watch_ng_if.htm</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Files\ng_todo.htm">
+      <Link>ng_todo.htm</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Files\ng_select_array.htm">
+      <Link>ng_select_array.htm</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Files\ng_basic.htm">
+      <Link>ng_basic.htm</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Files\ng_dropdown.htm">
+      <Link>ng_dropdown.htm</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Files\ng_dropdown_watch.htm">
+      <Link>ng_dropdown_watch.htm</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Files\ng_options_with_object.htm">
+      <Link>ng_options_with_object.htm</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Files\ng_repeat.htm">
+      <Link>ng_repeat.htm</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Files\ng_repeat_start_end.htm">
+      <Link>ng_repeat_start_end.htm</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Files\ng_service.htm">
+      <Link>ng_service.htm</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Files\ng_table1.html">
+      <Link>ng_table1.html</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Files\ng_th.htm">
+      <Link>ng_th.htm</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Files\ng_pattern_validate.htm">
+      <Link>ng_pattern_validate.htm</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Files\ng_headers_sort_example1.htm">
+      <Link>ng_headers_sort_example1.htm</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Files\ng_headers_sort_example2.htm">
+      <Link>ng_headers_sort_example2.htm</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Files\ng_multi_select.htm">
+      <Link>ng_multi_select.htm</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Files\ng_repeat_selected.htm">
+      <Link>ng_repeat_selected.htm</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
+  <ItemGroup>
     <Compile Include="MockHttpBackend\MockHttpBackendTests.cs" />
     <Compile Include="Basic\BasicTests.cs" />
     <Compile Include="MockHttpBackend\Support\NgMockE2EModule.cs" />
@@ -82,6 +167,10 @@
     <EmbeddedResource Include="MockHttpBackend\Support\angular-mocks.js" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\src\Protractor.Extensions\Protractor.Extensions.csproj">
+      <Project>{D83DFE64-32B2-406E-A9A2-E2AE61777C80}</Project>
+      <Name>Protractor.Extensions</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\src\Protractor\Protractor-NET40.csproj">
       <Project>{de9c82c5-ebb3-4a2b-a75e-ce3e68e2c866}</Project>
       <Name>Protractor-NET40</Name>

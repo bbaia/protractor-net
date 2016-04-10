@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<style>
+table, th , td  {
+  border: 1px solid grey;
+  border-collapse: collapse;
+  padding: 5px;
+}
+table tr:nth-child(odd)	{
+  background-color: #f1f1f1;
+}
+table tr:nth-child(even) {
+  background-color: #ffffff;
+}
+</style>
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.9/angular.js">
+</script>
+
+<body ng-app='myApp' ng-controller='myCtrl'> 
+
+<table>
+  <tr ng-repeat='x in names'>
+    <td>{{ $index + 1 }}</td>
+    <td>{{ x.Name }}</td>
+    <td>{{ x.Country }}</td>
+  </tr>
+</table>
+
+</div>
+
+<script type='text/javascript'>
+angular.module('myApp', []).controller('myCtrl', function($scope, $http) {
+    $http.get("http://www.w3schools.com/angular/customers.php")
+        .success(function(response) {
+            $scope.names = response.records;
+        });
+});
+</script>
+
+</body>
+</html>

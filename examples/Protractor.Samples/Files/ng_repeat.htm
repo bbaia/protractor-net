@@ -1,0 +1,40 @@
+<!doctype html>
+<!-- http://www.java2s.com/Tutorials/AngularJS/AngularJS_Tutorial/Buildin-Directives/ng_repeat.htm -->
+<html ng-app="myApp">
+<head>
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.9/angular.js">
+</script>
+<script>
+angular.module('myApp', [])
+.controller('myCtrl', function($scope) {
+  $scope.people = [
+	{name: "A", city: "San Francisco"},
+	{name: "B", city: "New York"},
+	{name: "C", city: "Vancouver"},
+	{name: "D", city: "San Diego"},
+	{name: "E", city: "Paris"},
+	{name: "F", city: "London"},
+	{name: "G", city: "Beijing"},
+	{name: "H", city: "HongKong"},
+	{name: "I", city: "Toyou"},
+	{name: "J", city: "Seattle"}
+  ];
+});
+</script>
+<style>
+    .odd {
+      color: blue;
+    }
+    .even {
+      color: red;
+    }
+</style>
+</head>
+<body>
+  <ul ng-controller="myCtrl">
+    <li ng-repeat="person in people" ng-class="{even: !$even, odd: !$odd}">
+     {{$index}} {{person.name}} lives in {{person.city}}
+    </li>
+  </ul>  
+</body>
+</html>

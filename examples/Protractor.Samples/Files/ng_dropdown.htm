@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html ng-app="myApp">
+<head>
+<meta content="text/html; charset=utf-8" http-equiv="Content-Type"/>
+<title>Cascading Dropdown Menus</title>
+ <!-- origin: http://lab.devzone.co.in/angular-js-dropdowns/ -->
+<style type="text/css">
+.main { 
+    width: 900px; 
+    margin: 0 auto; 
+    height: 700px;
+    border: 1px solid #ccc;
+    padding: 20px;
+}
+
+.content{    
+    height: 700px;
+    border-top: 1px solid #ccc;
+    padding-top: 15px;
+}
+select{
+    width: 150px;
+    height: 23px;
+}
+
+</style>
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.9/angular.js">
+</script>
+
+<script type='text/javascript'>
+	angular.module('myApp', []).controller('myCtrl', function($scope) {
+
+    $scope.countries = {
+        'India': {
+            'Maharashtra': ['Pune', 'Mumbai', 'Nagpur', 'Akola'],
+            'Madhya Pradesh': ['Indore', 'Bhopal', 'Jabalpur'],
+            'Rajasthan': ['Jaipur', 'Ajmer', 'Jodhpur']
+        },
+        'USA': {
+            'Alabama': ['Montgomery', 'Birmingham'],
+            'California': ['Sacramento', 'Fremont'],
+            'Illinois': ['Springfield', 'Chicago']
+        },
+        'Australia': {
+            'New South Wales': ['Sydney'],
+            'Victoria': ['Melbourne']
+        }
+    };
+})
+</script>
+</head>
+<body>
+<div ng-controller="myCtrl">
+<table>
+<tbody>
+  <tr>
+	<td>Country:</td>
+	<td>
+	  <select id="country" ng-model="states" ng-options="country for (country, states) in countries">
+		<option value="">Select</option>
+	  </select>
+	</td>
+  </tr>
+  <tr>
+	<td>State:</td>
+	<td>
+	  <select id="state" ng-disabled="!states" ng-model="cities" ng-options="state for (state,city) in states">
+		<option value="">Select</option>
+	  </select>
+	</td>
+  </tr>
+  <tr>
+	<td>City:</td>
+	<td>
+	  <select id="city" ng-disabled="!cities || !states" ng-model="city">
+		<option value="">Select</option>
+		<option ng-repeat="city in cities" value="{{city}}">{{city}}</option>
+	  </select>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+</body>
+</html>

@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title></title>
+<!-- https://jsfiddle.net/JeJenny/ZG9re/ -->
+
+<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.9/angular.js">
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.0/jquery.min.js">
+</script>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous">
+</script>
+<script type="text/javascript">
+
+var myApp = angular.module('myApp', []);
+
+myApp.directive('fileModel', ['$parse', function ($parse) {
+	return {
+		restrict: 'A',
+		link: function(scope, element, attrs) {
+			var model = $parse(attrs.fileModel);
+			var modelSetter = model.assign;
+			
+			element.bind('change', function(){
+				scope.$apply(function(){
+					modelSetter(scope, element[0].files[0]);
+				});
+			});
+		}
+	};
+}]);
+
+myApp.service('fileUpload', ['$http', function ($http) {
+	this.uploadFileToUrl = function(file, uploadUrl){
+		var fd = new FormData();
+		fd.append('file', file);
+		$http.post(uploadUrl, fd, {
+			transformRequest: angular.identity,
+			headers: {'Content-Type': undefined}
+		})
+		.success(function(){
+		})
+		.error(function(){
+		});
+	}
+}]);
+
+myApp.controller('myCtrl', ['$scope', 'fileUpload', function($scope, fileUpload){
+	
+	$scope.uploadFile = function(){
+		var file = $scope.myFile;
+		console.log('file is ' );
+		console.dir(file);
+		var uploadUrl = "/fileUpload";
+		fileUpload.uploadFileToUrl(file, uploadUrl);
+	};
+	
+}]);
+
+</script>
+</head>
+<body ng-app="myApp">
+
+<div ng-controller = "myCtrl">
+  <input type="file" file-model="myFile"/>
+  <button ng-click="uploadFile()">Upload</button>
+</div>
+</body>
+</html>

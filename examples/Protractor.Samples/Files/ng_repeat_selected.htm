@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title></title>
+</head>
+<body>
+
+<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.9/angular.js">
+</script>
+
+<script type="text/javascript">
+var app = angular.module('myApp', [])
+app.controller('myController', function($scope) {
+    $scope.Fruits = [{
+        Id: 1,
+        Name: 'Apple',
+        Selected: false
+    }, {
+        Id: 2,
+        Name: 'Mango',
+        Selected: true
+    }, {
+        Id: 3,
+        Name: 'Orange',
+        Selected: false
+    }];
+       $scope.onchange = function(id) {
+        alert("Selected id:" + id.Id);
+    }
+});
+
+</script>
+<div ng-app="myApp" ng-controller="myController">
+  <select>
+    <option value = "0" label = "Please Select"></option>
+    <option ng-repeat="fruit in Fruits" value="{{fruit.Id}}" ng-selected = "{{ fruit.Selected == true }}" >{{fruit.Name}}</option>
+  </select>
+</div>
+</body>
+</html>

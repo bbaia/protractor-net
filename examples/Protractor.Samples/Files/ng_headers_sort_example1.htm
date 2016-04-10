@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>
+Angular JS sorting rows by table header
+</title>
+<style>
+td { padding: 0.2em 1em; }
+th { text-align: center; }
+thead { border-bottom: 2px solid black; cursor: pointer; }
+</style>
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.9/angular.js">
+</script>
+<script type="text/javascript">
+var app = angular.module('myApp', []);
+
+app.controller('myCtrl', function($scope) {
+  $scope.orderByField = 'firstName';
+  $scope.reverseSort = false;
+
+  $scope.data = {
+    employees: [{
+      firstName: 'John',
+      lastName: 'Doe',
+      age: 30
+    },{
+      firstName: 'Frank',
+      lastName: 'Burns',
+      age: 54
+    },{
+      firstName: 'Sue',
+      lastName: 'Banter',
+      age: 21
+    }]
+  };
+});
+</script>
+
+</head>
+<body>
+<section ng-app="myApp" ng-controller="myCtrl">
+  <span class="label">Ordered By: {{orderByField}}, Reverse Sort: {{reverseSort}}</span>
+  <table class="table table-bordered">
+    <thead>
+      <tr>
+        <th>
+          <a href="#" ng-click="orderByField='firstName'; reverseSort = !reverseSort">First Name <span ng-show="orderByField == 'firstName'"><span ng-show="!reverseSort">^</span><span ng-show="reverseSort">v</span></span></a>
+        </th>
+        <th>
+          <a href="#" ng-click="orderByField='lastName'; reverseSort = !reverseSort">Last Name <span ng-show="orderByField == 'lastName'"><span ng-show="!reverseSort">^</span><span ng-show="reverseSort">v</span></span></a>
+        </th>
+        <th>
+          <a href="#" ng-click="orderByField='age'; reverseSort = !reverseSort">Age <span ng-show = "orderByField == 'age'"><span ng-show="!reverseSort">^</span><span ng-show="reverseSort">v</span></span></a>
+        </th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr ng-repeat="emp in data.employees|orderBy:orderByField:reverseSort" ng-order-by="orderByField">
+        <td>{{emp.firstName}}</td>
+        <td>{{emp.lastName}}</td>
+        <td>{{emp.age}}</td>
+      </tr>
+    </tbody>
+  </table>
+</section>

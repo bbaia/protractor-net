@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html ng-app='myApp'>
+<html>
+  <!-- http://www.java2s.com/Tutorials/AngularJS/AngularJS_Example/Directives/Use_ng_pattern_to_validate.htm 
+https://docs.angularjs.org/api/ng/directive/input -->
+<head>
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.13/angular.js">
+</script>
+<script type='text/javascript'>
+angular.module('myApp', []).controller('myCtrl', function($scope) {
+    $scope.isOdd = function($value) {
+        return $value % 2;
+    };
+});
+</script>
+</head>
+<body>
+<div ng-controller="myCtrl">
+<form name="form">
+	<input ng-model="myVal" name="value" required ng-pattern="/^[0-9]+$/"/>
+	<br/>
+	<tt>
+	   required: {{!!form.value.$error.required}}
+	 </tt>
+	<br/>
+	<tt>
+	   pattern: {{form.value.$error.pattern}}
+	 </tt>
+	<br/>
+	<tt>
+	   valid: {{form.value.$valid}}
+	 </tt>
+  </form>
+</div>
+</body>
+</html>

@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html ng-app='myApp'>
+<!-- https://docs.angularjs.org/guide/directive -->
+<head>
+<meta charset=utf-8/>
+<title>Angular Direcrives Picker</title>
+<script src='https://ajax.googleapis.com/ajax/libs/angularjs/1.4.9/angular.js'></script>
+<script type='text/javascript'>
+angular.module('myApp', [])
+    .controller('myCtrlr', ['$scope', function($scope) {
+        $scope.name = 'Max Karl Ernst Ludwig Planck';
+    }]);
+</script>
+</head>
+<body>
+<div ng-controller='myCtrlr'>
+  <input ng-model='name'/><hr/>
+  <span ng-bind='name'></span><br/>
+  <span ng:bind='name'></span><br/>
+  <span ng_bind='name'></span><br/>
+  <span data-ng-bind='name'></span><br/>
+  <span x-ng-bind='name'></span><br/>
+</div>
+</body>

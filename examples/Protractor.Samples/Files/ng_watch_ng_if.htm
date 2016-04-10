@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html ng-app='myApp'>
+<!-- http://kenhowardpdx.com/blog/2015/05/how-to-watch-scope-properties-in-angular-with-typescript/ -->
+<head>
+<meta charset=utf-8/>
+<title>Watch An
+gular Scope Properties</title>
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.13/angular.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
+<script type="text/javascript">
+function Door() {
+    var _this = this;
+    _this.isOpen = false;
+    _this.open = function() {
+        _this.isOpen = true;
+    };
+    _this.close = function() {
+        _this.isOpen = false;
+    }
+}
+
+HouseController.$inject = ['$scope'];
+
+function HouseController($scope) {
+    var _this = this;
+    _this.frontDoor = new Door();
+
+    $scope.$watch(function() {
+        return _this.frontDoor.isOpen;
+    }, function(newValue, oldValue) {
+        if (newValue !== oldValue) {
+            var doorState = (newValue === true) ? 'open' : 'closed';
+            alert('The door is ' + doorState);
+        }
+    });
+}
+
+angular.module('myApp', []).controller('app').controller('HouseController', HouseController);
+</script>
+<div ng-app="app" class="container" style="margin-top: 10px;">
+  <div ng-controller="HouseController as house">
+    <button class="btn btn-xs btn-success" ng-click="house.frontDoor.open()" ng-if="!house.frontDoor.isOpen">Open Door</button>
+    <button class="btn btn-xs btn-danger" ng-click="house.frontDoor.close()" ng-if="house.frontDoor.isOpen">Close Door</button>
+    <p>The door is {{house.frontDoor.isOpen === true ? "open" : "closed"}}</p>
+  </div>
+</div>
+</html>

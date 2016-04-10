@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title></title>
+<style>
+/*
+ * angular-modal v0.0.3
+ * (c) 2013 Brian Ford http://briantford.com
+ * License: MIT
+ */
+
+.btf-modal {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  width: 50%;
+  max-width: 550px;
+  min-width: 330px;
+  height: auto;
+  z-index: 2000;
+  -webkit-transform: translateX(-50%) translateY(-50%);
+  -moz-transform: translateX(-50%) translateY(-50%);
+  -ms-transform: translateX(-50%) translateY(-50%);
+  transform: translateX(-50%) translateY(-50%);
+}
+</style>
+
+<style>
+.demo-modal {
+  border: 1px solid black;
+  background-color: #ccc;
+  padding: 5px;
+}
+
+.demo-modal-close {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+}
+</style>
+<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.9/angular.js">
+</script>
+<script type="text/javascript">
+
+/*
+ * angular-modal v0.0.3
+ * (c) 2013 Brian Ford http://briantford.com
+ * License: MIT
+ */
+'use strict';
+
+angular.module('btford.modal', []).
+factory('btfModal', function($compile, $rootScope, $controller, $q, $http, $templateCache) {
+    return function modalFactory(config) {
+
+        if ((+!!config.template) + (+!!config.templateUrl) !== 1) {
+            throw new Error('Expected modal to have exacly one of either `template` or `templateUrl`');
+        }
+
+        var template = config.template,
+            controller = config.controller || angular.noop,
+            controllerAs = config.controllerAs,
+            container = angular.element(config.container || document.body),
+            element = null,
+            html;
+
+        if (config.template) {
+            var deferred = $q.defer();
+            deferred.resolve(config.template);
+            html = deferred.promise;
+        } else {
+            html = $http.get(config.templateUrl, {
+                cache: $templateCache
+            }).
+            then(function(response) {
+                return response.data;
+            });
+        }
+
+        function activate(locals) {
+            html.then(function(html) {
+                if (!element) {
+                    attach(html, locals);
+                }
+            });
+        }
+
+        function attach(html, locals) {
+            element = angular.element(html);
+            container.prepend(element);
+            var scope = $rootScope.$new();
+            if (locals) {
+                for (var prop in locals) {
+                    scope[prop] = locals[prop];
+                }
+            }
+            var ctrl = $controller(controller, {
+                $scope: scope
+            });
+            if (controllerAs) {
+                scope[controllerAs] = ctrl;
+            }
+            $compile(element)(scope);
+        }
+
+        function deactivate() {
+            if (element) {
+                element.remove();
+                element = null;
+            }
+        }
+
+        return {
+            activate: activate,
+            deactivate: deactivate
+        };
+    };
+});
+</script>
+<script type="text/javascript">
+
+angular.module('myApp', [
+    'btford.modal'
+]).
+
+// let's make a modal called `myModal`
+factory('myModal', function(btfModal) {
+    return btfModal({
+        controller: 'MyModalCtrl',
+        controllerAs: 'modal',
+        // templateUrl: 'modal.html'
+        template: '<div class="btf-modal demo-modal"><a class="demo-modal-close" href ng-click="modal.closeMe()">x</a><p>Closing in {{modal.tickCount}}...</p></div>',
+    });
+}).
+
+// typically you'll inject the modal service into its own
+// controller so that the modal can close itself
+controller('MyModalCtrl', function($scope, $timeout, myModal) {
+
+    var ctrl = this,
+        timeoutId;
+
+    ctrl.tickCount = 5;
+
+    ctrl.closeMe = function() {
+        cancelTick();
+        myModal.deactivate();
+    };
+
+    function tick() {
+        timeoutId = $timeout(function() {
+            ctrl.tickCount -= 1;
+            if (ctrl.tickCount <= 0) {
+                ctrl.closeMe();
+            } else {
+                tick();
+            }
+        }, 1000);
+    }
+
+    function cancelTick() {
+        $timeout.cancel(timeoutId);
+    }
+
+    $scope.$on('$destroy', cancelTick);
+
+    tick();
+}).
+
+controller('MyCtrl', function(myModal) {
+    this.showModal = myModal.activate;
+});
+ 
+</script>
+</head>
+<body ng-app="myApp">
+  <div ng-app="myApp" ng-controller="MyCtrl as ctrl">
+    <a href ng-click="ctrl.showModal()">Show the modal</a>
+  </div>
+</body>
+</html>

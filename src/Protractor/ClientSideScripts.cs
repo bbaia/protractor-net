@@ -89,7 +89,7 @@ waitForAllAngular2(callback);
          *
          * arguments[0] {string} none.
          */
-         public const string TestForAngular = @"
+        public const string TestForAngular = @"
 var attempts = arguments[0];
 var callback = arguments[arguments.length - 1];
 var TestForAngular = function(attempts) {
@@ -104,7 +104,7 @@ var TestForAngular = function(attempts) {
     }
 };
 TestForAngular(attempts);";
-         
+
         /**
          * Continue to bootstrap Angular. 
          * 
@@ -129,13 +129,13 @@ TestForAngular(attempts);";
          */
         public const string Evaluate = "return angular.element(arguments[0]).scope().$eval(arguments[1]);";
 
-                /**
-         * Browse to another page using in-page navigation.
-         *
-         * arguments[0]  {string} selector The selector housing an ng-app
-         * arguments[1]{string} url In page URL using the same syntax as $location.url()
-         * 
-         */
+        /**
+ * Browse to another page using in-page navigation.
+ *
+ * arguments[0]  {string} selector The selector housing an ng-app
+ * arguments[1]{string} url In page URL using the same syntax as $location.url(), e.g.
+ * 
+ */
         public const string SetLocation = @"
 var setLocation = function(selector, url) {
 
@@ -156,7 +156,7 @@ var selector = arguments[0];
 var binding = arguments[1];
 
 setLocation(selector, binding);";
-        
+
         #region Locators
 
         /**
@@ -204,10 +204,14 @@ var findBindings = function(binding, exactMatch, using, rootSelector) {
 
 var using = arguments[0] || document;
 var binding = arguments[1];
-var exactMatch = arguments[2] || false;
-var rootSelector = arguments[3] || 'body';
-return findBindings(binding, exactMatch, using, rootSelector);
-";
+var rootSelector = arguments[2];
+
+var exactMatch = arguments[3];
+if (typeof exactMatch === 'undefined') {
+    exactMatch = true;
+}
+
+return findBindings(binding, exactMatch, using, rootSelector);";
 
 
 
@@ -242,15 +246,15 @@ var rootSelector = arguments[2];
 return findByModel(model, using, rootSelector);
 ";
 
-       /**
-         * Find selected option elements by model name.
-         *
-         * arguments[0] {Element} The scope of the search.
-         * arguments[1] {string} The model name.
-         *
-         * @return {Array.WebElement} The matching select elements.
-         */
-        public const string FindSelectedOptions = @"
+        /**
+          * Find selected option elements by model name.
+          *
+          * arguments[0] {Element} The scope of the search.
+          * arguments[1] {string} The model name.
+          *
+          * @return {Array.WebElement} The matching select elements.
+          */
+        public const string FindSelectedOption = @"
 var findSelectedOption = function(model, using ) {
     var prefixes = ['ng-', 'ng_', 'data-ng-', 'x-ng-', 'ng\\:'];
     for (var p = 0; p < prefixes.length; ++p) {
@@ -296,6 +300,33 @@ var findByButtonText = function(searchText, using) {
 var using = arguments[0] || document;
 var searchText = arguments[1];
 return findByButtonText(searchText, using);";
+
+         /**
+          * Find selected option elements in the select element
+          * implemented via repeater without a model.
+          * arguments[0] {Element} The scope of the search.
+          * arguments[1] {string} The repeater name.
+          *
+          * @return {Array.WebElement} The matching select elements.
+          */
+
+        public const string FindSelectedRepeaterOption = @"
+
+var findSelectedRepeaterOption = function(repeater, using) {
+    var prefixes = ['ng-', 'ng_', 'data-ng-', 'x-ng-', 'ng\\:'];
+    for (var p = 0; p < prefixes.length; ++p) {
+        var selector = 'option[' + prefixes[p] + 'repeat=""' + repeater + '""]:checked';
+        var elements = using.querySelectorAll(selector);
+        if (elements.length) {
+            return elements;
+        }
+    }
+};
+var using = arguments[0] || document;
+var repeater = arguments[1];
+return findSelectedRepeaterOption(repeater, using);
+
+";
 
         /**
          * Find buttons by textual content.
@@ -360,7 +391,7 @@ return matches;
          *
          * arguments[0] {Element} The scope of the search.
          * arguments[1] {string} The descriptor for the option
-         * (i.e. fruit for fruit in fruits).* arguments[1] {string} The text of the repeater, e.g. 'cat in cats'.
+         * (i.e. fruit for fruit in fruits).
          *
          * @return {Array.WebElement} The matching elements.
          */
@@ -428,6 +459,119 @@ var using = arguments[0] || document;
 var repeater = arguments[1];
 return findAllRepeaterRows(using, repeater);";
 
+        /**
+        * Find the elements in a column of an ng-repeat.
+        *
+        * @param {string} repeater The text of the repeater, e.g. 'cat in cats'.
+        * @param {boolean} exact Whether the repeater needs to be matched exactly
+        * @param {string} binding The column binding, e.g. '{{cat.name}}'.
+        * @param {Element} using The scope of the search.
+        * @param {string} rootSelector The selector to use for the root app element.
+        *
+        * @return {Array.WebElement} The elements in the column.
+        */
+
+
+        public const string FindRepeaterColumn = @"
+var repeaterMatch = function(ngRepeat, repeater, exact) {
+    if (exact) {
+        return ngRepeat.split(' track by ')[0].split(' as ')[0].split('|')[0].
+        split('=')[0].trim() == repeater;
+    } else {
+        return ngRepeat.indexOf(repeater) != -1;
+    }
+}
+
+var findRepeaterColumn = function(repeater, exact, binding, using, rootSelector) {
+    var matches = [];
+    var root = document.querySelector(rootSelector || 'body');
+    using = using || document;
+    var rows = [];
+    var prefixes = ['ng-', 'ng_', 'data-ng-', 'x-ng-', 'ng\\:'];
+    for (var p = 0; p < prefixes.length; ++p) {
+        var attr = prefixes[p] + 'repeat';
+        var repeatElems = using.querySelectorAll('[' + attr + ']');
+        attr = attr.replace(/\\/g, '');
+        for (var i = 0; i < repeatElems.length; ++i) {
+            if (repeaterMatch(repeatElems[i].getAttribute(attr), repeater, exact)) {
+                rows.push(repeatElems[i]);
+            }
+        }
+    }
+    /* multiRows is an array of arrays, where each inner array contains
+    one row of elements. */
+    var multiRows = [];
+    for (var p = 0; p < prefixes.length; ++p) {
+        var attr = prefixes[p] + 'repeat-start';
+        var repeatElems = using.querySelectorAll('[' + attr + ']');
+        attr = attr.replace(/\\/g, '');
+        for (var i = 0; i < repeatElems.length; ++i) {
+            if (repeaterMatch(repeatElems[i].getAttribute(attr), repeater, exact)) {
+                var elem = repeatElems[i];
+                var row = [];
+                while (elem.nodeType != 8 || (elem.nodeValue &&
+                        !repeaterMatch(elem.nodeValue, repeater))) {
+                    if (elem.nodeType == 1) {
+                        row.push(elem);
+                    }
+                    elem = elem.nextSibling;
+                }
+                multiRows.push(row);
+            }
+        }
+    }
+    var bindings = [];
+    for (var i = 0; i < rows.length; ++i) {
+        if (angular.getTestability) {
+            matches.push.apply(
+                matches,
+                angular.getTestability(root).findBindings(rows[i], binding));
+        } else {
+            if (rows[i].className.indexOf('ng-binding') != -1) {
+                bindings.push(rows[i]);
+            }
+            var childBindings = rows[i].getElementsByClassName('ng-binding');
+            for (var k = 0; k < childBindings.length; ++k) {
+                bindings.push(childBindings[k]);
+            }
+        }
+    }
+    for (var i = 0; i < multiRows.length; ++i) {
+        for (var j = 0; j < multiRows[i].length; ++j) {
+            if (angular.getTestability) {
+                matches.push.apply(
+                    matches,
+                    angular.getTestability(root).findBindings(multiRows[i][j], binding));
+            } else {
+                var elem = multiRows[i][j];
+                if (elem.className.indexOf('ng-binding') != -1) {
+                    bindings.push(elem);
+                }
+                var childBindings = elem.getElementsByClassName('ng-binding');
+                for (var k = 0; k < childBindings.length; ++k) {
+                    bindings.push(childBindings[k]);
+                }
+            }
+        }
+    }
+    for (var j = 0; j < bindings.length; ++j) {
+        var dataBinding = angular.element(bindings[j]).data('$binding');
+        if (dataBinding) {
+            var bindingName = dataBinding.exp || dataBinding[0].exp || dataBinding;
+            if (bindingName.indexOf(binding) != -1) {
+                matches.push(bindings[j]);
+            }
+        }
+    }
+    return matches;
+};
+
+var using = arguments[0] || document;
+var repeater = arguments[1];
+var binding = arguments[2];
+var exact = false;
+var rootSelector = null;
+return findRepeaterColumn(repeater, exact, binding, using, rootSelector);";
         #endregion
     }
 }

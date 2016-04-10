@@ -1,0 +1,64 @@
+<!doctype html>
+<html ng-app="todoApp">
+<head>
+<!-- https://angularjs.org/todo.html, https://github.com/angular/protractor/issues/1212  -->
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.9/angular.js">
+</script>
+<script type="text/javascript">
+angular.module('todoApp', []).controller('TodoListController', function() {
+    var todoList = this;
+    todoList.todos = [{
+        text: 'learn angular',
+        done: true
+    }, {
+        text: 'build an angular app',
+        done: false
+    }];
+
+    todoList.addTodo = function() {
+        todoList.todos.push({
+            text: todoList.todoText,
+            done: false
+        });
+        todoList.todoText = '';
+    };
+
+    todoList.remaining = function() {
+        var count = 0;
+        angular.forEach(todoList.todos, function(todo) {
+            count += todo.done ? 0 : 1;
+        });
+        return count;
+    };
+
+    todoList.archive = function() {
+        var oldTodos = todoList.todos;
+        todoList.todos = [];
+        angular.forEach(oldTodos, function(todo) {
+            if (!todo.done) todoList.todos.push(todo);
+        });
+    };
+});
+</script>
+<style>
+done-true { text-decoration: line-through; color: grey; }
+</style>
+</head>
+<body>
+<h2>Todo</h2>
+<div ng-controller="TodoListController as todoList">
+  <span>{{todoList.remaining()}} of {{todoList.todos.length}} remaining</span>
+  [ <a href="" ng-click="todoList.archive()">archive</a> ]
+  <ul class="unstyled">
+    <li ng-repeat="todo in todoList.todos as items">
+      <input type="checkbox" ng-model="todo.done"/>
+      <span class="done-{{todo.done}}">{{todo.text}}</span>
+    </li>
+  </ul>
+  <form ng-submit="todoList.addTodo()">
+    <input type="text" ng-model="todoList.todoText" size="30" placeholder="add new todo here"/>
+    <input class="btn-primary" type="submit" value="add"/>
+  </form>
+</div>
+</body>
+</html>

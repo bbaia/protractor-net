@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html ng-app="demo">
+<head>
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.2.6/jquery.min.js">
+</script>
+<!-- TODO : Angular 1.4.9 compatibility -->
+<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/angularjs/1.1.5/angular.js">
+</script>
+<script type="text/javascript">
+angular.module("sticky", []).directive("sticky", function($window) {
+  return {
+    link: function(scope, element, attrs) {
+
+      var $win = angular.element($window);
+
+      if (scope._stickyElements === undefined) {
+        scope._stickyElements = [];
+
+        $win.bind("scroll.sticky", function(e) {
+          var pos = $win.scrollTop();
+          for (var i = 0; i < scope._stickyElements.length; i++) {
+
+            var item = scope._stickyElements[i];
+
+            if (!item.isStuck && pos > item.start) {
+              item.element.addClass("stuck");
+              item.isStuck = true;
+
+              if (item.placeholder) {
+                item.placeholder = angular.element("<div></div>")
+                  .css({
+                    height: item.element.outerHeight() + "px"
+                  })
+                  .insertBefore(item.element);
+              }
+            } else if (item.isStuck && pos < item.start) {
+              item.element.removeClass("stuck");
+              item.isStuck = false;
+
+              if (item.placeholder) {
+                item.placeholder.remove();
+                item.placeholder = true;
+              }
+            }
+          }
+        });
+
+        var recheckPositions = function() {
+          for (var i = 0; i < scope._stickyElements.length; i++) {
+            var item = scope._stickyElements[i];
+            if (!item.isStuck) {
+              item.start = item.element.offset().top;
+            } else if (item.placeholder) {
+              item.start = item.placeholder.offset().top;
+            }
+          }
+        };
+        $win.bind("load", recheckPositions);
+        $win.bind("resize", recheckPositions);
+      }
+
+      var item = {
+        element: element,
+        isStuck: false,
+        placeholder: attrs.usePlaceholder !== undefined,
+        start: element.offset().top
+      };
+
+      scope._stickyElements.push(item);
+
+    }
+  };
+});
+</script>
+<script>
+  angular.module('demo',["sticky"]);
+</script>
+
+<style>
+.stuck { position: fixed; top: 0; }
+
+body {
+  height: 3000px;
+  padding:0;
+  margin:0;
+}
+.header {
+  font-size:2em;
+  padding: 1em;
+  text-align: center;
+  border: 1px solid #888;
+}
+.some-element{
+  width:100%;
+  margin:auto;
+  padding: 1em 0;
+  font-size:1.5em;
+  text-align: center;
+  background-color: #ddd;
+}
+.content{
+  height:3000px;
+  width: 800px;
+  margin:auto;
+  background-color: #fff;
+  border: 1px solid #888
+}
+</style>
+</head>
+
+<body>
+  <div class="header">angular-sticky example</div>
+  <div class="some-element" sticky use-placeholder>I'm all sticky!</div>
+  <div class="content">
+    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent non lacus ante. Etiam facilisis turpis eget orci pharetra, eget consectetur eros porttitor. Quisque pellentesque ligula vel convallis viverra. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Vestibulum pellentesque, mi in dapibus pretium, nisl dui sagittis felis, a aliquet erat purus ut diam. Nam vitae quam ut justo pharetra vehicula. Mauris placerat mauris quis fringilla feugiat. Duis bibendum hendrerit arcu, at lobortis lorem luctus vel. Proin scelerisque eros vitae eros rutrum, vel iaculis erat blandit. Ut pharetra interdum tellus, non suscipit magna varius luctus. Aliquam neque erat, viverra eu venenatis vel, volutpat vel leo.
+    Morbi rutrum mi et libero tincidunt, non convallis dui ultricies. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Pellentesque a dui euismod, scelerisque velit et, tempus nulla. Maecenas leo massa, condimentum quis sapien non, volutpat accumsan sem. Pellentesque sollicitudin lectus facilisis erat bibendum consequat. Donec metus nulla, feugiat quis dui id, bibendum eleifend nunc. Fusce fringilla metus in metus cursus dapibus. Praesent quis consectetur leo. Phasellus lobortis iaculis urna, in interdum massa fringilla vel. Pellentesque non pulvinar nisl. Nunc gravida placerat risus id vestibulum. Fusce eget felis imperdiet, scelerisque risus in, blandit dolor. Vivamus gravida, justo sit amet rutrum laoreet, risus nulla consectetur nisi, eu iaculis ligula justo at eros. Aenean luctus tempor fermentum. Suspendisse in arcu nulla. Mauris vestibulum tortor a odio sagittis, vel feugiat mauris ornare.
+  </div>
+  </div>
+</body>
+</html>

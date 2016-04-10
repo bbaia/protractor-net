@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title></title>
+<!-- http://stackoverflow.com/questions/18751129/angularjs-selecting-multiple-options?rq=1 -->
+</head>
+<body ng-app="myApp">
+
+<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.9/angular.js">
+</script>
+
+<script type="text/javascript">
+
+var app = angular.module('myApp', []);
+app.controller('myController', function($scope) {
+    
+    $scope.selected = [
+        {id:1, name:"Blue"},
+        {id:4, name:"Red"}
+    ];
+    
+    $scope.selectedValues = [];
+    
+    $scope.$watch('selected', function(nowSelected){
+        $scope.selectedValues = [];
+        
+        if( ! nowSelected ){
+            // here we've initialized selected already
+            // but sometimes that's not the case
+            // then we get null or undefined
+            return;
+        }
+        angular.forEach(nowSelected, function(val){
+            $scope.selectedValues.push( val.id.toString() );
+        });
+    });
+    
+});
+
+// http://docs.angularjs.org/guide/bootstrap Manual Initialization
+//angular.bootstrap(document, ['myApp']);
+</script>
+<div ng-controller="myController">
+  <label>Select a Color:</label><br>
+  <select multiple ng-model="selectedValues">
+    <option value="1">Blue</option>
+    <option value="2">Green</option>
+    <option value="3">Yellow</option>
+    <option value="4">Red</option>
+  </select>
+  <br>
+  <tt> selectedValues = {{selectedValues}}</tt>    
+</div>

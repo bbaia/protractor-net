@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<!-- https://mingqin.wordpress.com/2014/12/07/angularjs-scopes-watch-and-directives-to-implement-cascading-dropdown/ -->
+<title>Cascading Dropdowns by Scope Watch</title>
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.9/angular.js">
+</script>
+</head>
+<body ng-app="cascadingDropListApp">
+    <div ng-controller="CountryController">
+      <div>
+                Country:
+                <select id="country" ng-model="country" ng-options="country for country in countries"><option value="">Select</option></select>
+            </div>
+      <div>
+                City:
+                <select id="state" ng-disabled="!states" ng-model="state" ng-options="state for state in states"><option value="">Select</option></select>
+            </div>
+      <div>
+                Suburb:
+                <select id="city" ng-disabled="!cities" ng-model="city" ng-options="city for city in cities"><option value="">Select</option></select>
+
+            </div>
+    </div>
+    <script>
+angular.module('cascadingDropListApp', [])
+    .controller('CountryController', ['$scope', function($scope) {
+        $scope.countries = ['china', 'united states'];
+        $scope.$watch('country', function(newVal) {
+            if (newVal === 'china')
+                $scope.states = ['BeiJing', 'ShangHai'];
+            if (newVal === 'united states')
+                $scope.states = ['California', 'Mississippi'];
+        });
+        $scope.$watch('state', function(newVal) {
+            if (newVal === 'ShangHai')
+                $scope.cities = ['JiaDing', 'HongQian', 'PuDong'];
+            if (newVal === 'BeiJing')
+                $scope.cities = ['HaiDian', 'TianAnMen'];
+            if (newVal === 'California')
+                $scope.cities = ['Los Angeles', 'Santa Barbara'];
+            if (newVal === 'Mississippi')
+                $scope.cities = ['Jackson', 'Oxford'];
+        });
+
+    }]);
+</script>
+  </body>
+</html>

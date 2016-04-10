@@ -27,7 +27,6 @@ namespace Protractor
         }
 
         #region IWrapsElement Members
-
         /// <summary>
         /// Gets the wrapped <see cref="IWebElement"/> instance.
         /// </summary>
@@ -45,7 +44,7 @@ namespace Protractor
         /// </summary>
         public bool Displayed
         {
-            get 
+            get
             {
                 this.ngDriver.WaitForAngular();
                 return this.element.Displayed;
@@ -127,6 +126,15 @@ namespace Protractor
         }
 
         /// <summary>
+        /// gets the instance of <see cref="NgWebDriver"/>
+        /// </summary>
+        /// <returns>A <see cref="NgWebDriver"/> object the to manipulate this element.</returns>
+        public NgWebDriver NgDriver
+        {
+            get { return ngDriver; }
+        }
+
+        /// <summary>
         /// Clears the content of this element.
         /// </summary>
         public void Clear()
@@ -136,7 +144,7 @@ namespace Protractor
         }
 
         /// <summary>
-        /// Clicks this element. 
+        /// Clicks this element.
         /// </summary>
         public void Click()
         {
@@ -181,11 +189,8 @@ namespace Protractor
         }
 
         /// <summary>
-        /// Finds the first <see cref="NgWebElement"/> using the given mechanism. 
-        /// </summary>
-        /// <param name="by">The locating mechanism to use.</param>
-        /// <returns>The first matching <see cref="NgWebElement"/> on the current context.</returns>
-        /// <exception cref="NoSuchElementException">If no element matches the criteria.</exception>
+        ///
+        /// </summary>    	
         public NgWebElement FindElement(By by)
         {
             if (by is JavaScriptBy)
@@ -197,14 +202,8 @@ namespace Protractor
         }
 
         /// <summary>
-        /// Finds all <see cref="NgWebElement"/>s within the current context 
-        /// using the given mechanism.
-        /// </summary>
-        /// <param name="by">The locating mechanism to use.</param>
-        /// <returns>
-        /// A <see cref="ReadOnlyCollection{T}"/> of all <see cref="NgWebElement"/>s 
-        /// matching the current criteria, or an empty list if nothing matches.
-        /// </returns>
+        ///
+        /// </summary>    	
         public ReadOnlyCollection<NgWebElement> FindElements(By by)
         {
             if (by is JavaScriptBy)
@@ -215,11 +214,26 @@ namespace Protractor
             return new ReadOnlyCollection<NgWebElement>(this.element.FindElements(by).Select(e => new NgWebElement(this.ngDriver, e)).ToList());
         }
 
+        /// <summary>
+        /// Finds the first <see cref="NgWebElement"/> using the given mechanism.
+        /// </summary>
+        /// <param name="by">The locating mechanism to use.</param>
+        /// <returns>The first matching <see cref="NgWebElement"/> on the current context.</returns>
+        /// <exception cref="NoSuchElementException">If no element matches the criteria.</exception>
         IWebElement ISearchContext.FindElement(By by)
         {
             return this.FindElement(by);
         }
 
+        /// <summary>
+        /// Finds all <see cref="NgWebElement"/>s within the current context
+        /// using the given mechanism.
+        /// </summary>
+        /// <param name="by">The locating mechanism to use.</param>
+        /// <returns>
+        /// A <see cref="ReadOnlyCollection{T}"/> of all <see cref="NgWebElement"/>s
+        /// matching the current criteria, or an empty list if nothing matches.
+        /// </returns>
         ReadOnlyCollection<IWebElement> ISearchContext.FindElements(By by)
         {
             if (by is JavaScriptBy)
@@ -229,7 +243,6 @@ namespace Protractor
             this.ngDriver.WaitForAngular();
             return new ReadOnlyCollection<IWebElement>(this.element.FindElements(by).Select(e => (IWebElement)new NgWebElement(this.ngDriver, e)).ToList());
         }
-
         #endregion
 
         /// <summary>

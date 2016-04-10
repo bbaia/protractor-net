@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<!-- http://www.java2s.com/Tutorials/AngularJSDemo/n/ng_options_with_object_example.htm --> 
+<html  ng-app='testApp'>
+<head>
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.9/angular.js">
+</script>
+<script type='text/javascript'>
+angular.module('testApp', []).controller('testCtrl', function($scope) {
+    $scope.colors = [
+      {
+        name: 'black',
+        shade: 'dark'
+       }, 
+      {
+        name: 'white',
+        shade: 'light'
+       }, 
+      {
+        name: 'red',
+        shade: 'dark'
+       }, 
+      {
+        name: 'blue',
+        shade: 'dark'
+       }, 
+      {
+        name: 'yellow',
+        shade: 'light'
+    }];
+    $scope.color = $scope.colors[2];
+})
+</script>
+</head>
+<body>
+  <div ng-controller='testCtrl'>
+    <select ng-model='color' ng-options='c.name for c in colors'/><br/>
+  </div>
+</body>
+</html>
+
+
+

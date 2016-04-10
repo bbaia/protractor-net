@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html ng-app="myApp">
+<head>
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.13/angular.js">
+</script>
+<script type='text/javascript'>
+angular.module('myApp', []).controller('myCtrl', function($scope) {
+  $scope.myChoice = 3;
+  $scope.options = [
+    { name: 'one', value: 1},
+    { name: 'two', value: 2},
+    { name: 'three', value: 3},
+    { name: 'four', value: 4}];
+});
+  
+  </script>
+</head>
+<body ng-controller="myCtrl">
+  <select ng-model="myChoice">
+    <option ng-repeat="option in options" 
+            value="{{option.value}}" 
+            ng-selected="option.value == myChoice">{{option.name}}</option>
+  </select>
+  <div>Value = {{myChoice}}</div>
+</body>
+</html>

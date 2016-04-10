@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+<!-- http://alexandros.resin.io/angular-d3-svg/ -->
+<head>
+<meta charset="utf-8">
+<style>
+.line {
+fill: none;
+stroke: steelblue;
+stroke-width: 1.5px;
+} 
+</style>
+<script data-require="angular.js@1.4.x" src="http://code.angularjs.org/1.4.9/angular.js"></script>
+<script src="http://cdn.jsdelivr.net/d3js/3.3.9/d3.min.js">
+</script>
+<script type="text/javascript">
+angular.element(document).ready(function() {
+    var app = angular.module('angularSVG', []);
+    app.controller('MainCtrl', function($scope) {
+        $scope.graph = {
+            'width': 300,
+            'height': 100
+        };
+        $scope.points = [
+        {
+            'x': 3,
+            'y': 7
+        },
+        {
+            'x': 5,
+            'y': 15
+        }, 
+        {
+            'x': 7,
+            'y': 8
+        }, 
+        {
+            'x': 11,
+            'y': 17
+        }, 
+        {
+            'x': 13,
+            'y': 13
+        }, 
+        {
+            'x': 17,
+            'y': 23
+        }];
+        x = d3.time.scale().range([0, $scope.graph.width]);
+        y = d3.scale.linear().range([$scope.graph.height, 0]);
+        x.domain(d3.extent($scope.points, function(d) {
+            return d.x
+        }));
+        y.domain(d3.extent($scope.points, function(d) {
+            return d.y
+        }));
+        $scope.line = d3.svg.line()
+            .x( function(d) { return x(d.x); })
+            .y( function(d) { return y(d.y); });
+    });
+    angular.bootstrap(document, ['angularSVG']);
+});
+</script>
+</head>
+<body ng-controller="MainCtrl">
+<svg ng-attr-height="{{graph.height}}" ng-attr-width="{{graph.width}}">
+<path class="line" ng-attr-d="{{line(points)}}"></path>
+</svg>
+</body>
+</html>

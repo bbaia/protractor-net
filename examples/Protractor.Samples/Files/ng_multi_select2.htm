@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title></title>
+<!-- http://jsfiddle.net/prakash38/kvmkbb82/17/ -->
+
+<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.9/angular.js">
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.0/jquery.min.js">
+</script>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
+<script type="text/javascript">
+
+var multiddl = angular.module('myApp', []);
+multiddl.directive('multiselectDropdown', function() {
+    return {
+        restrict: 'E',
+        scope: {
+            model: '=',
+            options: '=',
+        },
+        template: "<div class='btn-group' data-ng-class='{open: open}' style='width: 200px;'>" +
+            "<button class='btn btn-small' style='width: 160px;'>---Select---</button>" +
+            "<button class='btn btn-small dropdown-toggle' data-ng-click='openDropdown()' style='width: 40px;' ><span class='caret'></span></button>" +
+            "<ul class='dropdown-menu' aria-labelledby='dropdownMenu' style='position: relative;'>" +
+            "<li style='cursor:pointer;' data-ng-repeat='option in options'><a data-ng-click='toggleSelectItem(option)'><span data-ng-class='getClassName(option)' aria-hidden='true'></span> {{option.name}}</a></li>" +
+            "</ul>" +
+            "</div>",
+
+        controller: function($scope) {
+            $scope.openDropdown = function() {
+                $scope.open = !$scope.open;
+            };
+            $scope.selectAll = function() {
+                $scope.model = [];
+                angular.forEach($scope.options, function(item, index) {
+                    $scope.model.push(item);
+                });
+            };
+            $scope.deselectAll = function() {
+                $scope.model = [];
+            };
+            $scope.toggleSelectItem = function(option) {
+                var intIndex = -1;
+                angular.forEach($scope.model, function(item, index) {
+                    if (item.id == option.id) {
+                        intIndex = index;
+                    }
+                });
+                if (intIndex >= 0) {
+                    $scope.model.splice(intIndex, 1);
+                } else {
+                    $scope.model.push(option);
+                }
+            };
+
+            $scope.getClassName = function(option) {
+               var varClassName = 'glyphicon glyphicon-remove-circle';
+                angular.forEach($scope.model, function(item, index) {
+                    if (item.id == option.id) {
+                       varClassName = 'glyphicon glyphicon-ok-circle';
+                    }
+                });
+                return (varClassName);
+            };
+        }
+    }
+});
+</script>
+<script type="text/javascript">
+
+multiddl.controller("multiselectddlController", function($scope) {
+    $scope.SelectedCountries = [{
+        "id": 1,
+        "name": "India"
+    }, {
+        "id": 3,
+        "name": "Japan"
+    }, {
+        "id": 5,
+        "name": "Germany"
+    }];
+    $scope.MasterCountries = [{
+        "id": 1,
+        "name": "India"
+    }, {
+        "id": 2,
+        "name": "America"
+    }, {
+        "id": 3,
+        "name": "Japan"
+    }, {
+        "id": 4,
+        "name": "China"
+    }, {
+        "id": 5,
+        "name": "Germany"
+    }]
+});
+</script>
+</head>
+<body ng-app="myApp">
+<div ng-controller="multiselectddlController">
+    <div style="font-weight: bold;">Selected Countries</div>
+    <div data-ng-repeat="country in SelectedCountries">
+        <ul>
+            <li>{{country.name}}</li>
+        </ul>
+    </div>
+    <multiselect-dropdown model="SelectedCountries" options="MasterCountries "></multiselect-dropdown>
+</div>
+</body>
+</html>
