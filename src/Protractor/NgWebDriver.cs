@@ -17,6 +17,7 @@ namespace Protractor
 
         private IWebDriver driver;
         private IJavaScriptExecutor jsExecutor;
+        private bool isAngular2;
         private string rootElement;
         private NgModule[] mockModules;
 
@@ -149,7 +150,7 @@ namespace Protractor
 
                 // TODO: test Safari & Android
                 IHasCapabilities hcDriver = this.driver as IHasCapabilities;
-                if (hcDriver != null && 
+                if (hcDriver != null &&
                     (hcDriver.Capabilities.BrowserName == "internet explorer" ||
                      hcDriver.Capabilities.BrowserName == "phantomjs"))
                 {
@@ -166,19 +167,30 @@ namespace Protractor
                 try
                 {
                     // Make sure the page is an Angular page.
-                    object isAngularApp = this.jsExecutor.ExecuteAsyncScript(ClientSideScripts.TestForAngular);
-                    if (isAngularApp is bool && (bool)isAngularApp)
+                    long? angularVersion = this.jsExecutor.ExecuteAsyncScript(ClientSideScripts.TestForAngular) as long?;
+                    if (angularVersion.HasValue)
                     {
-                        // At this point, Angular will pause for us, until angular.resumeBootstrap is called.
-
-                        // Register extra modules
-                        foreach (NgModule ngModule in this.mockModules)
+                        if (angularVersion.Value == 1)
                         {
-                            this.jsExecutor.ExecuteScript(ngModule.Script);
+                            // At this point, Angular will pause for us, until angular.resumeBootstrap is called.
+
+                            // Register extra modules
+                            foreach (NgModule ngModule in this.mockModules)
+                            {
+                                this.jsExecutor.ExecuteScript(ngModule.Script);
+                            }
+                            // Resume Angular bootstrap
+                            this.jsExecutor.ExecuteScript(ClientSideScripts.ResumeAngularBootstrap,
+                                String.Join(",", this.mockModules.Select(m => m.Name).ToArray()));
                         }
-                        // Resume Angular bootstrap
-                        this.jsExecutor.ExecuteScript(ClientSideScripts.ResumeAngularBootstrap,
-                            String.Join(",", this.mockModules.Select(m => m.Name).ToArray()));
+                        else if (angularVersion.Value == 2)
+                        {
+                            this.isAngular2 = true;
+                            if (this.mockModules.Length > 0)
+                            {
+                                throw new NotSupportedException("Mock modules are not supported in Angular 2");
+                            }
+                        }
                     }
                 }
                 catch (WebDriverTimeoutException wdte)
@@ -343,7 +355,14 @@ namespace Protractor
         {
             if (!this.IgnoreSynchronization)
             {
-                this.jsExecutor.ExecuteAsyncScript(ClientSideScripts.WaitForAngular, this.rootElement);
+                if (this.isAngular2)
+                {
+                    this.jsExecutor.ExecuteAsyncScript(ClientSideScripts.WaitForAllAngular2);
+                }
+                else
+                {
+                    this.jsExecutor.ExecuteAsyncScript(ClientSideScripts.WaitForAngular, this.rootElement);
+                }
             }
         }
     }

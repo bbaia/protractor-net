@@ -23,6 +23,10 @@ namespace Protractor
 var rootSelector = arguments[0];
 var el = document.querySelector(rootSelector);
 var callback = arguments[1];
+if (window.getAngularTestability) {
+    window.getAngularTestability(el).whenStable(callback);
+    return;
+}
 if (!window.angular) {
     throw new Error('angular could not be found on the window');
 }
@@ -38,14 +42,35 @@ angular.element(el).injector().get('$browser').
 }";
 
         /**
+         * Wait until all Angular2 applications on the page have become stable.
+         *
+         * arguments[0] {function} callback
+         */
+        public const string WaitForAllAngular2 = @"
+var callback = arguments[0];
+var testabilities = window.getAllAngularTestabilities();
+var count = testabilities.length;
+var decrement = function() {
+    count--;
+    if (count === 0) {
+        callback();
+    }
+};
+testabilities.forEach(function(testability) {
+    testability.whenStable(decrement);
+});";
+
+        /**
          * Tests whether the angular global variable is present on a page. 
          * Retries in case the page is just loading slowly.
          */
         public const string TestForAngular = @"
 var callback = arguments[0];
 var check = function() {
-    if (window.angular && window.angular.resumeBootstrap) {
-        callback(true);
+    if (window.getAllAngularTestabilities) {
+        callback(2);
+    } else if (window.angular && window.angular.resumeBootstrap) {
+        callback(1);
     } else {
         window.setTimeout(function() {check()}, 1000);
     }
