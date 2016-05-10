@@ -76,6 +76,9 @@ return angular.element(el).injector().get('$location').absUrl();";
          */
         public const string GetLocation = @"
 var el = document.querySelector(arguments[0]);
+if (angular.getTestability) {
+    return angular.getTestability(el).getLocation();
+}
 return angular.element(el).injector().get('$location').url();";
 
         /**
@@ -117,21 +120,29 @@ return angular.element(element).scope().$eval(expression);";
         /**
          * Find a list of elements in the page by their angular binding.
          *
-         * arguments[0] {Element} The scope of the search.
-         * arguments[1] {string} The binding, e.g. {{cat.name}}.
+         * arguments[0] {string} The binding, e.g. {{cat.name}}.
+         * arguments[1] {string} The selector to use for the root app element.
+         * arguments[2] {Element} The scope of the search.
          *
          * @return {Array.WebElement} The elements containing the binding.
          */
         public const string FindBindings = @"
-var using = arguments[0] || document;
-var binding = arguments[1];
+var binding = arguments[0];
+var root = document.querySelector(arguments[1]);
+var using = arguments[2] || document;
+if (angular.getTestability) {
+    return angular.getTestability(root).
+        findBindings(using, binding, false);
+}
 var bindings = using.getElementsByClassName('ng-binding');
 var matches = [];
 for (var i = 0; i < bindings.length; ++i) {
-    var bindingName = angular.element(bindings[i]).data().$binding[0].exp ||
-        angular.element(bindings[i]).data().$binding;
-    if (bindingName.indexOf(binding) != -1) {
-        matches.push(bindings[i]);
+    var dataBinding = angular.element(bindings[i]).data('$binding');
+    if (dataBinding) {
+        var bindingName = dataBinding.exp || dataBinding[0].exp || dataBinding;
+        if (bindingName.indexOf(binding) != -1) {
+            matches.push(bindings[i]);
+        }
     }
 }
 return matches;";
@@ -139,14 +150,20 @@ return matches;";
         /**
          * Find elements by model name.
          *
-         * arguments[0] {Element} The scope of the search.
-         * arguments[1] {string} The model name.
+         * arguments[0] {string} The model name.
+         * arguments[1] {string} The selector to use for the root app element.
+         * arguments[2] {Element} The scope of the search.
          *
          * @return {Array.WebElement} The matching input elements.
          */
         public const string FindModel = @"
-var using = arguments[0] || document;
-var model = arguments[1];
+var model = arguments[0];
+var root = document.querySelector(arguments[1]);
+var using = arguments[2] || document;
+if (angular.getTestability) {
+    return angular.getTestability(root).
+        findModels(using, model, true);
+}
 var prefixes = ['ng-', 'ng_', 'data-ng-', 'x-ng-', 'ng\\:'];
 for (var p = 0; p < prefixes.length; ++p) {
     var selector = '[' + prefixes[p] + 'model=""' + model + '""]';
@@ -159,14 +176,16 @@ for (var p = 0; p < prefixes.length; ++p) {
         /**
          * Find selected option elements by model name.
          *
-         * arguments[0] {Element} The scope of the search.
-         * arguments[1] {string} The model name.
+         * arguments[0] {string} The model name.
+         * arguments[1] {string} The selector to use for the root app element.
+         * arguments[2] {Element} The scope of the search.
          *
          * @return {Array.WebElement} The matching select elements.
          */
         public const string FindSelectedOptions = @"
-var using = arguments[0] || document;
-var model = arguments[1];
+var model = arguments[0];
+var root = document.querySelector(arguments[1]);
+var using = arguments[2] || document;
 var prefixes = ['ng-', 'ng_', 'data-ng-', 'x-ng-', 'ng\\:'];
 for (var p = 0; p < prefixes.length; ++p) {
     var selector = 'select[' + prefixes[p] + 'model=""' + model + '""] option:checked';
@@ -179,14 +198,16 @@ for (var p = 0; p < prefixes.length; ++p) {
         /**
          * Find all rows of an ng-repeat.
          *
-         * arguments[0] {Element} The scope of the search.
-         * arguments[1] {string} The text of the repeater, e.g. 'cat in cats'.
+         * arguments[0] {string} The text of the repeater, e.g. 'cat in cats'.
+         * arguments[1] {string} The selector to use for the root app element.
+         * arguments[2] {Element} The scope of the search.
          *
          * @return {Array.WebElement} All rows of the repeater.
          */
         public const string FindAllRepeaterRows = @"
-var using = arguments[0] || document;
-var repeater = arguments[1];
+var repeater = arguments[0];
+var root = document.querySelector(arguments[1]);
+var using = arguments[2] || document;
 var rows = [];
 var prefixes = ['ng-', 'ng_', 'data-ng-', 'x-ng-', 'ng\\:'];
 for (var p = 0; p < prefixes.length; ++p) {

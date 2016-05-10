@@ -31,9 +31,9 @@ namespace Protractor
         }
 
         /// <summary>
-        /// Gets or sets the scope for the search. By default, the document.
+        /// Gets or sets any additional arguments to the script.
         /// </summary>
-        public IWebElement RootElement { get; set; }
+        public object[] AdditionalScriptArguments { get; set; }
 
         /// <summary>
         /// Finds the first element matching the criteria.
@@ -63,9 +63,14 @@ namespace Protractor
         public override ReadOnlyCollection<IWebElement> FindElements(ISearchContext context)
         {
             // Create script arguments
-            object[] scriptArgs = new object[this.args.Length + 1];
-            scriptArgs[0] = this.RootElement;
-            Array.Copy(this.args, 0, scriptArgs, 1, this.args.Length);
+            object[] scriptArgs = this.args;
+            if (this.AdditionalScriptArguments != null && this.AdditionalScriptArguments.Length > 0)
+            {
+                // Add additionnal script arguments
+                scriptArgs = new object[this.args.Length + this.AdditionalScriptArguments.Length];
+                this.args.CopyTo(scriptArgs, 0);
+                this.AdditionalScriptArguments.CopyTo(scriptArgs, this.args.Length);
+            }
 
             // Get JS executor
             IJavaScriptExecutor jsExecutor = context as IJavaScriptExecutor;

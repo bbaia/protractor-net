@@ -260,6 +260,10 @@ namespace Protractor
         /// <exception cref="NoSuchElementException">If no element matches the criteria.</exception>
         public NgWebElement FindElement(By by)
         {
+            if (by is JavaScriptBy)
+            {
+                ((JavaScriptBy)by).AdditionalScriptArguments = new object[] { this.RootElement };
+            }
             this.WaitForAngular();
             return new NgWebElement(this, this.driver.FindElement(by));
         }
@@ -275,6 +279,10 @@ namespace Protractor
         /// </returns>
         public ReadOnlyCollection<NgWebElement> FindElements(By by)
         {
+            if (by is JavaScriptBy)
+            {
+                ((JavaScriptBy)by).AdditionalScriptArguments = new object[] { this.RootElement };
+            }
             this.WaitForAngular();
             return new ReadOnlyCollection<NgWebElement>(this.driver.FindElements(by).Select(e => new NgWebElement(this, e)).ToList());
         }
@@ -286,6 +294,10 @@ namespace Protractor
 
         ReadOnlyCollection<IWebElement> ISearchContext.FindElements(By by)
         {
+            if (by is JavaScriptBy)
+            {
+                ((JavaScriptBy)by).AdditionalScriptArguments = new object[] { this.RootElement };
+            }
             this.WaitForAngular();
             return new ReadOnlyCollection<IWebElement>(this.driver.FindElements(by).Select(e => (IWebElement)new NgWebElement(this, e)).ToList());
         }
