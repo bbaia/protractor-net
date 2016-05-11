@@ -1,3 +1,9 @@
+0.8.0 / 2016-05-11
+==================
+
+* ([1ffd373](https://github.com/bbaia/protractor-net/commit/1ffd373f071b426d3054cfa65149aa5f0b6c5d52)) Add initial Angular 2 support (NgBy locators not supported)
+* ([e08080c](https://github.com/bbaia/protractor-net/commit/e08080ca4e76505e374a35d3855672b241d802df)) Use Angular testability API for NgBy.Model and NgBy.Bindings
+
 0.7.1 / 2016-04-07
 ==================
 
