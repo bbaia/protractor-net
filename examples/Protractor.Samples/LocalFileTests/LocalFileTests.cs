@@ -18,6 +18,8 @@ using OpenQA.Selenium.IE;
 using OpenQA.Selenium.PhantomJS;
 using OpenQA.Selenium.Remote;
 using OpenQA.Selenium.Support.UI;
+
+using FluentAssertions;
 using Protractor.Extensions;
 
 namespace Protractor.Test
@@ -35,7 +37,10 @@ namespace Protractor.Test
         [TestFixtureSetUp]
         public void SetUp()
         {
-			driver = new PhantomJSDriver();
+            // driver = new FirefoxDriver();
+            // System.InvalidOperationException : Access to 'file:///...' from script denied (UnexpectedJavaScriptError) 
+            // driver = new ChromeDriver();
+            driver = new PhantomJSDriver();
             driver.Manage().Timeouts().SetScriptTimeout(TimeSpan.FromSeconds(60));
             ngDriver = new NgWebDriver(driver);
         }
@@ -293,6 +298,96 @@ namespace Protractor.Test
         }
 
         [Test]
+        public void ShouldHandleSearchAngularUISelect()
+        {
+            GetPageContent("ng_ui_select_example1.htm");
+            String searchText = "Ma";
+            IWebElement search = ngDriver.FindElement(By.CssSelector("input[type='search']"));
+            search.SendKeys(searchText);
+            NgWebElement ng_search = new NgWebElement(ngDriver, search);
+
+            StringAssert.IsMatch(@"input", ng_search.TagName); // triggers  ngDriver.waitForAngular();
+            ReadOnlyCollection<IWebElement> available_colors = ngDriver.WrappedDriver.FindElements(By.CssSelector("div[role='option']"));
+
+            var matching_colors = available_colors.Where(color => color.Text.Contains(searchText));
+            foreach (IWebElement matching_color in matching_colors)
+            {
+                ngDriver.Highlight(matching_color);
+                Console.Error.WriteLine(String.Format("Matched color: {0}", matching_color.Text));
+            }
+
+
+        }
+
+        [Test]
+        public void ShouldHandleDeselectAngularUISelect()
+        {
+            GetPageContent("ng_ui_select_example1.htm");
+            ReadOnlyCollection<NgWebElement> ng_selected_colors = ngDriver.FindElements(NgBy.Repeater("$item in $select.selected"));
+            while (true)
+            {
+                ng_selected_colors = ngDriver.FindElements(NgBy.Repeater("$item in $select.selected"));
+                if (ng_selected_colors.Count == 0)
+                {
+                    break;
+                }
+                NgWebElement ng_deselect_color = ng_selected_colors.Last();
+                Object itemColor = ng_deselect_color.Evaluate("$item");
+                Console.Error.WriteLine(String.Format("Deselecting color: {0}", itemColor.ToString()));
+                IWebElement ng_close = ng_deselect_color.FindElement(By.CssSelector("span[class *='close']"));
+                Assert.IsNotNull(ng_close);
+                Assert.IsNotNull(ng_close.GetAttribute("ng-click"));
+                StringAssert.IsMatch(@"removeChoice", ng_close.GetAttribute("ng-click"));
+
+                ngDriver.Highlight(ng_close);
+                ng_close.Click();
+                // ngDriver.waitForAngular();
+
+            }
+            Console.Error.WriteLine("Nothing is selected");
+
+        }
+
+        [Test]
+        public void ShouldHandleAngularUISelect()
+        {
+            GetPageContent("ng_ui_select_example1.htm");
+            ReadOnlyCollection<NgWebElement> ng_selected_colors = ngDriver.FindElements(NgBy.Repeater("$item in $select.selected"));
+            Assert.IsTrue(2 == ng_selected_colors.Count);
+            foreach (NgWebElement ng_selected_color in ng_selected_colors)
+            {
+                ngDriver.Highlight(ng_selected_color);
+                Object selected_color_item = ng_selected_color.Evaluate("$item");
+                Console.Error.WriteLine(String.Format("selected color: {0}", selected_color_item.ToString()));
+            }
+            // IWebElement search = ngDriver.FindElement(By.CssSelector("input[type='search']"));
+            // same element
+            NgWebElement ng_search = ngDriver.FindElement(NgBy.Model("$select.search"));
+            ng_search.Click();
+            int wait_seconds = 3;
+            WebDriverWait wait = new WebDriverWait(driver, TimeSpan.FromSeconds(wait_seconds));
+            wait.Until(d => (d.FindElements(By.CssSelector("div[role='option']"))).Count > 0);
+            ReadOnlyCollection<NgWebElement> ng_available_colors = ngDriver.FindElements(By.CssSelector("div[role='option']"));
+            Assert.IsTrue(6 == ng_available_colors.Count);
+            foreach (NgWebElement ng_available_color in ng_available_colors)
+            {
+                ngDriver.Highlight(ng_available_color);
+                int available_color_index = -1;
+                try
+                {
+                    available_color_index = Int32.Parse(ng_available_color.Evaluate("$index").ToString());
+                }
+                catch (Exception e)
+                {
+                    // ignore
+                }
+                Console.Error.WriteLine(String.Format("available color [{1}]:{0}", ng_available_color.Text, available_color_index));
+            }
+        }
+
+
+
+        [Test]
         public void ShouldFindElementByRepeaterColumn()
         {
             GetPageContent("ng_service.htm");
@@ -306,7 +401,6 @@ namespace Protractor.Test
         public void ShouldFindSelectedtOption()
         {
             GetPageContent("ng_select_array.htm");
-            //  NOTE: works with Angular 1.2.13, fails with Angular 1.4.9
             NgWebElement ng_element = ngDriver.FindElement(NgBy.SelectedOption("myChoice"));
             StringAssert.IsMatch("three", ng_element.Text);
             Assert.IsTrue(ng_element.Displayed);
@@ -340,6 +434,61 @@ namespace Protractor.Test
         }
 
         [Test]
+        public void ShouldDirectSelectFromDatePicker()
+        {
+            GetPageContent("ng_datepicker.htm");
+            NgWebElement ng_result = ngDriver.FindElement(NgBy.Model("data.inputOnTimeSet"));
+            ng_result.Clear();
+            ngDriver.Highlight(ng_result);
+            IWebElement calendar = ngDriver.FindElement(By.CssSelector(".input-group-addon"));
+            ngDriver.Highlight(calendar);
+            Actions actions = new Actions(ngDriver.WrappedDriver);
+            actions.MoveToElement(calendar).Click().Build().Perform();
+
+            int datepicker_width = 900;
+            int datepicker_heght = 800;
+            driver.Manage().Window.Size = new System.Drawing.Size(datepicker_width, datepicker_heght);
+            IWebElement dropdown = driver.FindElement(By.CssSelector("div.dropdown.open ul.dropdown-menu"));
+            NgWebElement ng_dropdown = new NgWebElement(ngDriver, dropdown);
+            Assert.IsNotNull(ng_dropdown);
+            ReadOnlyCollection<NgWebElement> elements = ng_dropdown.FindElements(NgBy.Repeater("dateObject in week.dates"));
+            Assert.IsTrue(28 <= elements.Count);
+
+            String monthDate = "12";
+            IWebElement dateElement = ng_dropdown.FindElements(NgBy.CssContainingText("td.ng-binding", monthDate)).First();
+            Console.Error.WriteLine("Mondh Date: " + dateElement.Text);
+            dateElement.Click();
+            NgWebElement ng_element = ng_dropdown.FindElement(NgBy.Model("data.inputOnTimeSet"));
+            Assert.IsNotNull(ng_element);
+            ngDriver.Highlight(ng_element);
+            ReadOnlyCollection<NgWebElement> ng_dataDates = ng_element.FindElements(NgBy.Repeater("dateObject in data.dates"));
+            Assert.AreEqual(24, ng_dataDates.Count);
+
+            String timeOfDay = "6:00 PM";
+            NgWebElement ng_hour = ng_element.FindElements(NgBy.CssContainingText("span.hour", timeOfDay)).First();
+            Assert.IsNotNull(ng_hour);
+            ngDriver.Highlight(ng_hour);
+            Console.Error.WriteLine("Hour of the day: " + ng_hour.Text);
+            ng_hour.Click();
+            String specificMinute = "6:35 PM";
+
+            // reload
+            ng_element = ng_dropdown.FindElement(NgBy.Model("data.inputOnTimeSet"));
+            Assert.IsNotNull(ng_element);
+            ngDriver.Highlight(ng_element);
+            NgWebElement ng_minute = ng_element.FindElements(NgBy.CssContainingText("span.minute", specificMinute)).First();
+            Assert.IsNotNull(ng_minute);
+            ngDriver.Highlight(ng_minute);
+            Console.Error.WriteLine("Time of the day: " + ng_minute.Text);
+            ng_minute.Click();
+            ng_result = ngDriver.FindElement(NgBy.Model("data.inputOnTimeSet"));
+            ngDriver.Highlight(ng_result, 100);
+            Console.Error.WriteLine("Selected Date/time: " + ng_result.GetAttribute("value"));
+
+
+        }
+
+        [Test]
         public void ShouldFindOptions()
         {
             // base_url = "http://www.java2s.com/Tutorials/AngularJSDemo/n/ng_options_with_object_example.htm";
@@ -370,18 +519,32 @@ namespace Protractor.Test
         }
 
         [Test]
+        public void ShouldThrowfluentExceptions()
+        {
+            GetPageContent("ng_repeat_start_end.htm");
+
+            // Potentially a useful Assert for Page Object - heavy projects. Does not work very well with Protractor
+            Action a = () =>
+            {
+                var displayed = ngDriver.FindElement(NgBy.Repeater("this is not going to be found")).Displayed;
+            };
+            a.ShouldThrow<NoSuchElementException>().WithMessage("Could not find element by: NgBy.Repeater:");
+
+        }
+
+        [Test]
         public void ShouldUpload()
         {
-            GetPageContent("ng_upload1.htm");
-            // need to run static page in local web server - otherwise test would not actually do anything
-            // ngDriver.Navigate().GoToUrl("http://localhost:8080/ng_upload1.htm");
-            
+            // GetPageContent("ng_upload1.htm");
+            //  need to run 
+            ngDriver.Navigate().GoToUrl("http://localhost:8080/ng_upload1.htm");
+
             IWebElement file = driver.FindElement(By.CssSelector("div[ng-controller = 'myCtrl'] > input[type='file']"));
             Assert.IsNotNull(file);
             StringAssert.AreEqualIgnoringCase(file.GetAttribute("file-model"), "myFile");
             String localPath = CreateTempFile("lorem ipsum dolor sit amet");
-            
-            
+
+
             IAllowsFileDetection fileDetectionDriver = driver as IAllowsFileDetection;
             if (fileDetectionDriver == null)
             {
@@ -405,7 +568,7 @@ namespace Protractor.Test
             Object myFile = ng_file.Evaluate("myFile");
             if (myFile != null)
             {
-                Dictionary<String,Object> result = (Dictionary<String,Object>) myFile;
+                Dictionary<String, Object> result = (Dictionary<String, Object>)myFile;
                 Assert.IsTrue(result.Keys.Contains("name"));
                 Assert.IsTrue(result.Keys.Contains("type"));
                 Assert.IsTrue(result.Keys.Contains("size"));
@@ -468,7 +631,7 @@ namespace Protractor.Test
             //    }
             //}
         }
-        
+
         private string CreateTempFile(string content)
         {
             FileInfo testFile = new FileInfo("webdriver.tmp");

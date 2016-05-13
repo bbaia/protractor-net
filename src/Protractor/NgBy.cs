@@ -135,5 +135,16 @@ namespace Protractor
         {
             return new JavaScriptBy(ClientSideScripts.FindSelectedOption, model);
         }
+        
+        /// <summary>
+        /// Gets a mechanism to find select option elements by their model name.
+        /// </summary>
+        /// <param name="cssSelector">The css selector to match.</param>
+        /// <param name="searchText">The exact text to match.</param>
+        /// <returns>A <see cref="By"/> object the driver can use to find the elements.</returns>
+        public static By CssContainingText(string cssSelector, string searchText)
+        {
+        	return new JavaScriptBy(ClientSideScripts.FindByCssContainingText, searchText, cssSelector );
+        }        
     }
 }

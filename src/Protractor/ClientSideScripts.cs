@@ -370,7 +370,7 @@ return findByPartialButtonText(searchText, using);";
          * @return {Array.Element} The matching elements.
          */
 
-        public const string findByCssContainingText_untested = @"
+        public const string FindByCssContainingText = @"
 var using = arguments[0] || document;
 var searchText = arguments[1];
 var cssSelector = arguments[2];
