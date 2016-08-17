@@ -11,7 +11,7 @@ namespace Protractor
     /// <summary>
     /// Provides a mechanism to write tests against an AngularJS application.
     /// </summary>
-    public class NgWebDriver : IWebDriver, IWrapsDriver
+    public class NgWebDriver : IWebDriver, IWrapsDriver, IJavaScriptExecutor
     {
         private const string AngularDeferBootstrap = "NG_DEFER_BOOTSTRAP!";
 
@@ -136,7 +136,7 @@ namespace Protractor
                 if (hcDriver != null && hcDriver.Capabilities.BrowserName == "internet explorer")
                 {
                     // 'this.driver.Url' does not work on IE
-                    return this.jsExecutor.ExecuteScript(ClientSideScripts.GetLocationAbsUrl, this.rootElement) as string;
+                    return this.ExecuteScript(ClientSideScripts.GetLocationAbsUrl, this.rootElement) as string;
                 }
                 else
                 {
@@ -155,19 +155,19 @@ namespace Protractor
                      hcDriver.Capabilities.BrowserName == "phantomjs"))
                 {
                     // Internet Explorer & PhantomJS
-                    this.jsExecutor.ExecuteScript("window.name += '" + AngularDeferBootstrap + "';");
+                    this.ExecuteScript("window.name += '" + AngularDeferBootstrap + "';");
                     this.driver.Url = value;
                 }
                 else
                 {
                     // Chrome & Firefox
-                    this.jsExecutor.ExecuteScript("window.name += '" + AngularDeferBootstrap + "'; window.location.href = '" + value + "';");
+                    this.ExecuteScript("window.name += '" + AngularDeferBootstrap + "'; window.location.href = '" + value + "';");
                 }
 
                 try
                 {
                     // Make sure the page is an Angular page.
-                    long? angularVersion = this.jsExecutor.ExecuteAsyncScript(ClientSideScripts.TestForAngular) as long?;
+                    long? angularVersion = this.ExecuteAsyncScript(ClientSideScripts.TestForAngular) as long?;
                     if (angularVersion.HasValue)
                     {
                         if (angularVersion.Value == 1)
@@ -177,10 +177,10 @@ namespace Protractor
                             // Register extra modules
                             foreach (NgModule ngModule in this.mockModules)
                             {
-                                this.jsExecutor.ExecuteScript(ngModule.Script);
+                                this.ExecuteScript(ngModule.Script);
                             }
                             // Resume Angular bootstrap
-                            this.jsExecutor.ExecuteScript(ClientSideScripts.ResumeAngularBootstrap,
+                            this.ExecuteScript(ClientSideScripts.ResumeAngularBootstrap,
                                 String.Join(",", this.mockModules.Select(m => m.Name).ToArray()));
                         }
                         else if (angularVersion.Value == 2)
@@ -333,12 +333,12 @@ namespace Protractor
             get
             {
                 this.WaitForAngular();
-                return this.jsExecutor.ExecuteScript(ClientSideScripts.GetLocation, this.rootElement) as string;
+                return this.ExecuteScript(ClientSideScripts.GetLocation, this.rootElement) as string;
             }
             set
             {
                 this.WaitForAngular();
-                this.jsExecutor.ExecuteScript(ClientSideScripts.SetLocation, this.rootElement, value);
+                this.ExecuteScript(ClientSideScripts.SetLocation, this.rootElement, value);
             }
         }
 
@@ -357,13 +357,80 @@ namespace Protractor
             {
                 if (this.isAngular2)
                 {
-                    this.jsExecutor.ExecuteAsyncScript(ClientSideScripts.WaitForAllAngular2);
+                    this.ExecuteAsyncScript(ClientSideScripts.WaitForAllAngular2);
                 }
                 else
                 {
-                    this.jsExecutor.ExecuteAsyncScript(ClientSideScripts.WaitForAngular, this.rootElement);
+                    this.ExecuteAsyncScript(ClientSideScripts.WaitForAngular, this.rootElement);
                 }
             }
         }
+
+        #region IJavaScriptExecutor Members
+
+        /// <summary>
+        /// Executes JavaScript in the context of the currently selected frame or window.
+        /// </summary>
+        /// <param name="script">The JavaScript code to execute.</param>
+        /// <param name="args">The arguments to the script.</param>
+        /// <returns>The value returned by the script.</returns>
+        /// <remarks>
+        ///   <para>
+        ///     The <see cref="M:OpenQA.Selenium.IJavaScriptExecutor.ExecuteScript(System.String,System.Object[])" /> method executes JavaScript in the context of
+        ///     the currently selected frame or window. This means that "document" will refer
+        ///     to the current document. If the script has a return value, then the following
+        ///     steps will be taken:
+        ///   </para>
+        ///   <para>
+        ///     <list type="bullet">
+        ///       <item>
+        ///         <description>For an HTML element, this method returns a <see cref="T:OpenQA.Selenium.IWebElement" /></description>
+        ///       </item>
+        ///       <item>
+        ///         <description>For a number, a <see cref="T:System.Int64" /> is returned</description>
+        ///       </item>
+        ///       <item>
+        ///         <description>For a boolean, a <see cref="T:System.Boolean" /> is returned</description>
+        ///       </item>
+        ///       <item>
+        ///         <description>For all other cases a <see cref="T:System.String" /> is returned.</description>
+        ///       </item>
+        ///       <item>
+        ///         <description>
+        ///           For an array, we check the first element, and attempt to return a
+        ///           <see cref="T:System.Collections.Generic.List`1" /> of that type, following the rules above. 
+        ///           Nested lists are not supported.
+        ///         </description>
+        ///       </item>
+        ///       <item>
+        ///         <description>If the value is null or there is no return value, <see langword="null" /> is returned.</description>
+        ///       </item>
+        ///     </list>
+        ///   </para>
+        ///   <para>
+        ///     Arguments must be a number (which will be converted to a <see cref="T:System.Int64" />),
+        ///     a <see cref="T:System.Boolean" />, a <see cref="T:System.String" /> or a <see cref="T:OpenQA.Selenium.IWebElement" />.
+        ///     An exception will be thrown if the arguments do not meet these criteria.
+        ///     The arguments will be made available to the JavaScript via the "arguments" magic
+        ///     variable, as if the function were called via "Function.apply"
+        ///   </para>
+        /// </remarks>
+        public object ExecuteScript(string script, params object[] args)
+        {
+            return jsExecutor.ExecuteScript(script, args);
+        }
+
+        /// <summary>
+        /// Executes JavaScript asynchronously in the context of the currently selected frame or window.
+        /// </summary>
+        /// <param name="script">The JavaScript code to execute.</param>
+        /// <param name="args">The arguments to the script.</param>
+        /// <returns>The value returned by the script.</returns>
+        public object ExecuteAsyncScript(string script, params object[] args)
+        {
+            return jsExecutor.ExecuteAsyncScript(script, args);
+        }
+
+        #endregion
     }
 }

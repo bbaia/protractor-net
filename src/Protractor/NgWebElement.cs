@@ -240,7 +240,7 @@ namespace Protractor
         public object Evaluate(string expression)
         {
             this.ngDriver.WaitForAngular();
-            return ((IJavaScriptExecutor)this.ngDriver.WrappedDriver).ExecuteScript(ClientSideScripts.Evaluate, this.element, expression);
+            return this.ngDriver.ExecuteScript(ClientSideScripts.Evaluate, this.element, expression);
         }
     }
 }
