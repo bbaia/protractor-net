@@ -148,13 +148,14 @@ namespace Protractor
                 // Reset URL
                 this.driver.Url = "about:blank";
 
-                // TODO: test Safari & Android
+                // TODO: test Android
                 IHasCapabilities hcDriver = this.driver as IHasCapabilities;
                 if (hcDriver != null &&
                     (hcDriver.Capabilities.BrowserName == "internet explorer" ||
-                     hcDriver.Capabilities.BrowserName == "phantomjs"))
+                     hcDriver.Capabilities.BrowserName == "phantomjs" ||
+                     hcDriver.Capabilities.BrowserName.ToLower() == "safari"))
                 {
-                    // Internet Explorer & PhantomJS
+                    // Internet Explorer, PhantomJS & Safari
                     this.jsExecutor.ExecuteScript("window.name += '" + AngularDeferBootstrap + "';");
                     this.driver.Url = value;
                 }
