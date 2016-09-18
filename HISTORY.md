@@ -1,3 +1,10 @@
+0.8.1 / 2016-09-18
+==================
+
+* ([31d91ed](https://github.com/bbaia/protractor-net/commit/31d91edd7c3b933364dbee1c01835730b946a92b)) Add Microsoft Edge support
+* ([842ea1d](https://github.com/bbaia/protractor-net/commit/842ea1dd44945110a983a2e37b38560ff2bd1d87)) Fix issue that caused Safari to sometimes hang on page load
+* ([e9705d6](https://github.com/bbaia/protractor-net/commit/e9705d6651b581b6b06e4e9dd0d74c8b31836719)) Implement IJavaScriptExecutor in NgWebDriver
+
 0.8.0 / 2016-05-11
 ==================
 

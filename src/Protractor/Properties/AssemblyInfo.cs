@@ -5,5 +5,5 @@
 [assembly: AssemblyProduct("Protractor for .NET")]
 
 // Versions are incremented according to semver (http://semver.org/)
-[assembly: AssemblyVersion("0.8.0.0")]
-[assembly: AssemblyFileVersion("0.8.0.0")]
+[assembly: AssemblyVersion("0.8.1.0")]
+[assembly: AssemblyFileVersion("0.8.1.0")]
