@@ -4,6 +4,7 @@ using OpenQA.Selenium;
 using OpenQA.Selenium.PhantomJS;
 using OpenQA.Selenium.Chrome;
 using OpenQA.Selenium.IE;
+using OpenQA.Selenium.Edge;
 
 namespace Protractor.Samples.Basic
 {
@@ -24,6 +25,9 @@ namespace Protractor.Samples.Basic
             // Using Internet Explorer
             //var options = new InternetExplorerOptions() { IntroduceInstabilityByIgnoringProtectedModeSettings = true };
             //driver = new InternetExplorerDriver(options);
+
+            // Using Microsoft Edge
+            //driver = new EdgeDriver();
 
             // Required for TestForAngular and WaitForAngular scripts
             driver.Manage().Timeouts().SetScriptTimeout(TimeSpan.FromSeconds(5));

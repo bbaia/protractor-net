@@ -152,16 +152,15 @@ namespace Protractor
                 IHasCapabilities hcDriver = this.driver as IHasCapabilities;
                 if (hcDriver != null &&
                     (hcDriver.Capabilities.BrowserName == "internet explorer" ||
+                     hcDriver.Capabilities.BrowserName == "MicrosoftEdge" ||
                      hcDriver.Capabilities.BrowserName == "phantomjs" ||
                      hcDriver.Capabilities.BrowserName.ToLower() == "safari"))
                 {
-                    // Internet Explorer, PhantomJS & Safari
                     this.ExecuteScript("window.name += '" + AngularDeferBootstrap + "';");
                     this.driver.Url = value;
                 }
                 else
                 {
-                    // Chrome & Firefox
                     this.ExecuteScript("window.name += '" + AngularDeferBootstrap + "'; window.location.href = '" + value + "';");
                 }
 

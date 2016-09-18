@@ -70,6 +70,10 @@
       <Link>chromedriver.exe</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="..\..\packages\Selenium.WebDriver.MicrosoftWebDriver.10.0.10586.0\driver\MicrosoftWebDriver.exe">
+      <Link>MicrosoftWebDriver.exe</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="phantomjs-license.txt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
