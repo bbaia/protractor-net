@@ -57,5 +57,17 @@ namespace Protractor.Samples.Basic
             Assert.AreEqual("build an angular app", elements[1].Text);
             Assert.AreEqual(false, elements[1].Evaluate("todo.done"));
         }
+
+        [Test]
+        public void NonAngularPageShouldBeSupported()
+        {
+            Assert.DoesNotThrow(() =>
+            {
+                var ngDriver = new NgWebDriver(driver);
+                ngDriver.IgnoreSynchronization = true;
+                ngDriver.Navigate().GoToUrl("http://www.google.com");
+                ngDriver.IgnoreSynchronization = false;
+            });
+        }
     }
 }
