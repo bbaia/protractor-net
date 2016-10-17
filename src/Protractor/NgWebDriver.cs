@@ -164,39 +164,42 @@ namespace Protractor
                     this.ExecuteScript("window.name += '" + AngularDeferBootstrap + "'; window.location.href = '" + value + "';");
                 }
 
-                try
+                if (!this.IgnoreSynchronization)
                 {
-                    // Make sure the page is an Angular page.
-                    long? angularVersion = this.ExecuteAsyncScript(ClientSideScripts.TestForAngular) as long?;
-                    if (angularVersion.HasValue)
+                    try
                     {
-                        if (angularVersion.Value == 1)
+                        // Make sure the page is an Angular page.
+                        long? angularVersion = this.ExecuteAsyncScript(ClientSideScripts.TestForAngular) as long?;
+                        if (angularVersion.HasValue)
                         {
-                            // At this point, Angular will pause for us, until angular.resumeBootstrap is called.
+                            if (angularVersion.Value == 1)
+                            {
+                                // At this point, Angular will pause for us, until angular.resumeBootstrap is called.
 
-                            // Register extra modules
-                            foreach (NgModule ngModule in this.mockModules)
-                            {
-                                this.ExecuteScript(ngModule.Script);
+                                // Register extra modules
+                                foreach (NgModule ngModule in this.mockModules)
+                                {
+                                    this.ExecuteScript(ngModule.Script);
+                                }
+                                // Resume Angular bootstrap
+                                this.ExecuteScript(ClientSideScripts.ResumeAngularBootstrap,
+                                    String.Join(",", this.mockModules.Select(m => m.Name).ToArray()));
                             }
-                            // Resume Angular bootstrap
-                            this.ExecuteScript(ClientSideScripts.ResumeAngularBootstrap,
-                                String.Join(",", this.mockModules.Select(m => m.Name).ToArray()));
-                        }
-                        else if (angularVersion.Value == 2)
-                        {
-                            this.isAngular2 = true;
-                            if (this.mockModules.Length > 0)
+                            else if (angularVersion.Value == 2)
                             {
-                                throw new NotSupportedException("Mock modules are not supported in Angular 2");
+                                this.isAngular2 = true;
+                                if (this.mockModules.Length > 0)
+                                {
+                                    throw new NotSupportedException("Mock modules are not supported in Angular 2");
+                                }
                             }
                         }
                     }
-                }
-                catch (WebDriverTimeoutException wdte)
-                {
-                    throw new InvalidOperationException(
-                        String.Format("Angular could not be found on the page '{0}'", value), wdte);
+                    catch (WebDriverTimeoutException wdte)
+                    {
+                        throw new InvalidOperationException(
+                            String.Format("Angular could not be found on the page '{0}'", value), wdte);
+                    }
                 }
             }
         }
