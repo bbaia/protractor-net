@@ -1,3 +1,8 @@
+0.8.2 / 2016-10-21
+==================
+
+* ([95c0ddb](https://github.com/bbaia/protractor-net/commit/95c0ddb8502177ee8d1c31c94d58d930c16ec361)) Fix navigating to non-Angular page with IgnoreSynchronization set to true
+
 0.8.1 / 2016-09-18
 ==================
 
