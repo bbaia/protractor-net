@@ -17,10 +17,10 @@ namespace Protractor.Samples.Basic
         public void SetUp()
         {
             // Using PhantomJS
-            driver = new PhantomJSDriver();
+            //driver = new PhantomJSDriver();
 
             // Using Chrome
-            //driver = new ChromeDriver();
+            driver = new ChromeDriver();
 
             // Using Internet Explorer
             //var options = new InternetExplorerOptions() { IntroduceInstabilityByIgnoringProtectedModeSettings = true };
@@ -54,7 +54,7 @@ namespace Protractor.Samples.Basic
             var ngDriver = new NgWebDriver(driver);
             ngDriver.Navigate().GoToUrl("http://www.angularjs.org");
             var elements = ngDriver.FindElements(NgBy.Repeater("todo in todoList.todos"));
-            Assert.AreEqual("build an angular app", elements[1].Text);
+            Assert.AreEqual("build an angular app", elements[1].Text.Trim());
             Assert.AreEqual(false, elements[1].Evaluate("todo.done"));
         }
 

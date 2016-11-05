@@ -4,20 +4,20 @@ using OpenQA.Selenium.Support.PageObjects;
 namespace Protractor.Samples.PageObjects.Support
 {
     /*
-     * Page Object that represents the the AngularJS tutorial Step 5 page: 
-     * http://docs.angularjs.org/tutorial/step_05
+     * Page Object that represents the the AngularJS tutorial Step 7 page: 
+     * http://docs.angularjs.org/tutorial/step_07
      */
-    public class TutorialStep5Page
+    public class TutorialStep7Page
     {
-        [FindsBy(How = How.Custom, CustomFinderType = typeof(NgByModel), Using = "query")]
+        [FindsBy(How = How.Custom, CustomFinderType = typeof(NgByModel), Using = "$ctrl.query")]
         public IWebElement QueryInput { get; set; }
 
-        [FindsBy(How = How.Custom, CustomFinderType = typeof(NgByModel), Using = "orderProp")]
+        [FindsBy(How = How.Custom, CustomFinderType = typeof(NgByModel), Using = "$ctrl.orderProp")]
         public IWebElement SortBySelect { get; set; }
 
         NgWebDriver ngDriver;
 
-        public TutorialStep5Page(IWebDriver driver, string url)
+        public TutorialStep7Page(IWebDriver driver, string url)
         {
             ngDriver = new NgWebDriver(driver);
             PageFactory.InitElements(ngDriver, this);
@@ -25,14 +25,14 @@ namespace Protractor.Samples.PageObjects.Support
             ngDriver.Navigate().GoToUrl(url);
         }
 
-        public TutorialStep5Page SearchFor(string query)
+        public TutorialStep7Page SearchFor(string query)
         {
             QueryInput.Clear();
             QueryInput.SendKeys(query);
             return this;
         }
 
-        public TutorialStep5Page SortByName()
+        public TutorialStep7Page SortByName()
         {
             // Alternative: Use OpenQA.Selenium.Support.UI.SelectElement from Selenium.Support package
             SortBySelect
@@ -41,7 +41,7 @@ namespace Protractor.Samples.PageObjects.Support
             return this;
         }
 
-        public TutorialStep5Page SortByAge()
+        public TutorialStep7Page SortByAge()
         {
             // Alternative: Use OpenQA.Selenium.Support.UI.SelectElement from Selenium.Support package
             SortBySelect
@@ -52,12 +52,12 @@ namespace Protractor.Samples.PageObjects.Support
 
         public int GetResultsCount()
         {
-            return ngDriver.FindElements(NgBy.Repeater("phone in phones")).Count;
+            return ngDriver.FindElements(NgBy.Repeater("phone in $ctrl.phones")).Count;
         }
 
         public string GetResultsPhoneName(int index)
         {
-            return ngDriver.FindElements(NgBy.Repeater("phone in phones"))[index].Evaluate("phone.name") as string;
+            return ngDriver.FindElements(NgBy.Repeater("phone in $ctrl.phones"))[index].Evaluate("phone.name") as string;
         }
     }
 }

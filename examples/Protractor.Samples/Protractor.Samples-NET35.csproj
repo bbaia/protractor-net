@@ -53,7 +53,7 @@
     <Compile Include="MockHttpBackend\MockHttpBackendTests.cs" />
     <Compile Include="MockHttpBackend\Support\NgMockE2EModule.cs" />
     <Compile Include="PageObjects\PageObjectsTests.cs" />
-    <Compile Include="PageObjects\Support\TutorialStep5Page.cs" />
+    <Compile Include="PageObjects\Support\TutorialStep7Page.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="..\..\packages\PhantomJS.2.1.1\tools\phantomjs\phantomjs.exe">

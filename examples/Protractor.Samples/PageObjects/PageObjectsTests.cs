@@ -4,14 +4,15 @@ using OpenQA.Selenium;
 using OpenQA.Selenium.PhantomJS;
 using OpenQA.Selenium.Chrome;
 using OpenQA.Selenium.IE;
+using OpenQA.Selenium.Edge;
 
 using Protractor.Samples.PageObjects.Support;
 
 namespace Protractor.Samples.PageObjects
 {
     /*
-     * E2E testing against the AngularJS tutorial Step 5 sample: 
-     * http://docs.angularjs.org/tutorial/step_05
+     * E2E testing against the AngularJS tutorial Step 7 sample: 
+     * http://docs.angularjs.org/tutorial/step_07
      */
     [TestFixture]
     public class PageObjectsTests
@@ -22,14 +23,17 @@ namespace Protractor.Samples.PageObjects
         public void SetUp()
         {
             // Using PhantomJS
-            driver = new PhantomJSDriver();
+            //driver = new PhantomJSDriver();
 
             // Using Chrome
-            //driver = new ChromeDriver();
+            driver = new ChromeDriver();
 
             // Using Internet Explorer
             //var options = new InternetExplorerOptions() { IntroduceInstabilityByIgnoringProtectedModeSettings = true };
             //driver = new InternetExplorerDriver(options);
+
+            // Using Microsoft Edge
+            //driver = new EdgeDriver();
 
             // Required for TestForAngular and WaitForAngular scripts
             driver.Manage().Timeouts().SetScriptTimeout(TimeSpan.FromSeconds(5));
@@ -44,7 +48,7 @@ namespace Protractor.Samples.PageObjects
         [Test(Description = "Should filter the phone list as user types into the search box")]
         public void ShouldFilter()
         {
-            var step5Page = new TutorialStep5Page(driver, "http://angular.github.io/angular-phonecat/step-5/app/");
+            var step5Page = new TutorialStep7Page(driver, "http://angular.github.io/angular-phonecat/step-7/app/");
 
             Assert.AreEqual(20, step5Page.GetResultsCount());
 
@@ -58,7 +62,7 @@ namespace Protractor.Samples.PageObjects
         [Test(Description = "Should be possible to control phone order via the drop down select box")]
         public void ShouldSort()
         {
-            var step5Page = new TutorialStep5Page(driver, "http://angular.github.io/angular-phonecat/step-5/app/");
+            var step5Page = new TutorialStep7Page(driver, "http://angular.github.io/angular-phonecat/step-7/app/");
 
             step5Page.SearchFor("tablet");
             Assert.AreEqual(2, step5Page.GetResultsCount());
