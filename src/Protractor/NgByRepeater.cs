@@ -6,12 +6,13 @@
     public class NgByRepeater : JavaScriptBy
     {
         /// <summary>
-        /// Creates a new instance of <see cref="NgByBinding"/>.
+        /// Creates a new instance of <see cref="NgByRepeater"/>.
         /// </summary>
         /// <param name="repeat">The text of the repeater, e.g. 'cat in cats'.</param>
         public NgByRepeater(string repeat)
             : base(ClientSideScripts.FindAllRepeaterRows, repeat)
         {
+            base.Description = "NgBy.Repeater: " + repeat;
         }
     }
 }

@@ -6,12 +6,13 @@
     public class NgByModel : JavaScriptBy
     {
         /// <summary>
-        /// Creates a new instance of <see cref="NgByBinding"/>.
+        /// Creates a new instance of <see cref="NgByModel"/>.
         /// </summary>
         /// <param name="model">The model name.</param>
         public NgByModel(string model)
             : base(ClientSideScripts.FindModel, model)
         {
+            base.Description = "NgBy.Model: " + model;
         }
     }
 }

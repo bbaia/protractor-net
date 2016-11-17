@@ -28,6 +28,7 @@ namespace Protractor
         {
             this.script = script;
             this.args = args;
+            this.Description = "Protractor.JavaScriptBy";
         }
 
         /// <summary>

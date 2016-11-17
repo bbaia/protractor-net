@@ -6,12 +6,13 @@
     public class NgBySelectedOption : JavaScriptBy
     {
         /// <summary>
-        /// Creates a new instance of <see cref="NgByBinding"/>.
+        /// Creates a new instance of <see cref="NgBySelectedOption"/>.
         /// </summary>
         /// <param name="model">The model name.</param>
         public NgBySelectedOption(string model)
             : base(ClientSideScripts.FindSelectedOptions, model)
         {
+            base.Description = "NgBy.SelectedOption: " + model;
         }
     }
 }

@@ -12,6 +12,7 @@
         public NgByBinding(string binding)
             : base(ClientSideScripts.FindBindings, binding)
         {
+            base.Description = "NgBy.Binding: " + binding;
         }
     }
 }

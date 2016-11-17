@@ -15,7 +15,7 @@ namespace Protractor
         /// <returns>A <see cref="By"/> object the driver can use to find the elements.</returns>
         public static By Binding(string binding)
         {
-            return new JavaScriptBy(ClientSideScripts.FindBindings, binding);
+            return new NgByBinding(binding);
         }
 
         /// <summary>
@@ -25,7 +25,7 @@ namespace Protractor
         /// <returns>A <see cref="By"/> object the driver can use to find the elements.</returns>
         public static By Model(string model)
         {
-            return new JavaScriptBy(ClientSideScripts.FindModel, model);
+            return new NgByModel(model);
         }
 
         /// <summary>
@@ -35,7 +35,7 @@ namespace Protractor
         /// <returns>A <see cref="By"/> object the driver can use to find the elements.</returns>
         public static By SelectedOption(string model)
         {
-            return new JavaScriptBy(ClientSideScripts.FindSelectedOptions, model);
+            return new NgBySelectedOption(model);
         }
 
         /// <summary>
@@ -45,7 +45,7 @@ namespace Protractor
         /// <returns>A <see cref="By"/> object the driver can use to find the elements.</returns>
         public static By Repeater(string repeat)
         {
-            return new JavaScriptBy(ClientSideScripts.FindAllRepeaterRows, repeat);
+            return new NgByRepeater(repeat);
         }
     }
 }
