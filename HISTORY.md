@@ -1,3 +1,10 @@
+0.9.0 / 2016-11-19
+==================
+
+* ([5eeb2fd](https://github.com/bbaia/protractor-net/commit/5eeb2fd61c2b7246d1be445a3fa93255c5cb337d)) Fix AngularJS tutorial based samples (broken since Angular 1.5 is used)
+* ([83ae33d](https://github.com/bbaia/protractor-net/commit/83ae33d651603675c5d44aa5ef963643b2991393)) Update to Selenium.WebDriver v3.0.0
+* ([9504185](https://github.com/bbaia/protractor-net/commit/95041854d166b3968d1431e71f5e898327873fe4)) Set By.Description property on NgBy locators to improve ToString() support
+
 0.8.2 / 2016-10-21
 ==================
 
