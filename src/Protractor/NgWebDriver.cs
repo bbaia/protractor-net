@@ -154,6 +154,7 @@ namespace Protractor
                     (hcDriver.Capabilities.BrowserName == "internet explorer" ||
                      hcDriver.Capabilities.BrowserName == "MicrosoftEdge" ||
                      hcDriver.Capabilities.BrowserName == "phantomjs" ||
+                     hcDriver.Capabilities.BrowserName == "firefox" ||
                      hcDriver.Capabilities.BrowserName.ToLower() == "safari"))
                 {
                     this.ExecuteScript("window.name += '" + AngularDeferBootstrap + "';");

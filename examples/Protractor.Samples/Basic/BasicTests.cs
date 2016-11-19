@@ -5,6 +5,7 @@ using OpenQA.Selenium.PhantomJS;
 using OpenQA.Selenium.Chrome;
 using OpenQA.Selenium.IE;
 using OpenQA.Selenium.Edge;
+using OpenQA.Selenium.Firefox;
 
 namespace Protractor.Samples.Basic
 {
@@ -28,6 +29,9 @@ namespace Protractor.Samples.Basic
 
             // Using Microsoft Edge
             //driver = new EdgeDriver();
+
+            // Using Firefox
+            //driver = new FirefoxDriver();
 
             // Required for TestForAngular and WaitForAngular scripts
             driver.Manage().Timeouts().SetScriptTimeout(TimeSpan.FromSeconds(5));
@@ -54,7 +58,7 @@ namespace Protractor.Samples.Basic
             var ngDriver = new NgWebDriver(driver);
             ngDriver.Navigate().GoToUrl("http://www.angularjs.org");
             var elements = ngDriver.FindElements(NgBy.Repeater("todo in todoList.todos"));
-            Assert.AreEqual("build an angular app", elements[1].Text.Trim());
+            Assert.AreEqual("build an AngularJS app", elements[1].Text.Trim());
             Assert.AreEqual(false, elements[1].Evaluate("todo.done"));
         }
 

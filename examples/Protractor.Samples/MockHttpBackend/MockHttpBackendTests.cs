@@ -5,6 +5,7 @@ using OpenQA.Selenium.PhantomJS;
 using OpenQA.Selenium.Chrome;
 using OpenQA.Selenium.IE;
 using OpenQA.Selenium.Edge;
+using OpenQA.Selenium.Firefox;
 
 using Protractor.Samples.MockHttpBackend.Support;
 
@@ -34,6 +35,9 @@ namespace Protractor.Samples.MockHttpBackend
 
             // Using Microsoft Edge
             //driver = new EdgeDriver();
+
+            // Using Firefox
+            //driver = new FirefoxDriver();
 
             // Required for TestForAngular and WaitForAngular scripts
             driver.Manage().Timeouts().SetScriptTimeout(TimeSpan.FromSeconds(5));
