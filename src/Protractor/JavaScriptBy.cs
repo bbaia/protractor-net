@@ -48,7 +48,11 @@ namespace Protractor
         public override IWebElement FindElement(ISearchContext context)
         {
             ReadOnlyCollection<IWebElement> elements = this.FindElements(context);
-            return elements.Count > 0 ? elements[0] : null;
+            if (elements.Count == 0)
+            {
+                throw new NoSuchElementException(String.Format("Unable to locate element: {{ {0} }}.", this.Description));
+            }
+            return elements[0];
         }
 
         /// <summary>
