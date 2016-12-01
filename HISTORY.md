@@ -1,3 +1,8 @@
+0.9.1 / 2016-12-01
+==================
+
+* ([dbb4074](https://github.com/bbaia/protractor-net/commit/dbb4074d4ad2fd263a414584fd8fa0ed56bea4fd)) Fix NgNavigation.Refresh() to reload the injected NgModules
+
 0.9.0 / 2016-11-19
 ==================
 

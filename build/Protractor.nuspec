@@ -2,7 +2,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
   <metadata>
     <id>Protractor</id>
-    <version>0.9.0</version>
+    <version>0.9.1</version>
     <projectUrl>https://github.com/bbaia/protractor-net</projectUrl>
     <licenseUrl>https://github.com/bbaia/protractor-net/blob/master/LICENSE</licenseUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
