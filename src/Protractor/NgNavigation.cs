@@ -122,8 +122,14 @@ namespace Protractor
         /// </summary>
         public void Refresh()
         {
-            this.ngDriver.WaitForAngular();
-            this.navigation.Refresh();
+            if (this.ngDriver.IgnoreSynchronization)
+            {
+                this.navigation.Refresh();
+            }
+            else
+            {
+                this.ngDriver.Url = this.ngDriver.Url;
+            }
         }
 
         #endregion
