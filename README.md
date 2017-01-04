@@ -25,3 +25,8 @@ public void ShouldGreetUsingBinding()
     }
 }
 ```
+
+## When to NOT use
+
+When you can use the original [Protractor](http://www.protractortest.org/) framework :)
+
