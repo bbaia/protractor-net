@@ -128,7 +128,8 @@ namespace Protractor
             }
             else
             {
-                this.ngDriver.Url = this.ngDriver.Url;
+                string url = this.ngDriver.ExecuteScript("return window.location.href;") as string;
+                this.ngDriver.Url = url;
             }
         }
 

@@ -63,6 +63,15 @@ namespace Protractor.Samples.Basic
         }
 
         [Test]
+        public void Angular2Test()
+        {
+            var ngDriver = new NgWebDriver(driver);
+            ngDriver.Navigate().GoToUrl("https://material.angular.io/");
+            ngDriver.FindElement(By.XPath("//a[@routerlink='guide/getting-started']")).Click();
+            Assert.AreEqual("https://material.angular.io/guide/getting-started", ngDriver.Url);
+        }
+
+        [Test]
         public void NonAngularPageShouldBeSupported()
         {
             Assert.DoesNotThrow(() =>

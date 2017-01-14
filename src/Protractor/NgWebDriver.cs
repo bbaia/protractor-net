@@ -17,7 +17,6 @@ namespace Protractor
 
         private IWebDriver driver;
         private IJavaScriptExecutor jsExecutor;
-        private bool isAngular2;
         private string rootElement;
         private IList<NgModule> mockModules;
 
@@ -29,7 +28,7 @@ namespace Protractor
         /// The modules to load before Angular whenever Url setter or Navigate().GoToUrl() is called.
         /// </param>
         public NgWebDriver(IWebDriver driver, params NgModule[] mockModules)
-            : this(driver, "body", mockModules)
+            : this(driver, "", mockModules)
         {
         }
 
@@ -132,16 +131,7 @@ namespace Protractor
             get
             {
                 this.WaitForAngular();
-                IHasCapabilities hcDriver = this.driver as IHasCapabilities;
-                if (hcDriver != null && hcDriver.Capabilities.BrowserName == "internet explorer")
-                {
-                    // 'this.driver.Url' does not work on IE
-                    return this.ExecuteScript(ClientSideScripts.GetLocationAbsUrl, this.rootElement) as string;
-                }
-                else
-                {
-                    return this.driver.Url;
-                }
+                return this.driver.Url;
             }
             set
             {
@@ -191,7 +181,6 @@ namespace Protractor
                             }
                             else if (angularVersion.Value == 2)
                             {
-                                this.isAngular2 = true;
                                 if (this.mockModules.Count > 0)
                                 {
                                     throw new NotSupportedException("Mock modules are not supported in Angular 2");
@@ -362,14 +351,7 @@ namespace Protractor
         {
             if (!this.IgnoreSynchronization)
             {
-                if (this.isAngular2)
-                {
-                    this.ExecuteAsyncScript(ClientSideScripts.WaitForAllAngular2);
-                }
-                else
-                {
-                    this.ExecuteAsyncScript(ClientSideScripts.WaitForAngular, this.rootElement);
-                }
+                this.ExecuteAsyncScript(ClientSideScripts.WaitForAngular, this.rootElement);
             }
         }
 

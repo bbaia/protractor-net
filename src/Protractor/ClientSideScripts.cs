@@ -12,6 +12,62 @@ namespace Protractor
      */
     internal class ClientSideScripts
     {
+        /** 
+         * Tries to find $$testability and possibly $injector for an ng1 app
+         *
+         * By default, doesn't care about $injector if it finds $$testability. 
+         * However, these priorities can be reversed.
+         *
+         * @param {string=} selector The selector for the element with the injector.
+         * If falsy, tries a variety of methods to find an injector
+         * @param {boolean=} injectorPlease Prioritize finding an injector
+         * @return {$$testability?: Testability, $injector?: Injector} Returns whatever
+         *   ng1 app hooks it finds
+         */
+        private const string GetNg1HooksHelper = @"
+function getNg1Hooks(selector, injectorPlease) {
+    function tryEl(el) {
+        try {
+            if (!injectorPlease && angular.getTestability) {
+                var $$testability = angular.getTestability(el);
+                if ($$testability) {
+                    return {$$testability: $$testability};
+                }
+            } else {
+                var $injector = angular.element(el).injector();
+                if ($injector) {
+                    return {$injector: $injector};
+                }
+            }
+        } catch(err) {} 
+    }
+    function trySelector(selector) {
+        var els = document.querySelectorAll(selector);
+        for (var i = 0; i < els.length; i++) {
+            var elHooks = tryEl(els[i]);
+            if (elHooks) {
+                return elHooks;
+            }
+        }
+    }
+
+    if (selector) {
+        return trySelector(selector);
+    } else if (window.__TESTABILITY__NG1_APP_ROOT_INJECTOR__) {
+        var $injector = window.__TESTABILITY__NG1_APP_ROOT_INJECTOR__;
+        var $$testability = null;
+        try {
+            $$testability = $injector.get('$$testability');
+        } catch (e) {}
+        return {$injector: $injector, $$testability: $$testability};
+    } else {
+        return tryEl(document.body) ||
+            trySelector('[ng-app]') || trySelector('[ng\\:app]') ||
+            trySelector('[ng-controller]') || trySelector('[ng\\:controller]');
+    }
+};
+";
+
         /**
          * Wait until Angular has finished rendering and has
          * no outstanding $http calls before continuing.
@@ -19,58 +75,88 @@ namespace Protractor
          * arguments[0] {string} The selector housing an ng-app
          * arguments[1] {function} callback
          */
-        public const string WaitForAngular = @"
+        public const string WaitForAngular = GetNg1HooksHelper + @"
 var rootSelector = arguments[0];
-var el = document.querySelector(rootSelector);
 var callback = arguments[1];
-if (window.getAngularTestability) {
+if (window.angular && !(window.angular.version && window.angular.version.major > 1)) {
+    /* ng1 */
+    var hooks = getNg1Hooks(rootSelector);
+    if (hooks.$$testability) {
+        hooks.$$testability.whenStable(callback);
+    } else if (hooks.$injector) {
+        hooks.$injector.get('$browser').
+        notifyWhenNoOutstandingRequests(callback);
+    } else if (!!rootSelector) {
+        throw new Error('Could not automatically find injector on page: ""' +
+            window.location.toString() + '"". Consider setting rootElement');
+    } else {
+    throw new Error('root element (' + rootSelector + ') has no injector.' +
+        ' this may mean it is not inside ng-app.');
+    }
+} else if (rootSelector && window.getAngularTestability) {
+    var el = document.querySelector(rootSelector);
     window.getAngularTestability(el).whenStable(callback);
-    return;
-}
-if (!window.angular) {
-    throw new Error('angular could not be found on the window');
-}
-if (angular.getTestability) {
-    angular.getTestability(el).whenStable(callback);
+} else if (window.getAllAngularTestabilities) {
+    var testabilities = window.getAllAngularTestabilities();
+    var count = testabilities.length;
+    var decrement = function() {
+        count--;
+        if (count === 0) {
+            callback();
+        }
+    };
+    testabilities.forEach(function(testability) {
+        testability.whenStable(decrement);
+    });
+} else if (!window.angular) {
+    throw new Error('window.angular is undefined.  This could be either ' +
+        'because this is a non-angular page or because your test involves ' +
+        'client-side navigation, which can interfere with Protractor\'s ' +
+        'bootstrapping.  See http://git.io/v4gXM for details');
+} else if (window.angular.version >= 2) {
+    throw new Error('You appear to be using angular, but window.' +
+        'getAngularTestability was never set.  This may be due to bad ' +
+        'obfuscation.');
 } else {
-    if (!angular.element(el).injector()) {
-        throw new Error('root element (' + rootSelector + ') has no injector.' +
-            ' this may mean it is not inside ng-app.');
-    }
-angular.element(el).injector().get('$browser').
-    notifyWhenNoOutstandingRequests(callback);
+    throw new Error('Cannot get testability API for unknown angular ' +
+        'version ""' + window.angular.version + '""');
 }";
-
-        /**
-         * Wait until all Angular2 applications on the page have become stable.
-         *
-         * arguments[0] {function} callback
-         */
-        public const string WaitForAllAngular2 = @"
-var callback = arguments[0];
-var testabilities = window.getAllAngularTestabilities();
-var count = testabilities.length;
-var decrement = function() {
-    count--;
-    if (count === 0) {
-        callback();
-    }
-};
-testabilities.forEach(function(testability) {
-    testability.whenStable(decrement);
-});";
 
         /**
          * Tests whether the angular global variable is present on a page. 
          * Retries in case the page is just loading slowly.
          */
         public const string TestForAngular = @"
-var callback = arguments[0];
+var asyncCallback = arguments[0];
+var callback = function(args) {
+    setTimeout(function() {
+        asyncCallback(args);
+    }, 0);
+};
+var definitelyNg1 = false;
+var definitelyNg2OrNewer = false;
 var check = function() {
-    if (window.getAllAngularTestabilities) {
-        callback(2);
-    } else if (window.angular && window.angular.resumeBootstrap) {
-        callback(1);
+    /* Figure out which version of angular we're waiting on */
+    if (!definitelyNg1 && !definitelyNg2OrNewer) {
+        if (window.angular && !(window.angular.version && window.angular.version.major > 1)) {
+            definitelyNg1 = true;
+        } else if (window.getAllAngularTestabilities) {
+            definitelyNg2OrNewer = true;
+        }
+    }
+    /* See if our version of angular is ready */
+    if (definitelyNg1) {
+        if (window.angular && window.angular.resumeBootstrap) {
+            return callback(1);
+        }
+    } else if (definitelyNg2OrNewer) {
+        if (true /* ng2 has no resumeBootstrap() */) {
+            return callback(2);
+        }
+    }
+    /* Try again (or fail) */
+    if (definitelyNg1 && window.angular) {
+        throw new Error('angular never provided resumeBootstrap');
     } else {
         window.setTimeout(function() {check()}, 1000);
     }
@@ -83,28 +169,20 @@ check();";
          * arguments[0] {array} The module names to load.
          */
         public const string ResumeAngularBootstrap = @"
-angular.resumeBootstrap(arguments[0].length ? arguments[0].split(',') : []);";
-
-        /**
-         * Return the current url using $location.absUrl().
-         * 
-         * arguments[0] {string} The selector housing an ng-app
-         */
-        public const string GetLocationAbsUrl = @"
-var el = document.querySelector(arguments[0]);
-return angular.element(el).injector().get('$location').absUrl();";
+window.__TESTABILITY__NG1_APP_ROOT_INJECTOR__ = 
+    angular.resumeBootstrap(arguments[0].length ? arguments[0].split(',') : []);";
 
         /**
          * Return the current location using $location.url().
          *
          * arguments[0] {string} The selector housing an ng-app
          */
-        public const string GetLocation = @"
-var el = document.querySelector(arguments[0]);
+        public const string GetLocation = GetNg1HooksHelper + @"
+var hooks = getNg1Hooks(arguments[0]);
 if (angular.getTestability) {
-    return angular.getTestability(el).getLocation();
+    return hooks.$$testability.getLocation();
 }
-return angular.element(el).injector().get('$location').url();";
+return hooks.$injector.get('$location').getLocation();";
 
         /**
          * Browse to another page using in-page navigation.
@@ -112,13 +190,13 @@ return angular.element(el).injector().get('$location').url();";
          * arguments[0] {string} The selector housing an ng-app
          * arguments[1] {string} In page URL using the same syntax as $location.url()
          */
-        public const string SetLocation = @"
-var el = document.querySelector(arguments[0]);
+        public const string SetLocation = GetNg1HooksHelper + @"
+var hooks = getNg1Hooks(arguments[0]);
 var url = arguments[1];
 if (angular.getTestability) {
-    angular.getTestability(el).setLocation(url);
+    return hooks.$$testability.setLocation(url);
 }
-var $injector = angular.element(el).injector();
+var $injector = hooks.$injector;
 var $location = $injector.get('$location');
 var $rootScope = $injector.get('$rootScope');
 
@@ -151,12 +229,11 @@ return angular.element(element).scope().$eval(expression);";
          *
          * @return {Array.WebElement} The elements containing the binding.
          */
-        public const string FindBindings = @"
+        public const string FindBindings = GetNg1HooksHelper + @"
 var binding = arguments[0];
-var root = document.querySelector(arguments[1]);
 var using = arguments[2] || document;
 if (angular.getTestability) {
-    return angular.getTestability(root).
+    return getNg1Hooks(arguments[1]).$$testability.
         findBindings(using, binding, false);
 }
 var bindings = using.getElementsByClassName('ng-binding');
@@ -181,12 +258,11 @@ return matches;";
          *
          * @return {Array.WebElement} The matching input elements.
          */
-        public const string FindModel = @"
+        public const string FindModel = GetNg1HooksHelper + @"
 var model = arguments[0];
-var root = document.querySelector(arguments[1]);
 var using = arguments[2] || document;
 if (angular.getTestability) {
-    return angular.getTestability(root).
+    return getNg1Hooks(arguments[1]).$$testability.
         findModels(using, model, true);
 }
 var prefixes = ['ng-', 'ng_', 'data-ng-', 'x-ng-', 'ng\\:'];
@@ -209,7 +285,6 @@ for (var p = 0; p < prefixes.length; ++p) {
          */
         public const string FindSelectedOptions = @"
 var model = arguments[0];
-var root = document.querySelector(arguments[1]);
 var using = arguments[2] || document;
 var prefixes = ['ng-', 'ng_', 'data-ng-', 'x-ng-', 'ng\\:'];
 for (var p = 0; p < prefixes.length; ++p) {
@@ -231,7 +306,6 @@ for (var p = 0; p < prefixes.length; ++p) {
          */
         public const string FindAllRepeaterRows = @"
 var repeater = arguments[0];
-var root = document.querySelector(arguments[1]);
 var using = arguments[2] || document;
 var rows = [];
 var prefixes = ['ng-', 'ng_', 'data-ng-', 'x-ng-', 'ng\\:'];
