@@ -19,7 +19,7 @@ namespace Protractor
         private IJavaScriptExecutor jsExecutor;
         private bool isAngular2;
         private string rootElement;
-        private NgModule[] mockModules;
+        private IList<NgModule> mockModules;
 
         /// <summary>
         /// Creates a new instance of <see cref="NgWebDriver"/> by wrapping a <see cref="IWebDriver"/> instance.
@@ -54,7 +54,7 @@ namespace Protractor
             this.driver = driver;
             this.jsExecutor = (IJavaScriptExecutor)driver;
             this.rootElement = rootElement;
-            this.mockModules = mockModules;
+            this.mockModules = new List<NgModule>(mockModules);
         }
 
         #region IWrapsDriver Members
@@ -176,6 +176,9 @@ namespace Protractor
                             {
                                 // At this point, Angular will pause for us, until angular.resumeBootstrap is called.
 
+                                // Add default module for Angular v1
+                                this.mockModules.Add(new Ng1BaseModule());
+
                                 // Register extra modules
                                 foreach (NgModule ngModule in this.mockModules)
                                 {
@@ -188,7 +191,7 @@ namespace Protractor
                             else if (angularVersion.Value == 2)
                             {
                                 this.isAngular2 = true;
-                                if (this.mockModules.Length > 0)
+                                if (this.mockModules.Count > 0)
                                 {
                                     throw new NotSupportedException("Mock modules are not supported in Angular 2");
                                 }

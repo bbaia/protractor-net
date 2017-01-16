@@ -50,6 +50,7 @@
     <Compile Include="NgByModel.cs" />
     <Compile Include="NgByRepeater.cs" />
     <Compile Include="NgBySelectedOption.cs" />
+    <Compile Include="Ng1BaseModule.cs" />
     <Compile Include="NgNavigation.cs" />
     <Compile Include="NgWebDriver.cs" />
     <Compile Include="ClientSideScripts.cs" />
