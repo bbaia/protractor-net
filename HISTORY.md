@@ -1,3 +1,8 @@
+0.9.2 / 2017-01-17
+==================
+
+* ([d9753d9](https://github.com/bbaia/protractor-net/commit/d9753d93a8b85ebba40c9f8f3db7cf1ab2f9b3c9)) Add support for $compileProvider.debugInfoEnabled(false)
+
 0.9.1 / 2016-12-01
 ==================
 
