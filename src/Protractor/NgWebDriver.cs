@@ -17,7 +17,6 @@ namespace Protractor
 
         private IWebDriver driver;
         private IJavaScriptExecutor jsExecutor;
-        private bool isAngular2;
         private string rootElement;
         private IList<NgModule> mockModules;
 
@@ -88,6 +87,17 @@ namespace Protractor
         /// This should be used only when necessary, such as when a page continuously polls an API using $timeout.
         /// </summary>
         public bool IgnoreSynchronization { get; set; }
+
+        /// <summary>
+        /// Represents current version of Angular
+        /// If this.Angular == AngularVersion.None - NgWebDriver will ignore all synchronizations
+        /// If this.Angular == AngularVersion.AngularJS - NgWebDriver will use synchronizations with AngularJS if they were enabled
+        /// If this.Angular == AngularVersion.Angular2 - NgWebDriver will will use synchronizations with Angular2 if they were enabled
+        /// </summary>
+        public AngularVersion AngularVersion
+        {
+            get; set;
+        }
 
         #region IWebDriver Members
 
@@ -169,33 +179,34 @@ namespace Protractor
                     try
                     {
                         // Make sure the page is an Angular page.
-                        long? angularVersion = this.ExecuteAsyncScript(ClientSideScripts.TestForAngular) as long?;
-                        if (angularVersion.HasValue)
+                        this.AngularVersion = DiscoverAngularVersion();
+                        switch (this.AngularVersion)
                         {
-                            if (angularVersion.Value == 1)
-                            {
-                                // At this point, Angular will pause for us, until angular.resumeBootstrap is called.
-
-                                // Add default module for Angular v1
-                                this.mockModules.Add(new Ng1BaseModule());
-
-                                // Register extra modules
-                                foreach (NgModule ngModule in this.mockModules)
+                            case AngularVersion.AngularJS:
                                 {
-                                    this.ExecuteScript(ngModule.Script);
+                                    // At this point, Angular will pause for us, until angular.resumeBootstrap is called.
+
+                                    // Add default module for Angular v1
+                                    this.mockModules.Add(new Ng1BaseModule());
+
+                                    // Register extra modules
+                                    foreach (NgModule ngModule in this.mockModules)
+                                    {
+                                        this.ExecuteScript(ngModule.Script);
+                                    }
+                                    // Resume Angular bootstrap
+                                    this.ExecuteScript(ClientSideScripts.ResumeAngularBootstrap,
+                                        String.Join(",", this.mockModules.Select(m => m.Name).ToArray()));
+                                    break;
                                 }
-                                // Resume Angular bootstrap
-                                this.ExecuteScript(ClientSideScripts.ResumeAngularBootstrap,
-                                    String.Join(",", this.mockModules.Select(m => m.Name).ToArray()));
-                            }
-                            else if (angularVersion.Value == 2)
-                            {
-                                this.isAngular2 = true;
-                                if (this.mockModules.Count > 0)
+                            case AngularVersion.Angular2:
                                 {
-                                    throw new NotSupportedException("Mock modules are not supported in Angular 2");
+                                    if (this.mockModules.Count > 0)
+                                    {
+                                        throw new NotSupportedException("Mock modules are not supported in Angular 2");
+                                    }
+                                    break;
                                 }
-                            }
                         }
                     }
                     catch (WebDriverTimeoutException wdte)
@@ -204,6 +215,27 @@ namespace Protractor
                             String.Format("Angular could not be found on the page '{0}'", value), wdte);
                     }
                 }
+            }
+        }
+
+        /// <summary>
+        /// Discovers if any version of Angular beeing used in page
+        /// </summary>
+        /// <returns>
+        ///  An <see cref="AngularVersion"/> if Angular was found on current page, otherwise will return AngularVersion.None
+        /// </returns>
+        public virtual AngularVersion DiscoverAngularVersion()
+        {
+            var result = this.ExecuteAsyncScript(ClientSideScripts.TestForAngular) as long?;
+            if (!result.HasValue)
+            {
+                return AngularVersion.None;
+            }
+            switch (result.Value)
+            {
+                case 1: { return AngularVersion.AngularJS; }
+                case 2: { return AngularVersion.Angular2; }
+                default: { return AngularVersion.None; }
             }
         }
 
@@ -361,13 +393,26 @@ namespace Protractor
         {
             if (!this.IgnoreSynchronization)
             {
-                if (this.isAngular2)
+                switch (this.AngularVersion)
                 {
-                    this.ExecuteAsyncScript(ClientSideScripts.WaitForAllAngular2);
-                }
-                else
-                {
-                    this.ExecuteAsyncScript(ClientSideScripts.WaitForAngular, this.rootElement);
+                    case AngularVersion.Angular2:
+                        {
+                            this.ExecuteAsyncScript(ClientSideScripts.WaitForAllAngular2);
+                            break;
+                        }
+                    case AngularVersion.AngularJS:
+                        {
+                            this.ExecuteAsyncScript(ClientSideScripts.WaitForAngular, this.rootElement);
+                            break;
+                        }
+                    case AngularVersion.None:
+                        {
+                            break;
+                        }
+                    default:
+                        {
+                            throw new NotSupportedException(string.Format("Angular version {0} is not supported", this.AngularVersion.ToString()));
+                        }
                 }
             }
         }

@@ -66,16 +66,20 @@ testabilities.forEach(function(testability) {
          */
         public const string TestForAngular = @"
 var callback = arguments[0];
-var check = function() {
+var check = function(isFirstCall) {
     if (window.getAllAngularTestabilities) {
         callback(2);
     } else if (window.angular && window.angular.resumeBootstrap) {
         callback(1);
     } else {
-        window.setTimeout(function() {check()}, 1000);
+        if (isFirstCall) {
+            window.setTimeout(function() {check(false)}, 1000);
+        } else {
+            callback(null);
+        }
     }
 };
-check();";
+check(true);";
 
         /**
          * Continue to bootstrap Angular. 
