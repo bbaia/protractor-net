@@ -44,6 +44,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AngularVersion.cs" />
     <Compile Include="JavaScriptBy.cs" />
     <Compile Include="NgBy.cs" />
     <Compile Include="NgByBinding.cs" />
