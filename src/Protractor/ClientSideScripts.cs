@@ -309,13 +309,16 @@ var repeater = arguments[0];
 var using = arguments[2] || document;
 var rows = [];
 var prefixes = ['ng-', 'ng_', 'data-ng-', 'x-ng-', 'ng\\:'];
+var postfixes = ['', '-start'];
 for (var p = 0; p < prefixes.length; ++p) {
-    var attr = prefixes[p] + 'repeat';
-    var repeatElems = using.querySelectorAll('[' + attr + ']');
-    attr = attr.replace(/\\/g, '');
-    for (var i = 0; i < repeatElems.length; ++i) {
-        if (repeatElems[i].getAttribute(attr).indexOf(repeater) != -1) {
-            rows.push(repeatElems[i]);
+    for (var po = 0; po < postfixes.length; ++po) {
+        var attr = prefixes[p] + 'repeat' + postfixes[po];
+        var repeatElems = using.querySelectorAll('[' + attr + ']');
+        attr = attr.replace(/\\/g, '');
+        for (var i = 0; i < repeatElems.length; ++i) {
+            if (repeatElems[i].getAttribute(attr).indexOf(repeater) != -1) {
+                rows.push(repeatElems[i]);
+            }
         }
     }
 }
