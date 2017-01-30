@@ -1,3 +1,10 @@
+0.10.0 / 2017-01-30
+===================
+
+* ([7b76ebd](https://github.com/bbaia/protractor-net/commit/7b76ebd4569a212ac5f588c7b747cbde5c615efc)) Throw NoSuchElementException in NgBy locators when element is not found
+* ([c86613d](https://github.com/bbaia/protractor-net/commit/c86613de9914bc82229d1847db6c25bd69f91ffa)) Synchronize 'ClientSideScripts.cs' with latest Protractor 5
+* ([d599176](https://github.com/bbaia/protractor-net/commit/d59917668c9d3e046a8f939d3f5053709889edce)) Add Firefox support
+
 0.9.2 / 2017-01-17
 ==================
 
