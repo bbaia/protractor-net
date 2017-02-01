@@ -5,6 +5,8 @@ The .NET port of [Protractor](https://github.com/angular/protractor), an end to 
 
 Protractor for .NET is built on top of [Selenium WebDriver](http://www.seleniumhq.org/projects/webdriver/) C# binding.
 
+[Changelog](https://github.com/bbaia/protractor-net/blob/master/HISTORY.md)
+
 ## Get it from NuGet!
 
     PM> Install-Package Protractor
@@ -26,7 +28,11 @@ public void ShouldGreetUsingBinding()
 }
 ```
 
-## When to NOT use
+## Getting Help
+
+Please ask usage and debugging questions on [StackOverflow](http://stackoverflow.com/questions/tagged/protractor-net) (use the ["protractor-net"](http://stackoverflow.com/questions/ask?tags=protractor-net) tag)
+
+## When to NOT use?
 
 When you can use the original [Protractor](http://www.protractortest.org/) framework :)
 
