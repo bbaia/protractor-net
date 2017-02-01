@@ -13,9 +13,12 @@ namespace Protractor
         /// </summary>
         /// <param name="binding">The binding, e.g. '{{cat.name}}'.</param>
         /// <returns>A <see cref="By"/> object the driver can use to find the elements.</returns>
-        public static By Binding(string binding)
+        /// <param name="exactMatch">
+        /// Indicates whether or not the binding needs to be matched exactly. By default false.
+        /// </param>
+        public static By Binding(string binding, bool exactMatch = false)
         {
-            return new NgByBinding(binding);
+            return new NgByBinding(binding, exactMatch);
         }
 
         /// <summary>
@@ -42,10 +45,13 @@ namespace Protractor
         /// Gets a mechanism to find all rows of an ng-repeat.
         /// </summary>
         /// <param name="repeat">The text of the repeater, e.g. 'cat in cats'.</param>
+        /// <param name="exactMatch">
+        /// Indicates whether or not the repeater needs to be matched exactly. By default, false.
+        /// </param>
         /// <returns>A <see cref="By"/> object the driver can use to find the elements.</returns>
-        public static By Repeater(string repeat)
+        public static By Repeater(string repeat, bool exactMatch = false)
         {
-            return new NgByRepeater(repeat);
+            return new NgByRepeater(repeat, exactMatch);
         }
     }
 }

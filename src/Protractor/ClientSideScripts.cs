@@ -224,17 +224,19 @@ return angular.element(element).scope().$eval(expression);";
          * Find a list of elements in the page by their angular binding.
          *
          * arguments[0] {string} The binding, e.g. {{cat.name}}.
-         * arguments[1] {string} The selector to use for the root app element.
-         * arguments[2] {Element} The scope of the search.
+         * arguments[1] {boolean} Whether the binding needs to be matched exactly
+         * arguments[2] {string} The selector to use for the root app element.
+         * arguments[3] {Element} The scope of the search.
          *
          * @return {Array.WebElement} The elements containing the binding.
          */
         public const string FindBindings = GetNg1HooksHelper + @"
 var binding = arguments[0];
-var using = arguments[2] || document;
+var exactMatch = arguments[1];
+var using = arguments[3] || document;
 if (angular.getTestability) {
-    return getNg1Hooks(arguments[1]).$$testability.
-        findBindings(using, binding, false);
+    return getNg1Hooks(arguments[2]).$$testability.
+        findBindings(using, binding, exactMatch);
 }
 var bindings = using.getElementsByClassName('ng-binding');
 var matches = [];
@@ -242,8 +244,18 @@ for (var i = 0; i < bindings.length; ++i) {
     var dataBinding = angular.element(bindings[i]).data('$binding');
     if (dataBinding) {
         var bindingName = dataBinding.exp || dataBinding[0].exp || dataBinding;
-        if (bindingName.indexOf(binding) != -1) {
-            matches.push(bindings[i]);
+        if (exactMatch) {
+            var matcher = new RegExp('({|\\s|^|\\|)' +
+                /* See http://stackoverflow.com/q/3561711 */
+                binding.replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, '\\$&') +
+                '(}|\\s|$|\\|)');
+            if (matcher.test(bindingName)) {
+                matches.push(bindings[i]);
+            }
+        } else {
+            if (bindingName.indexOf(binding) != -1) {
+                matches.push(bindings[i]);
+            }
         }
     }
 }
@@ -299,14 +311,25 @@ for (var p = 0; p < prefixes.length; ++p) {
          * Find all rows of an ng-repeat.
          *
          * arguments[0] {string} The text of the repeater, e.g. 'cat in cats'.
+         * arguments[1] {boolean} Whether the repeater needs to be matched exactly
          * arguments[1] {string} The selector to use for the root app element.
          * arguments[2] {Element} The scope of the search.
          *
          * @return {Array.WebElement} All rows of the repeater.
          */
         public const string FindAllRepeaterRows = @"
+var repeaterMatch = function(ngRepeat, repeater, exact) {
+    if (exact) {
+        return ngRepeat.split(' track by ')[0].split(' as ')[0].split('|')[0].
+            split('=')[0].trim() == repeater;
+    } else {
+        return ngRepeat.indexOf(repeater) != -1;
+    }
+};
+
 var repeater = arguments[0];
-var using = arguments[2] || document;
+var exactMatch = arguments[1];
+var using = arguments[3] || document;
 var rows = [];
 var prefixes = ['ng-', 'ng_', 'data-ng-', 'x-ng-', 'ng\\:'];
 for (var p = 0; p < prefixes.length; ++p) {
@@ -314,7 +337,7 @@ for (var p = 0; p < prefixes.length; ++p) {
     var repeatElems = using.querySelectorAll('[' + attr + ']');
     attr = attr.replace(/\\/g, '');
     for (var i = 0; i < repeatElems.length; ++i) {
-        if (repeatElems[i].getAttribute(attr).indexOf(repeater) != -1) {
+        if (repeaterMatch(repeatElems[i].getAttribute(attr), repeater, exactMatch)) {
             rows.push(repeatElems[i]);
         }
     }
@@ -324,10 +347,10 @@ for (var p = 0; p < prefixes.length; ++p) {
     var repeatElems = using.querySelectorAll('[' + attr + ']');
     attr = attr.replace(/\\/g, '');
     for (var i = 0; i < repeatElems.length; ++i) {
-        if (repeatElems[i].getAttribute(attr).indexOf(repeater) != -1) {
+        if (repeaterMatch(repeatElems[i].getAttribute(attr), repeater, exactMatch)) {
             var elem = repeatElems[i];
             while (elem.nodeType != 8 || 
-                    !(elem.nodeValue.indexOf(repeater) != -1)) {
+                    !repeaterMatch(elem.nodeValue, repeater)) {
                 if (elem.nodeType == 1) {
                     rows.push(elem);
                 }

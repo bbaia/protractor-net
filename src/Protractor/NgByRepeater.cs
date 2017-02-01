@@ -9,8 +9,11 @@
         /// Creates a new instance of <see cref="NgByRepeater"/>.
         /// </summary>
         /// <param name="repeat">The text of the repeater, e.g. 'cat in cats'.</param>
-        public NgByRepeater(string repeat)
-            : base(ClientSideScripts.FindAllRepeaterRows, repeat)
+        /// <param name="exactMatch">
+        /// Indicates whether or not the repeater needs to be matched exactly. By default, false.
+        /// </param>
+        public NgByRepeater(string repeat, bool exactMatch = false)
+            : base(ClientSideScripts.FindAllRepeaterRows, repeat, exactMatch)
         {
             base.Description = "NgBy.Repeater: " + repeat;
         }
