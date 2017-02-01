@@ -1,3 +1,8 @@
+0.10.1 / 2017-02-01
+===================
+
+* ([1b35fb9](https://github.com/bbaia/protractor-net/commit/1b35fb9d375fa6d19a607a60c6485c6d08229e32)) Add 'exactMatch' option to NgByBinding & NgByRepeater locators
+
 0.10.0 / 2017-01-30
 ===================
 
