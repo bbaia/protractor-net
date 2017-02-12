@@ -19,7 +19,12 @@ Supports Microsoft .NET Framework 3.5 and higher.
 [Test]
 public void ShouldGreetUsingBinding()
 {
-    using (var ngDriver = new NgWebDriver(new ChromeDriver()))
+    // Instanciate a classic Selenium's WebDriver
+    var driver = new ChromeDriver();
+    // Configure timeouts (important since Protractor uses asynchronous client side scripts)
+    driver.Manage().Timeouts().SetScriptTimeout(TimeSpan.FromSeconds(5));
+
+    using (var ngDriver = new NgWebDriver(driver))
     {
         ngDriver.Url = "http://www.angularjs.org";
         ngDriver.FindElement(NgBy.Model("yourName")).SendKeys("Julie");
@@ -35,4 +40,3 @@ Please ask usage and debugging questions on [StackOverflow](http://stackoverflow
 ## When to NOT use?
 
 When you can use the original [Protractor](http://www.protractortest.org/) framework :)
-
