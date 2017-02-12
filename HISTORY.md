@@ -1,3 +1,8 @@
+0.10.2 / 2017-02-12
+===================
+
+* ([c30c04a](https://github.com/bbaia/protractor-net/commit/c30c04a262252dadd9c725c9e4be7a03ec4204a6)) Add NgByExactBinding & NgByExactRepeater for exact matching (Supports Page Objects pattern with FindsByAttribute)
+
 0.10.1 / 2017-02-01
 ===================
 
