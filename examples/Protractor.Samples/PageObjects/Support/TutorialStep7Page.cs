@@ -1,4 +1,5 @@
-﻿using OpenQA.Selenium;
+﻿using System.Collections.Generic;
+using OpenQA.Selenium;
 using OpenQA.Selenium.Support.PageObjects;
 
 namespace Protractor.Samples.PageObjects.Support
@@ -14,6 +15,9 @@ namespace Protractor.Samples.PageObjects.Support
 
         [FindsBy(How = How.Custom, CustomFinderType = typeof(NgByModel), Using = "$ctrl.orderProp")]
         public IWebElement SortBySelect { get; set; }
+
+        [FindsBy(How = How.Custom, CustomFinderType = typeof(NgByRepeater), Using = "phone in $ctrl.phones")]
+        public IList<IWebElement> PhonesList { get; set; }
 
         NgWebDriver ngDriver;
 
@@ -52,12 +56,12 @@ namespace Protractor.Samples.PageObjects.Support
 
         public int GetResultsCount()
         {
-            return ngDriver.FindElements(NgBy.Repeater("phone in $ctrl.phones")).Count;
+            return PhonesList.Count;
         }
 
         public string GetResultsPhoneName(int index)
         {
-            return ngDriver.FindElements(NgBy.Repeater("phone in $ctrl.phones"))[index].Evaluate("phone.name") as string;
+            return PhonesList[index].FindElement(NgBy.Binding("phone.name")).Text;
         }
     }
 }

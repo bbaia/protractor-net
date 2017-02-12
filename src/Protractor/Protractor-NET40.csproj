@@ -47,6 +47,8 @@
     <Compile Include="JavaScriptBy.cs" />
     <Compile Include="NgBy.cs" />
     <Compile Include="NgByBinding.cs" />
+    <Compile Include="NgByExactRepeater.cs" />
+    <Compile Include="NgByExactBinding.cs" />
     <Compile Include="NgByModel.cs" />
     <Compile Include="NgByRepeater.cs" />
     <Compile Include="NgBySelectedOption.cs" />
