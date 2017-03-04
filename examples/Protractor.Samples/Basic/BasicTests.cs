@@ -34,7 +34,7 @@ namespace Protractor.Samples.Basic
             //driver = new FirefoxDriver();
 
             // Required for TestForAngular and WaitForAngular scripts
-            driver.Manage().Timeouts().SetScriptTimeout(TimeSpan.FromSeconds(5));
+            driver.Manage().Timeouts().AsynchronousJavaScript = TimeSpan.FromSeconds(5);
         }
 
         [TearDown]
