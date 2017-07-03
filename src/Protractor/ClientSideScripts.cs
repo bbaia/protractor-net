@@ -62,6 +62,8 @@ function getNg1Hooks(selector, injectorPlease) {
         elhooks = trySelector(selector);
         if ('undefined' === typeof elhooks) {
             return tryBackup();
+        } else {
+            return elhooks;
         }
     } else if (window.__TESTABILITY__NG1_APP_ROOT_INJECTOR__) {
         var $injector = window.__TESTABILITY__NG1_APP_ROOT_INJECTOR__;
