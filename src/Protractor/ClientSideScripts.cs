@@ -50,9 +50,21 @@ function getNg1Hooks(selector, injectorPlease) {
             }
         }
     }
+    function tryBackup() {
+        return tryEl(document.body) ||
+            trySelector('[ng-app]') || trySelector('[ng\\:app]') ||
+            trySelector('[ng-controller]') || trySelector('[ng\\:controller]');
+    }
 
     if (selector) {
-        return trySelector(selector);
+        /* in Hybrid NG mode, the root element by default might not return anything.
+        * so try the backup stuff as well */
+        elhooks = trySelector(selector);
+        if ('undefined' === typeof elhooks) {
+            return tryBackup();
+        } else {
+            return elhooks;
+        }
     } else if (window.__TESTABILITY__NG1_APP_ROOT_INJECTOR__) {
         var $injector = window.__TESTABILITY__NG1_APP_ROOT_INJECTOR__;
         var $$testability = null;
@@ -61,9 +73,7 @@ function getNg1Hooks(selector, injectorPlease) {
         } catch (e) {}
         return {$injector: $injector, $$testability: $$testability};
     } else {
-        return tryEl(document.body) ||
-            trySelector('[ng-app]') || trySelector('[ng\\:app]') ||
-            trySelector('[ng-controller]') || trySelector('[ng\\:controller]');
+        return tryBackup();
     }
 };
 ";
@@ -78,7 +88,10 @@ function getNg1Hooks(selector, injectorPlease) {
         public const string WaitForAngular = GetNg1HooksHelper + @"
 var rootSelector = arguments[0];
 var callback = arguments[1];
-if (window.angular && !(window.angular.version && window.angular.version.major > 1)) {
+if (window.angular 
+    && !(window.angular.version 
+        && window.angular.version.major > 1)
+    ) {
     /* ng1 */
     var hooks = getNg1Hooks(rootSelector);
     if (hooks.$$testability) {
@@ -90,8 +103,8 @@ if (window.angular && !(window.angular.version && window.angular.version.major >
         throw new Error('Could not automatically find injector on page: ""' +
             window.location.toString() + '"". Consider setting rootElement');
     } else {
-    throw new Error('root element (' + rootSelector + ') has no injector.' +
-        ' this may mean it is not inside ng-app.');
+        throw new Error('root element (' + rootSelector + ') has no injector.' +
+            ' this may mean it is not inside ng-app.');
     }
 } else if (rootSelector && window.getAngularTestability) {
     var el = document.querySelector(rootSelector);
@@ -124,18 +137,25 @@ if (window.angular && !(window.angular.version && window.angular.version.major >
 
         /**
          * Tests whether the angular global variable is present on a page. 
+         * 
          * Retries in case the page is just loading slowly.
+         * arguments[0] {number} attempts Number of times to retry.
+         * arguments[1] {boolean} ng12Hybrid Flag set if app is a hybrid of angular 1 and 2
+         * arguments[2] {function({version: ?number, message: ?string})} asyncCallback callback
+         * 
          */
         public const string TestForAngular = @"
-var asyncCallback = arguments[0];
+var attempts = arguments[0];
+var ng12Hybrid = arguments[1];
+var asyncCallback = arguments[2];
 var callback = function(args) {
     setTimeout(function() {
         asyncCallback(args);
     }, 0);
 };
-var definitelyNg1 = false;
+var definitelyNg1 = !!ng12Hybrid;
 var definitelyNg2OrNewer = false;
-var check = function() {
+  var check = function(n) {
     /* Figure out which version of angular we're waiting on */
     if (!definitelyNg1 && !definitelyNg2OrNewer) {
         if (window.angular && !(window.angular.version && window.angular.version.major > 1)) {
@@ -147,21 +167,31 @@ var check = function() {
     /* See if our version of angular is ready */
     if (definitelyNg1) {
         if (window.angular && window.angular.resumeBootstrap) {
-            return callback(1);
+          return callback({ver: 1});
         }
     } else if (definitelyNg2OrNewer) {
         if (true /* ng2 has no resumeBootstrap() */) {
-            return callback(2);
+          return callback({ver: 2});
         }
     }
     /* Try again (or fail) */
+      if (n < 1) {
     if (definitelyNg1 && window.angular) {
-        throw new Error('angular never provided resumeBootstrap');
+          callback({message: 'angular never provided resumeBootstrap'});
+        } else if (ng12Hybrid && !window.angular) { 
+          callback({message: 'angular 1 never loaded' +
+              window.getAllAngularTestabilities ? ' (are you sure this app ' +
+              'uses ngUpgrade?  Try un-setting ng12Hybrid)' : ''});
     } else {
-        window.setTimeout(function() {check()}, 1000);
+          callback({message: 'retries looking for angular exceeded'});
     }
+      } else {
+        window.setTimeout(function() {check(n - 1);}, 1000);
+      }
+  };
+  check(attempts);
 };
-check();";
+";
 
         /**
          * Continue to bootstrap Angular. 
