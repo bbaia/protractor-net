@@ -154,6 +154,15 @@ namespace Protractor
         }
 
         /// <summary>
+        /// Gets the value of the specified property for this element.
+        /// </summary>
+        public string GetProperty(string propertyName)
+        {
+            this.ngDriver.WaitForAngular();
+            return this.element.GetProperty(propertyName);
+        }
+
+        /// <summary>
         /// Gets the value of a CSS property of this element.
         /// </summary>
         public string GetCssValue(string propertyName)
