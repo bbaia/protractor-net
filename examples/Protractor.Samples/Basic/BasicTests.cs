@@ -67,7 +67,7 @@ namespace Protractor.Samples.Basic
         {
             var ngDriver = new NgWebDriver(driver);
             ngDriver.Navigate().GoToUrl("https://material.angular.io/");
-            ngDriver.FindElement(By.XPath("//a[@routerlink='guide/getting-started']")).Click();
+            ngDriver.FindElement(By.XPath("//a[@routerlink='/guide/getting-started']")).Click();
             Assert.AreEqual("https://material.angular.io/guide/getting-started", ngDriver.Url);
         }
 
