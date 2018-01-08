@@ -343,7 +343,7 @@ namespace Protractor
         /// This is used before any action on this driver, except if IgnoreSynchonization flag is set to true.
         /// </summary>
         /// <remarks>
-        /// Use NgWebDriver.Manage().Timeouts().SetScriptTimeout() to specify the amount of time the driver should wait for Angular.
+        /// Use NgWebDriver.Manage().Timeouts().AsynchronousJavaScript to specify the amount of time the driver should wait for Angular.
         /// </remarks>
         /// <exception cref="InvalidOperationException">If Angular could not be found.</exception>
         /// <exception cref="WebDriverTimeoutException">If the driver times out while waiting for Angular.</exception>

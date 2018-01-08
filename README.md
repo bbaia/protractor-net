@@ -22,7 +22,7 @@ public void ShouldGreetUsingBinding()
     // Instanciate a classic Selenium's WebDriver
     var driver = new ChromeDriver();
     // Configure timeouts (important since Protractor uses asynchronous client side scripts)
-    driver.Manage().Timeouts().SetScriptTimeout(TimeSpan.FromSeconds(5));
+    driver.Manage().Timeouts().AsynchronousJavaScript = TimeSpan.FromSeconds(5);
 
     using (var ngDriver = new NgWebDriver(driver))
     {
