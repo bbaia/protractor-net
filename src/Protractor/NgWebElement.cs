@@ -26,6 +26,14 @@ namespace Protractor
             this.element = element;
         }
 
+        /// <summary>
+        /// Gets the <see cref="NgWebDriver"/> instance used to initialize the element.
+        /// </summary>
+        public NgWebDriver NgDriver
+        {
+            get { return this.ngDriver; }
+        }
+
         #region IWrapsElement Members
 
         /// <summary>

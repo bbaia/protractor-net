@@ -24,6 +24,14 @@ namespace Protractor
         }
 
         /// <summary>
+        /// Gets the <see cref="NgWebDriver"/> instance used to initialize the instance.
+        /// </summary>
+        public NgWebDriver NgDriver
+        {
+            get { return this.ngDriver; }
+        }
+
+        /// <summary>
         /// Gets the wrapped <see cref="INavigation"/> instance.
         /// </summary>
         public INavigation WrappedNavigation
