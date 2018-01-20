@@ -259,5 +259,15 @@ namespace Protractor
             this.ngDriver.WaitForAngular();
             return this.ngDriver.ExecuteScript(ClientSideScripts.Evaluate, this.element, expression);
         }
+        
+        /// <summary>
+        /// Exposes the NgWebDriver instance.
+        /// </summary>
+        /// <returns>The NgWebDriver instance used to initialize the element</returns>
+        public NgWebDriver NgDriver
+        {
+            get { return this.ngDriver; }
+        }
+        
     }
 }
