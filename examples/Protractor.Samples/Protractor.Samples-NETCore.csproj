@@ -1,0 +1,30 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp2.0</TargetFramework>
+    <AssemblyName>Protractor.Samples</AssemblyName>
+    <RootNamespace>Protractor.Samples</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="MockHttpBackend\Support\angular-mocks.js" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.7.0" />
+    <PackageReference Include="NUnit" Version="3.10.1" />
+    <PackageReference Include="NUnit3TestAdapter" Version="3.10.0" />
+    <PackageReference Include="PhantomJS" Version="2.1.1" />
+    <PackageReference Include="Selenium.Firefox.WebDriver" Version="0.20.0" />
+    <PackageReference Include="Selenium.Support" Version="3.11.2" />
+    <PackageReference Include="Selenium.WebDriver" Version="3.11.2" />
+    <PackageReference Include="Selenium.WebDriver.ChromeDriver" Version="2.37.0" />
+    <PackageReference Include="Selenium.WebDriver.IEDriver" Version="3.11.1" />
+    <PackageReference Include="Selenium.WebDriver.MicrosoftWebDriver" Version="10.0.16299" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\Protractor\Protractor-NETCore.csproj" />
+  </ItemGroup>
+
+</Project>

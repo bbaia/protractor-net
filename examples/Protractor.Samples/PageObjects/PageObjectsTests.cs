@@ -11,6 +11,7 @@ using Protractor.Samples.PageObjects.Support;
 
 namespace Protractor.Samples.PageObjects
 {
+#if !NETCOREAPP2_0
     /*
      * E2E testing against the AngularJS tutorial Step 7 sample: 
      * http://docs.angularjs.org/tutorial/step_07
@@ -80,4 +81,5 @@ namespace Protractor.Samples.PageObjects
             Assert.AreEqual("Motorola XOOM™ with Wi-Fi", step5Page.GetResultsPhoneName(1));
         }
     }
+    #endif
 }

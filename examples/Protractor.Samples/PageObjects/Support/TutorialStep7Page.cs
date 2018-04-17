@@ -4,6 +4,7 @@ using OpenQA.Selenium.Support.PageObjects;
 
 namespace Protractor.Samples.PageObjects.Support
 {
+#if !NETCOREAPP2_0
     /*
      * Page Object that represents the the AngularJS tutorial Step 7 page: 
      * http://docs.angularjs.org/tutorial/step_07
@@ -64,4 +65,5 @@ namespace Protractor.Samples.PageObjects.Support
             return PhonesList[index].FindElement(NgBy.Binding("phone.name")).Text;
         }
     }
+    #endif
 }
