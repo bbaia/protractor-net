@@ -13,3 +13,6 @@ obj
 *.csproj.user
 
 /.vs
+
+*.nuspec
+*.user

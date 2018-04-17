@@ -4,6 +4,12 @@
     <TargetFramework>netcoreapp2.0</TargetFramework>
     <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
     <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
+    <Authors>Alejandro Labra</Authors>
+    <PackageProjectUrl>https://github.com/alabras/protractor-net</PackageProjectUrl>
+    <Description>The .NET port of Protractor, an end to end test framework for AngularJS applications, built on top of Selenium WebDriver C# binding.</Description>
+    <PackageTags>Angular AngularJS Protractor Selenium WebDriver E2E Test netcore</PackageTags>
+    <PackageLicenseUrl>https://github.com/alabras/protractor-net/blob/master/LICENSE</PackageLicenseUrl>
+    <Version>1.0.0</Version>
   </PropertyGroup>
 
   <ItemGroup>
