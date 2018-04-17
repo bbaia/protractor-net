@@ -13,6 +13,8 @@ Protractor for .NET is built on top of [Selenium WebDriver](http://www.seleniumh
 
 Supports Microsoft .NET Framework 3.5 and higher.
 
+Supports .NET-Core 2.0
+
 ## Write tests!
 
 ```csharp
