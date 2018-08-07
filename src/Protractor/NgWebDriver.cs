@@ -140,12 +140,17 @@ namespace Protractor
 
                 // TODO: test Android
                 IHasCapabilities hcDriver = this.driver as IHasCapabilities;
-                if (hcDriver != null &&
-                    (hcDriver.Capabilities.BrowserName == "internet explorer" ||
-                     hcDriver.Capabilities.BrowserName == "MicrosoftEdge" ||
-                     hcDriver.Capabilities.BrowserName == "phantomjs" ||
-                     hcDriver.Capabilities.BrowserName == "firefox" ||
-                     hcDriver.Capabilities.BrowserName.ToLower() == "safari"))
+                string browserName = null;
+                if (hcDriver != null && hcDriver.Capabilities.HasCapability("browserName"))
+                {
+                    browserName = hcDriver.Capabilities.GetCapability("browserName").ToString();
+                }
+                if (browserName != null &&
+                    (browserName == "internet explorer" ||
+                     browserName == "MicrosoftEdge" ||
+                     browserName == "phantomjs" ||
+                     browserName == "firefox" ||
+                     browserName.ToLower() == "safari"))
                 {
                     this.ExecuteScript("window.name += '" + AngularDeferBootstrap + "';");
                     this.driver.Url = value;
