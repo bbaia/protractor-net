@@ -1,3 +1,8 @@
+0.12.0 / 2018-10-01
+===================
+
+* ([c4a034e](https://github.com/bbaia/protractor-net/commit/c4a034e93259a34b380a73224347bb5b67153ddd)) Update to Selenium.WebDriver v3.14
+
 0.11.0 / 2017-09-09
 ===================
 
