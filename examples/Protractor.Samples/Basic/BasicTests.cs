@@ -1,7 +1,6 @@
 ﻿using System;
 using NUnit.Framework;
 using OpenQA.Selenium;
-using OpenQA.Selenium.PhantomJS;
 using OpenQA.Selenium.Chrome;
 using OpenQA.Selenium.IE;
 using OpenQA.Selenium.Edge;
@@ -17,9 +16,6 @@ namespace Protractor.Samples.Basic
         [SetUp]
         public void SetUp()
         {
-            // Using PhantomJS
-            //driver = new PhantomJSDriver();
-
             // Using Chrome
             driver = new ChromeDriver();
 
