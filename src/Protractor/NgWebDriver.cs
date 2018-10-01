@@ -141,24 +141,9 @@ namespace Protractor
                 // TODO: test Android
                 IHasCapabilities hcDriver = this.driver as IHasCapabilities;
                 string browserName = string.Empty;
-                try
+                if (hcDriver.Capabilities.HasCapability("browserName"))
                 {
-                    browserName = hcDriver?.Capabilities.BrowserName;
-                }
-                catch (MissingMethodException exception)
-                {
-                    if (hcDriver != null && exception.Message.Contains(
-                            "Method not found: 'System.String OpenQA.Selenium.ICapabilities.get_BrowserName()'."))
-                    {
-                        if (hcDriver.Capabilities.HasCapability("browserName"))
-                        {
-                            browserName = hcDriver.Capabilities.GetCapability("browserName").ToString();
-                        }
-                    }
-                    else
-                    {
-                        throw;
-                    }
+                    browserName = hcDriver.Capabilities.GetCapability("browserName").ToString();
                 }
                 if (hcDriver != null &&
                     (browserName == "internet explorer" ||
