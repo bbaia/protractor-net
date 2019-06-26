@@ -1,0 +1,19 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <PackageId>Protractor</PackageId>
+    <Version>0.12.0</Version>
+    <Authors>Bao Trinh</Authors>
+    <Description>The .NET port of Protractor, an end to end test framework for AngularJS applications, built on top of Selenium WebDriver C# binding.</Description>
+    <RepositoryUrl>https://github.com/bbaia/protractor-net</RepositoryUrl>
+    <PackageProjectUrl>https://github.com/bbaia/protractor-net</PackageProjectUrl>
+    <PackageLicenseUrl>https://github.com/bbaia/protractor-net/blob/master/LICENSE</PackageLicenseUrl>
+    <Product>Protractor</Product>
+    <PackageTags>Angular AngularJS Protractor Selenium WebDriver E2E Test</PackageTags>
+  </PropertyGroup>
+  
+  <ItemGroup>
+    <PackageReference Include="Selenium.WebDriver" Version="3.141.0" />
+  </ItemGroup>
+</Project>
