@@ -11,7 +11,7 @@ Protractor for .NET is built on top of [Selenium WebDriver](http://www.seleniumh
 
     PM> Install-Package Protractor
 
-Supports Microsoft .NET Framework 3.5 and higher.
+Supports Microsoft since .NET Framework 4.6.1, Mono 5.4, .NET Core 2.0 and higher platform.
 
 ## Write tests!
 
