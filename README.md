@@ -19,7 +19,7 @@ Supports Microsoft .NET Framework 3.5 and higher.
 [Test]
 public void ShouldGreetUsingBinding()
 {
-    // Instanciate a classic Selenium's WebDriver
+    // Instantiate a classic Selenium WebDriver
     var driver = new ChromeDriver();
     // Configure timeouts (important since Protractor uses asynchronous client side scripts)
     driver.Manage().Timeouts().AsynchronousJavaScript = TimeSpan.FromSeconds(5);
