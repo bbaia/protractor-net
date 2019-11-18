@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using OpenQA.Selenium;
-using OpenQA.Selenium.Support.PageObjects;
 
 namespace Protractor.Samples.PageObjects.Support
 {
@@ -10,22 +9,26 @@ namespace Protractor.Samples.PageObjects.Support
      */
     public class TutorialStep7Page
     {
-        [FindsBy(How = How.Custom, CustomFinderType = typeof(NgByModel), Using = "$ctrl.query")]
-        public IWebElement QueryInput { get; set; }
+        public IWebElement QueryInput
+        {
+            get { return this.ngDriver.FindElement(NgBy.Model("$ctrl.query")); }
+        }
 
-        [FindsBy(How = How.Custom, CustomFinderType = typeof(NgByModel), Using = "$ctrl.orderProp")]
-        public IWebElement SortBySelect { get; set; }
+        public IWebElement SortBySelect
+        {
+            get { return this.ngDriver.FindElement(NgBy.Model("$ctrl.orderProp")); }
+        }
 
-        [FindsBy(How = How.Custom, CustomFinderType = typeof(NgByRepeater), Using = "phone in $ctrl.phones")]
-        public IList<IWebElement> PhonesList { get; set; }
+        public IList<IWebElement> PhonesList
+        {
+            get { return this.ngDriver.FindElements(NgBy.Repeater("phone in $ctrl.phones")); }
+        }
 
-        NgWebDriver ngDriver;
+        IWebDriver ngDriver;
 
         public TutorialStep7Page(IWebDriver driver, string url)
         {
             ngDriver = new NgWebDriver(driver);
-            PageFactory.InitElements(ngDriver, this);
-
             ngDriver.Navigate().GoToUrl(url);
         }
 
