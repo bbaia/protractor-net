@@ -1,0 +1,36 @@
+﻿<Project Sdk="Microsoft.NET.Sdk" ToolsVersion="Current">
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.0</TargetFramework>
+    <IsPackable>false</IsPackable>
+    <FileUpgradeFlags>
+    </FileUpgradeFlags>
+    <OldToolsVersion>2.0</OldToolsVersion>
+    <UpgradeBackupLocation />
+    <ProjectGuid>{144AB4E3-58AC-46D2-B6F8-68BADC1E890F}</ProjectGuid>
+    <AssemblyName>Protractor.Samples</AssemblyName>
+    <RootNamespace>Protractor.Samples</RootNamespace>
+  </PropertyGroup>
+  <ItemGroup>
+    <None Remove="MockHttpBackend\Support\angular-mocks.js" />
+    <None Remove="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="MockHttpBackend\Support\angular-mocks.js" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.4.0" />
+    <PackageReference Include="NUnit" Version="3.12.0" />
+    <PackageReference Include="NUnit3TestAdapter" Version="3.15.1" />
+    <PackageReference Include="Selenium.Firefox.WebDriver" Version="0.26.0" />
+    <PackageReference Include="Selenium.WebDriver" Version="3.141.0" />
+    <PackageReference Include="Selenium.WebDriver.ChromeDriver" Version="78.0.3904.10500" />
+    <PackageReference Include="Selenium.WebDriver.IEDriver" Version="3.150.1" />
+    <PackageReference Include="Selenium.WebDriver.MicrosoftDriver" Version="17.17134.0" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\Protractor\Protractor-NETStandard20.csproj">
+      <Project>{de9c82c5-ebb3-4a2b-a75e-ce3e68e2c866}</Project>
+      <Name>Protractor-NETStandard20</Name>
+    </ProjectReference>
+  </ItemGroup>
+</Project>
