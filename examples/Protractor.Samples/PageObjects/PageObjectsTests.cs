@@ -22,8 +22,14 @@ namespace Protractor.Samples.PageObjects
         [SetUp]
         public void SetUp()
         {
+            // Using headless Chrome
+            var chromeOptions = new ChromeOptions();
+            chromeOptions.AddArgument("--headless");
+            chromeOptions.AddArgument("--disable-gpu");
+            driver = new ChromeDriver(chromeOptions);
+
             // Using Chrome
-            driver = new ChromeDriver();
+            //driver = new ChromeDriver();
 
             // Using Internet Explorer
             //var options = new InternetExplorerOptions() { IntroduceInstabilityByIgnoringProtectedModeSettings = true };
