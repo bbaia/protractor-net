@@ -1,4 +1,4 @@
-Protractor for .NET
+Protractor for .NET [![Build Status](https://travis-ci.org/bbaia/protractor-net.svg?branch=master)](https://travis-ci.org/bbaia/protractor-net)
 ===================
 
 The .NET port of [Protractor](https://github.com/angular/protractor), an end to end test framework for Angular applications.

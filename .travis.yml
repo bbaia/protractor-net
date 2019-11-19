@@ -1,0 +1,10 @@
+language: csharp
+mono: none
+addons:
+  chrome: stable
+dotnet: 3.0
+install:
+  - dotnet restore Protractor.sln
+script:
+  - dotnet build examples/Protractor.Samples/Protractor.Samples.csproj
+  - dotnet test examples/Protractor.Samples/Protractor.Samples.csproj
