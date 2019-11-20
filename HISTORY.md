@@ -1,3 +1,9 @@
+0.13.0 / 2019-11-20
+===================
+
+* ([fe583f8](https://github.com/bbaia/protractor-net/commit/fe583f86bc69370a799fed2cc213a7a6c2085b9d)) Add support to .NET Standard 2.0
+* ([b17818e](https://github.com/bbaia/protractor-net/commit/b17818e1ff55064fc801edeed0e9cab745e41bc8)) Update to Selenium.WebDriver v3.141
+
 0.12.0 / 2018-10-01
 ===================
 

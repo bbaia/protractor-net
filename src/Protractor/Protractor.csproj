@@ -3,7 +3,7 @@
     <TargetFrameworks>net35;net40;netstandard2.0</TargetFrameworks>
     <AssemblyName>Protractor</AssemblyName>
     <RootNamespace>Protractor</RootNamespace>
-    <Version>0.12.0.0</Version>
+    <Version>0.13.0.0</Version>
     <Authors>Bruno Baia</Authors>
     <Company>Bruno Baia</Company>
     <PackageProjectUrl>https://github.com/bbaia/protractor-net</PackageProjectUrl>
