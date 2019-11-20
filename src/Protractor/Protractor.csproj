@@ -1,22 +1,23 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk" ToolsVersion="Current">
   <PropertyGroup>
-    <TargetFramework>netstandard2.0</TargetFramework>
-    <FileUpgradeFlags>
-    </FileUpgradeFlags>
-    <OldToolsVersion>2.0</OldToolsVersion>
-    <UpgradeBackupLocation />
-    <ProjectGuid>{DE9C82C5-EBB3-4A2B-A75E-CE3E68E2C866}</ProjectGuid>
+    <TargetFrameworks>net35;net40;netstandard2.0</TargetFrameworks>
     <AssemblyName>Protractor</AssemblyName>
     <RootNamespace>Protractor</RootNamespace>
     <Version>0.12.0.0</Version>
     <Authors>Bruno Baia</Authors>
     <Company>Bruno Baia</Company>
     <PackageProjectUrl>https://github.com/bbaia/protractor-net</PackageProjectUrl>
-    <PackageLicenseExpression>https://github.com/bbaia/protractor-net/blob/master/LICENSE</PackageLicenseExpression>
+    <PackageLicenseExpression></PackageLicenseExpression>
     <Product>Protractor for .NET</Product>
     <Description>The .NET port of Protractor, an end to end test framework for AngularJS applications, built on top of Selenium WebDriver C# binding.</Description>
     <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
     <RepositoryUrl>https://github.com/bbaia/protractor-net</RepositoryUrl>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <RepositoryType>git</RepositoryType>
+    <PackageTags>Angular AngularJS Protractor Selenium WebDriver E2E Test</PackageTags>
+    <PackageReleaseNotes>https://github.com/bbaia/protractor-net/blob/master/HISTORY.md</PackageReleaseNotes>
+    <PackageLicenseFile>LICENSE</PackageLicenseFile>
+    <Copyright>Copyright © 2019 Bruno Baia</Copyright>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
     <DocumentationFile>bin\Debug\netstandard2.0\Protractor.xml</DocumentationFile>
@@ -25,12 +26,12 @@
     <DocumentationFile>bin\Release\netstandard2.0\Protractor.xml</DocumentationFile>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Remove="Properties\AssemblyInfo.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Remove="packages.config" />
-  </ItemGroup>
-  <ItemGroup>
     <PackageReference Include="Selenium.WebDriver" Version="3.141.0" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\LICENSE">
+      <Pack>True</Pack>
+      <PackagePath></PackagePath>
+    </None>
   </ItemGroup>
 </Project>
