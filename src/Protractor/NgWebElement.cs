@@ -3,7 +3,6 @@ using System.Drawing;
 using System.Collections.ObjectModel;
 
 using OpenQA.Selenium;
-using OpenQA.Selenium.Internal;
 
 namespace Protractor
 {
