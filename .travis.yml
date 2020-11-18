@@ -2,7 +2,7 @@ language: csharp
 mono: none
 addons:
   chrome: stable
-dotnet: 3.0
+dotnet: 3.1
 install:
   - dotnet restore Protractor.sln
 script:
