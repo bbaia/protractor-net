@@ -1,3 +1,8 @@
+1.0.0-alpha1 / 2020-11-18
+=========================
+
+* ([9508018](https://github.com/bbaia/protractor-net/commit/9508018e5e73f37d0fdca1b6efe80c7d399b33ed)) Update Selenium to v4.0.0-alpha07 (Drops .NET 3.5 & 4.0 support)
+
 0.13.0 / 2019-11-20
 ===================
 

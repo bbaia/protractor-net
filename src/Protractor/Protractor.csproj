@@ -3,7 +3,7 @@
     <TargetFrameworks>net45;netstandard2.0</TargetFrameworks>
     <AssemblyName>Protractor</AssemblyName>
     <RootNamespace>Protractor</RootNamespace>
-    <Version>0.13.0.0</Version>
+    <Version>1.0.0-alpha1</Version>
     <Authors>Bruno Baia</Authors>
     <Company>Bruno Baia</Company>
     <PackageProjectUrl>https://github.com/bbaia/protractor-net</PackageProjectUrl>
@@ -17,7 +17,7 @@
     <PackageTags>Angular AngularJS Protractor Selenium WebDriver E2E Test</PackageTags>
     <PackageReleaseNotes>https://github.com/bbaia/protractor-net/blob/master/HISTORY.md</PackageReleaseNotes>
     <PackageLicenseFile>LICENSE</PackageLicenseFile>
-    <Copyright>Copyright © 2019 Bruno Baia</Copyright>
+    <Copyright>Copyright © 2020 Bruno Baia</Copyright>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
     <DocumentationFile>bin\Debug\netstandard2.0\Protractor.xml</DocumentationFile>
