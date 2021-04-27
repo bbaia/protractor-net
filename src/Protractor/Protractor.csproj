@@ -1,6 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk" ToolsVersion="Current">
   <PropertyGroup>
-    <TargetFrameworks>net45;netstandard2.0</TargetFrameworks>
+    <TargetFrameworks>net5.0;net45;netstandard2.0</TargetFrameworks>
     <AssemblyName>Protractor</AssemblyName>
     <RootNamespace>Protractor</RootNamespace>
     <Version>1.0.0-alpha1</Version>
@@ -26,7 +26,7 @@
     <DocumentationFile>bin\Release\netstandard2.0\Protractor.xml</DocumentationFile>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="Selenium.WebDriver" Version="4.0.0-alpha07" />
+    <PackageReference Include="Selenium.WebDriver" Version="4.0.0-beta2" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\LICENSE">
