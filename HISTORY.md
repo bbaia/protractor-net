@@ -1,3 +1,8 @@
+1.0.0-beta2 / 2021-04-27
+=========================
+
+* ([cbfecda](https://github.com/bbaia/protractor-net/commit/cbfecda9034cf1d493bc3501b1828c6b37cedb64)) Update Selenium to v4.0.0-beta2 (Adds .NET 5 support)
+
 1.0.0-alpha1 / 2020-11-18
 =========================
 
