@@ -14,10 +14,10 @@ namespace Protractor
     {
         private const string AngularDeferBootstrap = "NG_DEFER_BOOTSTRAP!";
 
-        private IWebDriver driver;
-        private IJavaScriptExecutor jsExecutor;
-        private string rootElement;
-        private IList<NgModule> mockModules;
+        private readonly IWebDriver driver;
+        private readonly IJavaScriptExecutor jsExecutor;
+        private readonly string rootElement;
+        private readonly IList<NgModule> mockModules;
 
         /// <summary>
         /// Creates a new instance of <see cref="NgWebDriver"/> by wrapping a <see cref="IWebDriver"/> instance.
@@ -90,7 +90,7 @@ namespace Protractor
         #region IWebDriver Members
 
         /// <summary>
-        /// Gets the current window handle, which is an opaque handle to this 
+        /// Gets the current window handle, which is an opaque handle to this
         /// window that uniquely identifies it within this driver instance.
         /// </summary>
         public string CurrentWindowHandle
@@ -101,6 +101,15 @@ namespace Protractor
         /// <summary>
         /// Gets the source of the page last loaded by the browser.
         /// </summary>
+        /// <remarks>
+        /// If the page has been modified after loading (for example, by JavaScript)
+        /// there is no guarantee that the returned text is that of the modified page.
+        /// Please consult the documentation of the particular driver being used to
+        /// determine whether the returned text reflects the current state of the page
+        /// or the text last sent by the web server. The page source returned is a
+        /// representation of the underlying DOM: do not expect it to be formatted
+        /// or escaped in the same way as the response sent from the web server.
+        /// </remarks>
         public string PageSource
         {
             get
@@ -125,6 +134,17 @@ namespace Protractor
         /// <summary>
         /// Gets or sets the URL the browser is currently displaying.
         /// </summary>
+        /// <remarks>
+        /// Setting the <see cref="Url"/> property will load a new web page in the current browser window.
+        /// This is done using an HTTP GET operation, and the method will block until the
+        /// load is complete. This will follow redirects issued either by the server or
+        /// as a meta-redirect from within the returned HTML. Should a meta-redirect "rest"
+        /// for any duration of time, it is best to wait until this timeout is over, since
+        /// should the underlying page change while your test is executing the results of
+        /// future calls against this interface will be against the freshly loaded page.
+        /// </remarks>
+        /// <seealso cref="INavigation.GoToUrl(string)"/>
+        /// <seealso cref="INavigation.GoToUrl(System.Uri)"/>
         public string Url
         {
             get
@@ -237,7 +257,7 @@ namespace Protractor
         /// Instructs the driver to navigate the browser to another location.
         /// </summary>
         /// <returns>
-        /// An <see cref="NgNavigation"/> object allowing the user to access 
+        /// An <see cref="NgNavigation"/> object allowing the user to access
         /// the browser's history and to navigate to a given URL.
         /// </returns>
         public NgNavigation Navigate()
@@ -265,35 +285,35 @@ namespace Protractor
         }
 
         /// <summary>
-        /// Finds the first <see cref="NgWebElement"/> using the given mechanism. 
+        /// Finds the first <see cref="NgWebElement"/> using the given method.
         /// </summary>
         /// <param name="by">The locating mechanism to use.</param>
         /// <returns>The first matching <see cref="NgWebElement"/> on the current context.</returns>
         /// <exception cref="NoSuchElementException">If no element matches the criteria.</exception>
         public NgWebElement FindElement(By by)
         {
-            if (by is JavaScriptBy)
+            if (by is JavaScriptBy jBy)
             {
-                ((JavaScriptBy)by).AdditionalScriptArguments = new object[] { this.RootElement };
+                jBy.AdditionalScriptArguments = new object[] { this.RootElement };
             }
             this.WaitForAngular();
             return new NgWebElement(this, this.driver.FindElement(by));
         }
 
         /// <summary>
-        /// Finds all <see cref="NgWebElement"/>s within the current context 
+        /// Finds all <see cref="NgWebElement"/>s within the current context
         /// using the given mechanism.
         /// </summary>
         /// <param name="by">The locating mechanism to use.</param>
         /// <returns>
-        /// A <see cref="ReadOnlyCollection{T}"/> of all <see cref="NgWebElement"/>s 
+        /// A <see cref="ReadOnlyCollection{T}"/> of all <see cref="NgWebElement"/>s
         /// matching the current criteria, or an empty list if nothing matches.
         /// </returns>
         public ReadOnlyCollection<NgWebElement> FindElements(By by)
         {
-            if (by is JavaScriptBy)
+            if (by is JavaScriptBy jBy)
             {
-                ((JavaScriptBy)by).AdditionalScriptArguments = new object[] { this.RootElement };
+                jBy.AdditionalScriptArguments = new object[] { this.RootElement };
             }
             this.WaitForAngular();
             return new ReadOnlyCollection<NgWebElement>(this.driver.FindElements(by).Select(e => new NgWebElement(this, e)).ToList());
@@ -306,9 +326,9 @@ namespace Protractor
 
         ReadOnlyCollection<IWebElement> ISearchContext.FindElements(By by)
         {
-            if (by is JavaScriptBy)
+            if (by is JavaScriptBy jBy)
             {
-                ((JavaScriptBy)by).AdditionalScriptArguments = new object[] { this.RootElement };
+                jBy.AdditionalScriptArguments = new object[] { this.RootElement };
             }
             this.WaitForAngular();
             return new ReadOnlyCollection<IWebElement>(this.driver.FindElements(by).Select(e => (IWebElement)new NgWebElement(this, e)).ToList());
@@ -409,6 +429,58 @@ namespace Protractor
         ///   </para>
         /// </remarks>
         public object ExecuteScript(string script, params object[] args)
+        {
+            return jsExecutor.ExecuteScript(script, args);
+        }
+
+        /// <summary>
+        /// Executes JavaScript in the context of the currently selected frame or window.
+        /// </summary>
+        /// <param name="script">A <see cref="PinnedScript"/> object containing the code to execute.</param>
+        /// <param name="args">The arguments to the script.</param>
+        /// <returns>The value returned by the script.</returns>
+        /// <remarks>
+        ///   <para>
+        ///     The <see cref="M:OpenQA.Selenium.IJavaScriptExecutor.ExecuteScript(System.String,System.Object[])" /> method executes JavaScript in the context of
+        ///     the currently selected frame or window. This means that "document" will refer
+        ///     to the current document. If the script has a return value, then the following
+        ///     steps will be taken:
+        ///   </para>
+        ///   <para>
+        ///     <list type="bullet">
+        ///       <item>
+        ///         <description>For an HTML element, this method returns a <see cref="T:OpenQA.Selenium.IWebElement" /></description>
+        ///       </item>
+        ///       <item>
+        ///         <description>For a number, a <see cref="T:System.Int64" /> is returned</description>
+        ///       </item>
+        ///       <item>
+        ///         <description>For a boolean, a <see cref="T:System.Boolean" /> is returned</description>
+        ///       </item>
+        ///       <item>
+        ///         <description>For all other cases a <see cref="T:System.String" /> is returned.</description>
+        ///       </item>
+        ///       <item>
+        ///         <description>
+        ///           For an array, we check the first element, and attempt to return a
+        ///           <see cref="T:System.Collections.Generic.List`1" /> of that type, following the rules above. 
+        ///           Nested lists are not supported.
+        ///         </description>
+        ///       </item>
+        ///       <item>
+        ///         <description>If the value is null or there is no return value, <see langword="null" /> is returned.</description>
+        ///       </item>
+        ///     </list>
+        ///   </para>
+        ///   <para>
+        ///     Arguments must be a number (which will be converted to a <see cref="T:System.Int64" />),
+        ///     a <see cref="T:System.Boolean" />, a <see cref="T:System.String" /> or a <see cref="T:OpenQA.Selenium.IWebElement" />.
+        ///     An exception will be thrown if the arguments do not meet these criteria.
+        ///     The arguments will be made available to the JavaScript via the "arguments" magic
+        ///     variable, as if the function were called via "Function.apply"
+        ///   </para>
+        /// </remarks>
+        public object ExecuteScript(PinnedScript script, params object[] args)
         {
             return jsExecutor.ExecuteScript(script, args);
         }
