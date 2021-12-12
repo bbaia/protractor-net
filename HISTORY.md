@@ -1,3 +1,9 @@
+1.0.0 / 2021-12-12
+==================
+
+* ([5eb7ba5](https://github.com/bbaia/protractor-net/commit/5eb7ba5aa88cad0bf35cd89c193b869d40ff9356)) Migrate from Travis CI to GitHub Actions
+* ([4578b2b](https://github.com/bbaia/protractor-net/commit/4578b2b4b826d4c5e05a51eb4ef6f659220500ec)) Update Selenium to v4.1.0
+
 1.0.0-beta2 / 2021-04-27
 =========================
 
